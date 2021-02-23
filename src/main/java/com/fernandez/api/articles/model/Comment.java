@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -13,21 +14,31 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "comentarios")
-public class Comentarios {
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private String contenido;
+    @Column(name = "content")
+    @NotNull
+    private String content;
 
-    private Long blogTranslationId;
+    @Column(name = "article_id")
+    @NotNull
+    private Long articleId;
 
+    @Column(name = "user_id")
+    @NotNull
     private Long userId;
 
+    @Column(name = "is_answer")
     private boolean isRespuesta;
 
+    @Column(name = "comment_id_answer")
+    @NotNull
     private Long comentarioIdRespuesta;
 
 }

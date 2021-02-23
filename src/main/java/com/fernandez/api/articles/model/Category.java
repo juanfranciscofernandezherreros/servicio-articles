@@ -1,18 +1,14 @@
 package com.fernandez.api.articles.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NaturalIdCache;
-
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,21 +17,27 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "category")
-@NaturalIdCache
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Category implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private String clave;
+    @Column(name = "name")
+    @NotNull
+    private String name;
 
-    @Column(name = "image", length = 500000)
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "language_id", referencedColumnName = "id")
+    @NotNull
+    private Language language;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CategoryTranslation> categoryTranslation;
+    @Column(name = "slug")
+    @NotNull
+    private String slug;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
+    private Set<Article> categories = new HashSet<>();
 
 }

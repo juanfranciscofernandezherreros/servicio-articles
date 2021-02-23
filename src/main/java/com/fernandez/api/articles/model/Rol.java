@@ -1,5 +1,7 @@
 package com.fernandez.api.articles.model;
 
+
+import com.fernandez.api.articles.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,8 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,25 +19,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "language")
-public class Language implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+@Table(name="rol")
+public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private int id;
 
-    @Column(name = "clave")
     @NotNull
-    private String clave;
+    @Enumerated(EnumType.STRING)
+    @Column(name="rol")
+    private RoleName roleName;
 
-    @Column(name = "iso2")
-    @NotNull
-    private String iso2;
-
-    @Column(name = "iso3")
-    @NotNull
-    private String iso3;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
 }

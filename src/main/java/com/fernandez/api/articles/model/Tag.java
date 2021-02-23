@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,26 +18,28 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "categorytranslation")
-public class CategoryTranslation {
+@Table(name = "tag")
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private String nameCategoryTranslated;
+    @Column(name = "name")
+    @NotNull
+    private String name;
 
     @OneToOne
     @JoinColumn(name = "language_id", referencedColumnName = "id")
+    @NotNull
     private Language language;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
+    @Column(name = "slug")
+    @NotNull
     private String slug;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
-    private Set<BlogsTranslation> categoriesSet = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "tags")
+    private Set<Article> tags = new HashSet<>();
 
 }
