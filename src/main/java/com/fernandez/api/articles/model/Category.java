@@ -6,13 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@Accessors(chain=true)
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,18 +23,11 @@ public class Category {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    @NotNull
+    @Column(name = "name", nullable = false , unique = true)
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "language_id", referencedColumnName = "id")
-    @NotNull
-    private Language language;
-
-    @Column(name = "slug")
-    @NotNull
-    private String slug;
+    @Column(name = "language")
+    private String language;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
     private Set<Article> categories = new HashSet<>();
