@@ -2,6 +2,8 @@ package com.fernandez.api.articles.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,7 +18,12 @@ public class ErrorHandlingController {
 
     @ExceptionHandler(ArticlesLogicException.class)
     public ResponseEntity<ErrorMessage> logicException(final ArticlesLogicException ex, final WebRequest request){
-        return buildResponseEntityException(new ErrorMessage(ex.getHttpStatus(),"Error de logica", Objects.toString(ex.getMessage())));
+        return buildResponseEntityException(new ErrorMessage(ex.getHttpStatus(),ex.getMessage(), Objects.toString(ex.getMessage())));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessage> logicException(final DataIntegrityViolationException ex, final WebRequest request){
+        return buildResponseEntityException(new ErrorMessage(HttpStatus.BAD_REQUEST,"Duplicated items", Objects.toString(ex.getMessage())));
     }
 
     public ResponseEntity<ErrorMessage> buildResponseEntityException(final ErrorMessage error){

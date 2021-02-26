@@ -3,6 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.UserDTO;
+import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.model.User;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -53,7 +55,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
             return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)),ArticleDTO.class);
         }else{
-            throw new RuntimeException("Tiene que a ver mínimo una categoría");
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST,"Tiene que a ver mínimo una categoría");
         }
     }
 
