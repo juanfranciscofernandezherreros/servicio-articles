@@ -1,14 +1,15 @@
 package com.fernandez.api.articles.model;
 
 import com.fernandez.api.articles.model.auditable.Auditable;
-import com.fernandez.api.articles.validator.title.Title;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -26,7 +27,6 @@ public class Article extends Auditable<String> {
     private Long id;
 
     @Column(name = "title" , nullable = false , unique = true)
-    @Title
     private String title;
 
     @Column(name = "slug",nullable = false , unique = true)
@@ -48,13 +48,13 @@ public class Article extends Auditable<String> {
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "articles_tags", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "tagstranslations_id")})
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "articles_categories", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "roles_id")})
-    private Set<Category> categories = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinTable(name = "articles_categories", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "categories_id")})
+    private List<Category> categories = new ArrayList<>();
 
 
 

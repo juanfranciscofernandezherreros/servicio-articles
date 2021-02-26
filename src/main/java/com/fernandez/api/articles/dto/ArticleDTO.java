@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -34,8 +37,8 @@ public class ArticleDTO {
 
     UserDTO user;
 
-    Set<TagDTO> tags = new HashSet<>();
+    List<TagDTO> tags = new ArrayList<>();
 
-    Set<CategoryDTO> categories = new HashSet<>();
+    List<CategoryDTO> categories = new ArrayList<>();
 
 }
