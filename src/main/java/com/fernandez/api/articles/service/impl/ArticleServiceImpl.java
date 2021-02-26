@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
-        log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
+        log.debug("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
         ModelMapper modelMapper = new ModelMapper();
         if(articleDTO.getCategories().size()>0) {
             articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
