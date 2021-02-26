@@ -1,5 +1,6 @@
 package com.fernandez.api.articles.service.impl;
 
+import antlr.StringUtils;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
@@ -53,12 +54,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO findArticleBySlug(String language, String slug) {
+    public ArticleDTO findArticleBySlug(String slug) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
-                articleRepository.findArticleByLanguageAndSlug(language,slug)
+                articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
+    }
+
+    @Override
+    public ArticleDTO findArticleById(Long articleId) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(
+                articleRepository.findById(articleId)
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                , ArticleDTO.class);
+    }
+
+    @Override
+    public void deleteArticleById(Long articleId) {
+        articleRepository.delete(articleRepository.findById(articleId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
     }
 
 
