@@ -19,9 +19,15 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
-    public ArticleDTO save(@RequestHeader(value = "accept-language", required = true) final String iso2, @Validated @RequestBody final ArticleDTO articleDTO) {
+    public ArticleDTO save(@RequestHeader(value = "accept-language", required = true) final String iso2, @Validated @RequestBody ArticleDTO articleDTO) {
         log.info("[ArticleController][Create] language={} articleDTO={}", iso2, articleDTO);
         articleDTO.setLanguage(iso2);
         return articleService.save(articleDTO);
+    }
+
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.SLUG)
+    public ArticleDTO findArticleBySlug(@RequestHeader(value = "accept-language", required = true) final String iso2 ,
+                                        @PathVariable final String slug) {
+        return articleService.findArticleBySlug(iso2,slug);
     }
 }

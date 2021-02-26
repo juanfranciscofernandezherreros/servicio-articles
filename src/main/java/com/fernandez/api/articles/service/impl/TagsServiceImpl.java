@@ -31,15 +31,14 @@ public class TagsServiceImpl implements TagService {
                 .collect(Collectors.toList());
     }
 
-    private TagDTO findTagByNameAndLanguage(final TagDTO tagDTO, final String language) {
+    private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, final String language) {
         ModelMapper modelMapper = new ModelMapper();
         tagDTO.setLanguage(language);
-        TagDTO tagDto = new TagDTO();
         Tag tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
         if (Objects.nonNull(tag)) {
-            tagDto = modelMapper.map(tag, TagDTO.class);
+            tagDTO = modelMapper.map(tag, TagDTO.class);
         } else {
-            tagDto = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
+            tagDTO = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
         }
         return tagDTO;
     }

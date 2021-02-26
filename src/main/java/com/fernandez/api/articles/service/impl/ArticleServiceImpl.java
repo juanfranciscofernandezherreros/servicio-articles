@@ -1,5 +1,7 @@
 package com.fernandez.api.articles.service.impl;
 
+import com.fernandez.api.articles.common.Messages;
+import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,6 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategoryService categoryService;
 
     private final TagService tagService;
+
+    private final Messages messages;
 
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
@@ -45,5 +51,15 @@ public class ArticleServiceImpl implements ArticleService {
             throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, "Tiene que a ver mínimo una categoría");
         }
     }
+
+    @Override
+    public ArticleDTO findArticleBySlug(String language, String slug) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(
+                articleRepository.findArticleByLanguageAndSlug(language,slug)
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                , ArticleDTO.class);
+    }
+
 
 }
