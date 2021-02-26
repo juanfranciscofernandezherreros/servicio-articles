@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,26 +25,26 @@ public class Article extends Auditable<String> {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title" , nullable = false , unique = true)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @Column(name = "slug",nullable = false , unique = true)
+    @Column(name = "slug", nullable = false, unique = true)
     private String slug;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "content",nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "main_image", length = 600000 , nullable = false)
+    @Column(name = "main_image", length = 600000, nullable = false)
     private String mainImage;
 
     @Column(name = "language")
     private String language;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
@@ -55,7 +54,6 @@ public class Article extends Auditable<String> {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "articles_categories", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "categories_id")})
     private List<Category> categories = new ArrayList<>();
-
 
 
 }

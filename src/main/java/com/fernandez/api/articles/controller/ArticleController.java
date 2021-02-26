@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -19,8 +18,8 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping(value = UrlMapping.PROTECTED+UrlMapping.ARTICLES)
-    public ArticleDTO save(@RequestHeader(value = "accept-language", required = true) final String iso2 , @Validated @RequestBody ArticleDTO articleDTO) {
+    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
+    public ArticleDTO save(@RequestHeader(value = "accept-language", required = true) final String iso2, @Validated @RequestBody final ArticleDTO articleDTO) {
         log.info("[ArticleController][Create] language={} articleDTO={}", iso2, articleDTO);
         articleDTO.setLanguage(iso2);
         return articleService.save(articleDTO);

@@ -1,5 +1,7 @@
 package com.fernandez.api.articles.service.impl;
 
+import com.fernandez.api.articles.common.Messages;
+import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
@@ -26,26 +28,29 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final Messages messages;
+
     @Override
-    public CategoryDTO findByName(String name) {
+    public CategoryDTO findByName(final String name) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(categoryRepository.findByName(name),CategoryDTO.class);
+        return modelMapper.map(categoryRepository.findByName(name), CategoryDTO.class);
     }
 
     @Override
-    public List<CategoryDTO> categoryDTOList(ArticleDTO articleDTO) {
-        Type listType = new TypeToken<List<CategoryDTO>>(){}.getType();
+    public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
+        Type listType = new TypeToken<List<CategoryDTO>>() {
+        }.getType();
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleDTO.getCategories()
                         .stream()
                         .map(categoryDTO -> findCategoryById(categoryDTO))
-                        .collect(Collectors.toList()),listType);
+                        .collect(Collectors.toList()), listType);
     }
 
-    private Category findCategoryById(CategoryDTO categoryDTO) {
+    private Category findCategoryById(final CategoryDTO categoryDTO) {
         return categoryRepository.findById(categoryDTO.getId())
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND,"Categoria no encontrada"));
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
     }
 
 }

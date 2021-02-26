@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class Category {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false , unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "language")

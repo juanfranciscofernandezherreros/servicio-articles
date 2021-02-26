@@ -1,11 +1,7 @@
 package com.fernandez.api.articles.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class ErrorMessage {

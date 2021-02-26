@@ -8,8 +8,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,10 +23,10 @@ public class User implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(unique = true, name = "username", length = 20 , nullable = false)
+    @Column(unique = true, name = "username", length = 20, nullable = false)
     private String username;
 
-    @Column(name = "name" , nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "first_name")
@@ -37,13 +35,13 @@ public class User implements Serializable {
     @Column(name = "second_surname")
     private String lastName;
 
-    @Column(name = "email", unique = true, length = 100 , nullable = false)
+    @Column(name = "email", unique = true, length = 100, nullable = false)
     private String email;
 
     @Column(name = "image_profile", length = 500000)
     private String imageProfile;
 
-    @Column(name = "password", length = 60 ,nullable = false)
+    @Column(name = "password", length = 60, nullable = false)
     private String password;
 
 }

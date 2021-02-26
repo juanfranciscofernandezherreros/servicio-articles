@@ -24,7 +24,7 @@ public class Tag {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "language")
