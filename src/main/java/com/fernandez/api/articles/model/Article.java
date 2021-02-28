@@ -43,7 +43,7 @@ public class Article extends Auditable<String> {
     @Column(name = "language")
     private String language;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 
