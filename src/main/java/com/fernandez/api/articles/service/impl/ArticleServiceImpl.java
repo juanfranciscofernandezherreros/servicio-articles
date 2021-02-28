@@ -84,9 +84,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDTO update(ArticleDTO articleDTO) {
         ModelMapper modelMapper = new ModelMapper();
-        articleRepository.findById(articleDTO.getId())
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
-        return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)), ArticleDTO.class);
+        if (articleDTO.getCategories().size() > 0) {
+            articleRepository.findById(articleDTO.getId())
+                    .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
+            return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)),ArticleDTO.class);
+        }else{
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
+        }
     }
 
 
