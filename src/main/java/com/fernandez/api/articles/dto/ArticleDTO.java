@@ -1,9 +1,6 @@
 package com.fernandez.api.articles.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
 
@@ -14,7 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 public class ArticleDTO {
+
+    Long id;
 
     @NonNull
     String title;
