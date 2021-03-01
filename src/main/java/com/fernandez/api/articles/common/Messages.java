@@ -1,23 +1,27 @@
 package com.fernandez.api.articles.common;
 
-import javax.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+import javax.transaction.Transactional;
+
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class Messages {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(Messages.class);
     private final MessageSource messageSource;
 
     private MessageSourceAccessor accessor;
 
-    public String get(final String code) {
+    public Messages(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    public @NotNull String get(final @NotNull String code) {
         return accessor.getMessage(code);
     }
 

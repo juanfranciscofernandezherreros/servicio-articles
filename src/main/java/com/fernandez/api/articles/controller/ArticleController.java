@@ -1,11 +1,12 @@
 package com.fernandez.api.articles.controller;
 
 import com.fernandez.api.articles.constants.UriApi;
-import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.ArticleDto;
 import com.fernandez.api.articles.service.ArticleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,22 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ArticleController {
 
-    private final ArticleService articleService;
+    private final @NotNull ArticleService articleService;
 
     @PostMapping(UriApi.PROTECTED + UriApi.V1 + UriApi.ARTICLES)
-    public ArticleDTO save(final ArticleDTO articleDto) {
+    public ArticleDto save(final ArticleDto articleDto) {
         log.info("[ArticleController][Create] articleDto={}", articleDto);
         return articleService.save(articleDto);
     }
 
     @PutMapping(UriApi.PROTECTED + UriApi.V1 + UriApi.ARTICLES)
-    public ArticleDTO update(final ArticleDTO articleDto) {
+    public ArticleDto update(final ArticleDto articleDto) {
         log.info("[ArticleController][update] articleDTO={}", articleDto);
         return articleService.update(articleDto);
     }
 
     @GetMapping(UriApi.PUBLIC + UriApi.V1 + UriApi.ARTICLES)
-    public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
+    public Page<ArticleDto> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
                                     @RequestParam(required = false) final String name,
                                     @RequestParam(required = false) final List<String> tags,
                                     @RequestParam(required = false) final List<String> categories,
@@ -47,7 +48,7 @@ public class ArticleController {
     }
 
     @GetMapping(UriApi.PUBLIC + UriApi.V1)
-    public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
+    public ArticleDto findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
                                             @RequestParam(required = false) final String slug) {
         log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug={}", articleId, slug);
         return articleService.findArticleBySlugOrId(slug, articleId);

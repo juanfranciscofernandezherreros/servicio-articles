@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -42,6 +43,6 @@ public class Tag {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "tags")
     @JsonBackReference
-    private Set<Article> tags = new HashSet<>();
+    private @NotNull Set<Article> tags = new HashSet<>();
 
 }

@@ -2,7 +2,7 @@ package com.fernandez.api.articles.service.impl;
 
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.Properties;
-import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.ArticleDto;
 import com.fernandez.api.articles.dto.CategoryDto;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Category;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository repository;
+    private final @NotNull CategoryRepository repository;
 
-    private final Messages messages;
+    private final @NotNull Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public CategoryDto findByName(final String name) {
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> categoryDtoList(final ArticleDTO articleDto) {
+    public List<CategoryDto> categoryDtoList(final @NotNull ArticleDto articleDto) {
         final Type listType = new TypeToken<List<CategoryDto>>() {}.getType();
         return modelMapper.map(
                 articleDto.getCategories()
@@ -48,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findCategoryById(final Long categoryId) {
+    public Category findCategoryById(final @NotNull Long categoryId) {
         return repository.findById(categoryId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.CATEGORY_NOT_FOUND)));
     }

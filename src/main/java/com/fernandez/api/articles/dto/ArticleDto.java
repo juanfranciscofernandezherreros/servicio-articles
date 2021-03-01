@@ -1,5 +1,6 @@
 package com.fernandez.api.articles.dto;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ArticleDTO {
+public class ArticleDto {
 
     private Long id;
 
@@ -38,8 +39,8 @@ public class ArticleDTO {
 
     private UserDto user;
 
-    private List<TagDto> tags = new ArrayList<>();
+    private @NotNull List<TagDto> tags = new ArrayList<>();
 
-    private List<CategoryDto> categories = new ArrayList<>();
+    private @NotNull List<CategoryDto> categories = new ArrayList<>();
 
 }
