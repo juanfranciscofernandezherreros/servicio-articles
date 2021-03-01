@@ -63,24 +63,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO findArticleBySlug(final String slug) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(
-                articleRepository.findArticleBySlug(slug)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
-    }
-
-    @Override
-    public ArticleDTO findArticleById(final Long articleId) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(
-                articleRepository.findById(articleId)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
-    }
-
-    @Override
     public void deleteArticleById(final Long articleId) {
         articleRepository.delete(articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
@@ -125,6 +107,18 @@ public class ArticleServiceImpl implements ArticleService {
         return articleList;
     }
 
+    @Override
+    public ArticleDTO findArticleBySlugOrId(String slug, Long articleId) {
+        ArticleDTO articleDTO = null;
+        if(Objects.nonNull(slug)){
+            articleDTO = findArticleBySlug(slug);
+        }
+        if(Objects.nonNull(articleId)){
+            articleDTO = findArticleById(articleId);
+        }
+        return articleDTO;
+    }
+
     private List<Category> findAllCategoriesById(List<String> categories) {
         return categories.stream()
                 .map(category -> categoryService.findCategoryById(Long.valueOf(category)))
@@ -135,5 +129,22 @@ public class ArticleServiceImpl implements ArticleService {
         return tags.stream()
                 .map(tag -> tagService.findTagById(Long.valueOf(tag)))
                 .collect(Collectors.toList());
+    }
+
+
+    private ArticleDTO findArticleBySlug(final String slug) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(
+                articleRepository.findArticleBySlug(slug)
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                , ArticleDTO.class);
+    }
+
+    private ArticleDTO findArticleById(final Long articleId) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(
+                articleRepository.findById(articleId)
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                , ArticleDTO.class);
     }
 }
