@@ -38,16 +38,6 @@ public class ArticleController {
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.ARTICLES)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
-                    value = "Results page you want to retrieve (0..N)", defaultValue = "0"),
-            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
-                    value = "Number of records per page.", defaultValue = "5"),
-            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "Sorting criteria in the format: property(,asc|desc). " +
-                            "Default sort order is ascending. " +
-                            "Multiple sort criteria are supported.")
-    })
     public Page<ArticleDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
                                     @RequestParam(required = false) final String name,
                                     @RequestParam(required = false) final List<String> tags,
