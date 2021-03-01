@@ -3,8 +3,6 @@ package com.fernandez.api.articles.controller;
 import com.fernandez.api.articles.constants.UrlMapping;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.service.ArticleService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -46,15 +44,10 @@ public class ArticleController {
         return articleService.findAllArticles(acceptLanguage, name, tags, categories, pageable);
     }
 
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.SLUG)
-    public ArticleDTO findArticleBySlug(@PathVariable final String slug) {
-        return articleService.findArticleBySlug(slug);
-    }
-
     @GetMapping(value = UrlMapping.PUBLIC)
-    public ArticleDTO findArticleById(@RequestHeader(value = "accept-language", required = true) final String iso2,
-                                      @RequestParam final Long id) {
-        return articleService.findArticleById(id);
+    public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
+                                            @RequestParam(required = false) final String slug) {
+        return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED)
