@@ -29,7 +29,7 @@ public class TagsServiceImpl implements TagService {
 
     private final @NotNull Messages messages;
 
-    private final @NotNull ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     private TagDto tagDto;
 
