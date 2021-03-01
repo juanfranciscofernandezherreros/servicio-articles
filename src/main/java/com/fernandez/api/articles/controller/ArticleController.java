@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
 public class ArticleController {
 
     private final ArticleService articleService;
@@ -36,11 +34,11 @@ public class ArticleController {
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.ARTICLES)
-    public Page<ArticleDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
+    public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
                                     @RequestParam(required = false) final String name,
                                     @RequestParam(required = false) final List<String> tags,
                                     @RequestParam(required = false) final List<String> categories,
-                                    @PageableDefault(page = 0, size = 5) Pageable pageable) {
+                                    @PageableDefault(size = 5) Pageable pageable) {
         return articleService.findAllArticles(acceptLanguage, name, tags, categories, pageable);
     }
 
