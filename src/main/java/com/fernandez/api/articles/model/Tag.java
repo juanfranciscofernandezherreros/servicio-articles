@@ -1,5 +1,6 @@
 package com.fernandez.api.articles.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Tag {
     private String language;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "tags")
+    @JsonBackReference
     private Set<Article> tags = new HashSet<>();
 
 }
