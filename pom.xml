@@ -8,14 +8,20 @@
         <version>2.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.fernandez.api</groupId>
     <artifactId>articles</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>articles</name>
     <description>Proyecto articles</description>
+
     <properties>
         <java.version>1.8</java.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
+        <junit5.version>5.1.1</junit5.version>
+        <org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -25,7 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -47,6 +52,52 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <!--ModelMapper-->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.3.6</version>
+        </dependency>
+        <!--OpenAPI-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <!--AOP-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -62,6 +113,10 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
