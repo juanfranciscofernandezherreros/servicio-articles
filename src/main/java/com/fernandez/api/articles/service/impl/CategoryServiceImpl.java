@@ -38,18 +38,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
-        Type listType = new TypeToken<List<CategoryDTO>>() {
-        }.getType();
+        Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleDTO.getCategories()
                         .stream()
-                        .map(categoryDTO -> findCategoryById(categoryDTO))
+                        .map(categoryDTO -> findCategoryById(categoryDTO.getId()))
                         .collect(Collectors.toList()), listType);
     }
 
-    private Category findCategoryById(final CategoryDTO categoryDTO) {
-        return categoryRepository.findById(categoryDTO.getId())
+    @Override
+    public Category findCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
     }
 

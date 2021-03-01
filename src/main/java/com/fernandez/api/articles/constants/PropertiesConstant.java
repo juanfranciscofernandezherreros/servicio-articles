@@ -5,5 +5,5 @@ public class PropertiesConstant {
     public static final String CATEGORY_NOT_FOUND = "category.not.found";
     public static final String ARTICLE_NOT_FOUND = "article.not.found";
     public static final String MINIMUM_ONE_CATEGORY = "minimum.category";
-
+    public static final String TAG_NOT_FOUND = "tag.not.found";
 }

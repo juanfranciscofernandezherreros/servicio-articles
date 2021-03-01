@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.fernandez.api.articles.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fernandez.api.articles.model.auditable.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,14 +46,17 @@ public class Article extends Auditable<String> {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "articles_tags", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "tagstranslations_id")})
+    @JsonManagedReference
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "articles_categories", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "categories_id")})
+    @JsonManagedReference
     private List<Category> categories = new ArrayList<>();
 
 
