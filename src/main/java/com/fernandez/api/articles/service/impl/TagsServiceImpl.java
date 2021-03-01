@@ -1,7 +1,7 @@
 package com.fernandez.api.articles.service.impl;
 
 import com.fernandez.api.articles.common.Messages;
-import com.fernandez.api.articles.constants.PropertiesConstant;
+import com.fernandez.api.articles.constants.Properties;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
@@ -29,6 +29,12 @@ public class TagsServiceImpl implements TagService {
 
     private final Messages messages;
 
+    private ModelMapper modelMapper;
+
+    private TagDTO tagDto;
+
+    private Tag tag;
+
     @Override
     public List<TagDTO> tagDTOList(final ArticleDTO articleDTO) {
         return articleDTO.getTags()
@@ -38,20 +44,18 @@ public class TagsServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findTagById(Long tagsId) {
+    public Tag findTagById(final Long tagsId) {
         return tagsRepository.findById(tagsId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.TAG_NOT_FOUND)));
     }
 
-    private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, final String language) {
-        ModelMapper modelMapper = new ModelMapper();
-        tagDTO.setLanguage(language);
-        Tag tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
+    private TagDTO findTagByNameAndLanguage(final TagDTO tagDTO, final String language) {
+        tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
         if (Objects.nonNull(tag)) {
-            tagDTO = modelMapper.map(tag, TagDTO.class);
+            tagDto = modelMapper.map(tag, TagDTO.class);
         } else {
-            tagDTO = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
+            tagDto = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
         }
-        return tagDTO;
+        return tagDto;
     }
 }

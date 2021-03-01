@@ -1,7 +1,7 @@
 package com.fernandez.api.articles.service.impl;
 
 import com.fernandez.api.articles.common.Messages;
-import com.fernandez.api.articles.constants.PropertiesConstant;
+import com.fernandez.api.articles.constants.Properties;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
@@ -26,20 +26,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryRepository repository;
 
     private final Messages messages;
 
+    private ModelMapper modelMapper = new ModelMapper();
+
     @Override
     public CategoryDTO findByName(final String name) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(categoryRepository.findByName(name), CategoryDTO.class);
+        return modelMapper.map(repository.findByName(name), CategoryDTO.class);
     }
 
     @Override
     public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
-        Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
-        ModelMapper modelMapper = new ModelMapper();
+        final Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         return modelMapper.map(
                 articleDTO.getCategories()
                         .stream()
@@ -48,9 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
+    public Category findCategoryById(final Long categoryId) {
+        return repository.findById(categoryId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.CATEGORY_NOT_FOUND)));
     }
 
 }

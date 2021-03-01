@@ -16,5 +16,5 @@ public interface ArticleService {
 
     Page<ArticleDTO> findAllArticles(String acceptLanguage, String name, List<String> tags, List<String> categoria, Pageable pageable);
 
-    ArticleDTO findArticleBySlugOrId(String slug,Long articleId);
+    ArticleDTO findArticleBySlugOrId(String slug, Long articleId);
 }

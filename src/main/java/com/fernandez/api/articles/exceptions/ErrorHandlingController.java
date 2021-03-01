@@ -17,13 +17,13 @@ import java.util.Objects;
 public class ErrorHandlingController {
 
     @ExceptionHandler(ArticlesLogicException.class)
-    public ResponseEntity<ErrorMessage> logicException(final ArticlesLogicException ex, final WebRequest request) {
-        return buildResponseEntityException(new ErrorMessage(ex.getHttpStatus(), ex.getMessage(), Objects.toString(ex.getMessage())));
+    public ResponseEntity<ErrorMessage> logicException(final ArticlesLogicException exception, final WebRequest request) {
+        return buildResponseEntityException(new ErrorMessage(exception.getHttpStatus(), exception.getMessage(), Objects.toString(exception.getMessage())));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorMessage> dataIntegrationViolation(final DataIntegrityViolationException ex, final WebRequest request) {
-        return buildResponseEntityException(new ErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage(), Objects.toString(ex.getMessage())));
+    public ResponseEntity<ErrorMessage> dataIntegrationViolation(final DataIntegrityViolationException exception, final WebRequest request) {
+        return buildResponseEntityException(new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), Objects.toString(exception.getMessage())));
     }
 
     public ResponseEntity<ErrorMessage> buildResponseEntityException(final ErrorMessage error) {

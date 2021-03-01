@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 
 public class ArticlesLogicException extends ArticlesException {
 
+    private static final long serialVersionUID = 1L;
+
     @Getter
     private final HttpStatus httpStatus;
 

@@ -1,7 +1,7 @@
 package com.fernandez.api.articles.service.impl;
 
 import com.fernandez.api.articles.common.Messages;
-import com.fernandez.api.articles.constants.PropertiesConstant;
+import com.fernandez.api.articles.constants.Properties;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
@@ -41,10 +41,15 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
+    private Page<ArticleDTO> articleList;
+
+    private ModelMapper modelMapper = new ModelMapper();
+
+    private ArticleDTO articleDTO;
+
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
         log.debug("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
-        ModelMapper modelMapper = new ModelMapper();
         if (articleDTO.getCategories().size() > 0) {
             articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
             articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
@@ -53,25 +58,24 @@ public class ArticleServiceImpl implements ArticleService {
             }
             return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)), ArticleDTO.class);
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, Properties.ONE_CATEGORY);
         }
     }
 
     @Override
     public void deleteArticleById(final Long articleId) {
         articleRepository.delete(articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.ARTICLE_NOT_FOUND))));
     }
 
     @Override
     public ArticleDTO update(final ArticleDTO articleDTO) {
-        ModelMapper modelMapper = new ModelMapper();
         if (articleDTO.getCategories().size() > 0) {
             articleRepository.findById(articleDTO.getId())
-                    .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
+                    .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.ARTICLE_NOT_FOUND)));
             return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)), ArticleDTO.class);
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, Properties.ONE_CATEGORY);
         }
     }
 
@@ -81,8 +85,6 @@ public class ArticleServiceImpl implements ArticleService {
                                             final List<String> tag,
                                             final List<String> categories,
                                             final Pageable pageable) {
-        ModelMapper modelMapper = new ModelMapper();
-        Page<ArticleDTO> articleList = null;
         if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
                     .map(article -> modelMapper.map(article, ArticleDTO.class));
@@ -103,24 +105,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO findArticleBySlugOrId(String slug, Long articleId) {
-        ArticleDTO articleDTO = null;
-        if(Objects.nonNull(slug)){
+    public ArticleDTO findArticleBySlugOrId(final String slug, final Long articleId) {
+        if (Objects.nonNull(slug)) {
             articleDTO = findArticleBySlug(slug);
         }
-        if(Objects.nonNull(articleId)){
+        if (Objects.nonNull(articleId)) {
             articleDTO = findArticleById(articleId);
         }
         return articleDTO;
     }
 
-    private List<Category> findAllCategoriesById(List<String> categories) {
+    private List<Category> findAllCategoriesById(final List<String> categories) {
         return categories.stream()
                 .map(category -> categoryService.findCategoryById(Long.valueOf(category)))
                 .collect(Collectors.toList());
     }
 
-    private List<Tag> findAllTagsById(List<String> tags) {
+    private List<Tag> findAllTagsById(final List<String> tags) {
         return tags.stream()
                 .map(tag -> tagService.findTagById(Long.valueOf(tag)))
                 .collect(Collectors.toList());
@@ -128,18 +129,16 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private ArticleDTO findArticleBySlug(final String slug) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleRepository.findArticleBySlug(slug)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
 
     private ArticleDTO findArticleById(final Long articleId) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleRepository.findById(articleId)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
 }

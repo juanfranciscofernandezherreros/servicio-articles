@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.Locale;
 
 @Slf4j
 @Service
@@ -20,12 +17,7 @@ public class Messages {
 
     private MessageSourceAccessor accessor;
 
-    @PostConstruct
-    private void init() {
-        accessor = new MessageSourceAccessor(messageSource, new Locale("es", "ES"));
-    }
-
-    public String get(String code) {
+    public String get(final String code) {
         return accessor.getMessage(code);
     }
 

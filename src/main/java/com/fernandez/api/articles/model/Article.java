@@ -1,13 +1,11 @@
 package com.fernandez.api.articles.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fernandez.api.articles.model.auditable.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "articles")
-public class Article extends Auditable<String> {
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
 package com.fernandez.api.articles.dto;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -10,34 +9,33 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class ArticleDTO {
 
-    Long id;
+    private Long id;
 
     @NonNull
-    String title;
+    private String title;
 
     @NonNull
-    String slug;
+    private String slug;
 
     @NonNull
-    String description;
+    private String description;
 
     @NonNull
-    String content;
+    private String content;
 
     @NonNull
-    String mainImage;
+    private String mainImage;
 
     @NonNull
-    String language;
+    private String language;
 
-    UserDTO user;
+    private UserDTO user;
 
-    List<TagDTO> tags = new ArrayList<>();
+    private List<TagDTO> tags = new ArrayList<>();
 
-    List<CategoryDTO> categories = new ArrayList<>();
+    private List<CategoryDTO> categories = new ArrayList<>();
 
 }
