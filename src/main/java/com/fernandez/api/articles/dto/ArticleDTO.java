@@ -1,7 +1,11 @@
 package com.fernandez.api.articles.dto;
 
-import lombok.*;
 import org.springframework.lang.NonNull;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +36,10 @@ public class ArticleDTO {
     @NonNull
     private String language;
 
-    private UserDTO user;
+    private UserDto user;
 
-    private List<TagDTO> tags = new ArrayList<>();
+    private List<TagDto> tags = new ArrayList<>();
 
-    private List<CategoryDTO> categories = new ArrayList<>();
+    private List<CategoryDto> categories = new ArrayList<>();
 
 }

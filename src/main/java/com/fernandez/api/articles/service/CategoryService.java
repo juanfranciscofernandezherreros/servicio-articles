@@ -1,15 +1,14 @@
 package com.fernandez.api.articles.service;
 
 import com.fernandez.api.articles.dto.ArticleDTO;
-import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.CategoryDto;
 import com.fernandez.api.articles.model.Category;
-
 import java.util.List;
 
 public interface CategoryService {
-    CategoryDTO findByName(String name);
+    CategoryDto findByName(String name);
 
-    Category findCategoryById(Long categoryDTO);
+    Category findCategoryById(Long categoryDto);
 
-    List<CategoryDTO> categoryDTOList(ArticleDTO articleDTO);
+    List<CategoryDto> categoryDtoList(ArticleDTO articleDto);
 }

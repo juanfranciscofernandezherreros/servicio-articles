@@ -7,8 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagDTO {
+public class UserDto {
+
     private Long id;
+    private String username;
     private String name;
-    private String language;
+    private String fistName;
+    private String email;
+    private String imageProfile;
+    private String password;
+
 }
