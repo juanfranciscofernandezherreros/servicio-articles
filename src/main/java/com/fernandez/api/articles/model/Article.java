@@ -1,7 +1,7 @@
 package com.fernandez.api.articles.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fernandez.api.articles.model.auditable.Auditable;
+import com.fernandez.api.articles.model.auditable.Audit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "articles")
-public class Article extends Auditable<String> {
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +49,9 @@ public class Article extends Auditable<String> {
     @JsonManagedReference
     private User user;
 
+    @Embedded
+    private Audit audit = new Audit();
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "articles_tags", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "tagstranslations_id")})
     @JsonManagedReference
@@ -58,6 +61,5 @@ public class Article extends Auditable<String> {
     @JoinTable(name = "articles_categories", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "categories_id")})
     @JsonManagedReference
     private List<Category> categories = new ArrayList<>();
-
 
 }

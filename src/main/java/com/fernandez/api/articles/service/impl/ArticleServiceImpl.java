@@ -8,7 +8,9 @@ import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.model.Tag;
+import com.fernandez.api.articles.model.auditable.Audit;
 import com.fernandez.api.articles.repository.ArticleRepository;
+import com.fernandez.api.articles.repository.CountCommentsBlogRepository;
 import com.fernandez.api.articles.service.ArticleService;
 import com.fernandez.api.articles.service.CategoryService;
 import com.fernandez.api.articles.service.TagService;
@@ -25,7 +27,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,6 +45,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
 
     private final UserService userService;
+
+    private final CountCommentsBlogRepository countCommentsBlogRepository;
 
     private final CategoryService categoryService;
 
@@ -56,7 +64,8 @@ public class ArticleServiceImpl implements ArticleService {
             if (articleDTO.getTags().size() > 0) {
                 articleDTO.setTags(tagService.tagDTOList(articleDTO));
             }
-            return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)), ArticleDTO.class);
+            Article article = modelMapper.map(articleDTO, Article.class);
+            return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
         } else {
             throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
         }
@@ -74,7 +83,18 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleDTO.getCategories().size() > 0) {
             articleRepository.findById(articleDTO.getId())
                     .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
-            return modelMapper.map(articleRepository.save(modelMapper.map(articleDTO, Article.class)), ArticleDTO.class);
+            Article article = modelMapper.map(articleDTO, Article.class);
+            Audit audit = new Audit();
+            DateFormat sourceFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date createdOnDate = null;
+            try {
+                createdOnDate = sourceFormat.parse(articleDTO.getAuditDTO().getCreatedOn());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            audit.setCreatedOn(createdOnDate);
+            article.setAudit(audit);
+            return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
         } else {
             throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
         }
@@ -90,19 +110,19 @@ public class ArticleServiceImpl implements ArticleService {
         Page<ArticleDTO> articleList = null;
         if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
-                    .map(article -> modelMapper.map(article, ArticleDTO.class));
+                    .map(article -> mapFromEntityToDto(article));
         }
         if (Objects.nonNull(name)) {
             articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, name, pageable)
-                    .map(article -> modelMapper.map(article, ArticleDTO.class));
+                    .map(article -> mapFromEntityToDto(article));
         }
         if (Objects.nonNull(categories)) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(categories), pageable)
-                    .map(article -> modelMapper.map(article, ArticleDTO.class));
+                    .map(article -> mapFromEntityToDto(article));
         }
         if (Objects.nonNull(tag)) {
             articleList = articleRepository.findByTagsIn(findAllTagsById(tag), pageable)
-                    .map(article -> modelMapper.map(article, ArticleDTO.class));
+                    .map(article -> mapFromEntityToDto(article));
         }
         return articleList;
     }
@@ -146,5 +166,15 @@ public class ArticleServiceImpl implements ArticleService {
                 articleRepository.findById(articleId)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
+    }
+
+    private ArticleDTO mapFromEntityToDto(Article article) {
+        ModelMapper modelMapper = new ModelMapper();
+        ArticleDTO articleDto = modelMapper.map(article, ArticleDTO.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = formatter.format(article.getAudit().getCreatedOn());
+        articleDto.setCreatedDate(formattedDate);
+        articleDto.setTotalComments(countCommentsBlogRepository.countCommentsFromArticle(article.getId()));
+        return articleDto;
     }
 }

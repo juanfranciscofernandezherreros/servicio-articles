@@ -6,4 +6,4 @@ INSERT INTO CATEGORY (language, name)
 VALUES ('es-ES', 'cat2');
 INSERT INTO TAG (language, name)
 VALUES ('es-ES', 'tag1');
-
+INSERT INTO COMENTARIOS (ARTICLE_ID,ISANSWER) VALUES(1,false);
