@@ -7,6 +7,7 @@ import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.repository.CategoryRepository;
+import com.fernandez.api.articles.repository.CountCommentsBlogRepository;
 import com.fernandez.api.articles.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -60,18 +62,6 @@ public class CategoryServiceImpl implements CategoryService {
                  .collect(Collectors.toList()),pageable);
     }
 
-    @Override
-    public CategoryDTO save(CategoryDTO categoryDTO) {
-        Category category = modelMapper.map(categoryDTO,Category.class);
-        return modelMapper.map(categoryRepository.save(category),CategoryDTO.class);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        categoryRepository.delete(categoryRepository.findById(id)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
-    }
-
     private CategoryDTO mapFromEntityToDto(Category category) {
         CategoryDTO categoryDto = modelMapper.map(category,CategoryDTO.class);
         Long totalArticles = categoryRepository.countTotalArticlesFromCategory(category);
@@ -87,11 +77,6 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
-    }
-
-    @Override
-    public CategoryDTO findCategoryDtoById(Long categoryDTO) {
-        return modelMapper.map(findCategoryById(categoryDTO),CategoryDTO.class);
     }
 
     private Page convertList2Page(List list, Pageable pageable) {

@@ -6,8 +6,4 @@ public final class UrlMapping {
     public static final String PUBLIC = "/public";
     public static final String ARTICLES = "/articles";
     public static final String CATEGORIES = "/categories";
-    public static final String TAGS = "/tags";
-    public static final String COMMENTS = "/comments";
-    public static final String RANDOM = "/random";
-
 }
