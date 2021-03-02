@@ -3,6 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
@@ -17,15 +18,19 @@ import com.fernandez.api.articles.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -149,7 +154,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ArticleDTO findArticleBySlug(final String slug) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(articleRepository.findArticleBySlug(slug)
+        return modelMapper.map(
+                articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
