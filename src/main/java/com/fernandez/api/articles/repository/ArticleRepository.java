@@ -6,6 +6,7 @@ import com.fernandez.api.articles.model.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findArticleByLanguageAndTitle(String acceptLanguage, String name, Pageable pageable);
 
     Page<Article> findAllByLanguage(String acceptLanguage, Pageable pageable);
+
+
 }
