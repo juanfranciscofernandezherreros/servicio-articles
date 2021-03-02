@@ -38,7 +38,7 @@ public class Category {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "language", nullable = false)
     private String language;
 
     @Column(name = "slug", nullable = false)
