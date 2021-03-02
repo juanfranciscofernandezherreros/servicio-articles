@@ -14,4 +14,5 @@ public class TagDTO {
     Long id;
     String name;
     String language;
+    String slug;
 }

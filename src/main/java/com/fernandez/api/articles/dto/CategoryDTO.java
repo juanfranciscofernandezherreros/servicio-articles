@@ -11,4 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class CategoryDTO {
     Long id;
     String name;
+    String language;
+    String slug;
 }
