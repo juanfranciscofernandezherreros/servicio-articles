@@ -50,7 +50,7 @@ public class ArticleController {
         return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
-    @DeleteMapping(value = UrlMapping.PROTECTED)
+    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
     public void deleteById(@RequestParam final Long id) {
         articleService.deleteArticleById(id);
     }

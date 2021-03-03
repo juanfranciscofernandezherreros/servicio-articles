@@ -9,10 +9,18 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CategoryService {
+
     CategoryDTO findByName(String name);
+
     Category findCategoryById(Long categoryDTO);
+
+    CategoryDTO findCategoryDtoById(Long categoryDTO);
 
     List<CategoryDTO> categoryDTOList(ArticleDTO articleDTO);
 
     Page<CategoryDTO> findAll(String acceptLanguage, Pageable pageable);
+
+    CategoryDTO save(CategoryDTO categoryDTO);
+
+    void deleteById(Long id);
 }
