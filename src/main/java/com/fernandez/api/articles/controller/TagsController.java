@@ -25,7 +25,7 @@ public class TagsController {
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
     public Page<TagDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
                                      @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        log.info("[CategoryController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
+        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAll(acceptLanguage,pageable);
     }
 
