@@ -3,6 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Tag;
@@ -16,12 +17,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -71,13 +70,6 @@ public class TagsServiceImpl implements TagService {
     public Page<TagDTO> findAll(String acceptLanguage, Pageable pageable) {
         return tagsRepository.findAllByLanguage(acceptLanguage, pageable)
                 .map(tag -> mapFromEntityToDto(tag));
-    }
-
-    @Override
-    public Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable) {
-        List<Tag> list = tagsRepository.findAllByLanguage(acceptLanguage);
-        Collections.shuffle(list, new Random(System.nanoTime()));
-        return convertList2Page(list,pageable);
     }
 
     private TagDTO mapFromEntityToDto(Tag tag) {

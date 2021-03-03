@@ -1,6 +1,7 @@
 package com.fernandez.api.articles.controller;
 
 import com.fernandez.api.articles.constants.UrlMapping;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +25,8 @@ public class TagsController {
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
     public Page<TagDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
                                      @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
+        log.info("[CategoryController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAll(acceptLanguage,pageable);
-    }
-
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM)
-    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") final String acceptLanguage,
-                                @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
-        return tagService.findAllTagsRandom(acceptLanguage,pageable);
     }
 
     @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
