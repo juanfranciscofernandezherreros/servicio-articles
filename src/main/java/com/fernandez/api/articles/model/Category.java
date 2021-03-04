@@ -6,18 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.Table;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToMany;
-
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,6 +36,6 @@ public class Category {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
     @JsonBackReference
-    private @NotNull Set<Article> categories = new HashSet<>();
+    private Set<Article> categories = new HashSet<>();
 
 }
