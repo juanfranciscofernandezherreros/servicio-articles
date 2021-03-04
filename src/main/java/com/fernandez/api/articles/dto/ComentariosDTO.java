@@ -19,6 +19,6 @@ public class ComentariosDTO {
     private AuditDTO auditDTO;
     private ComentariosUserNotRegisteredDTO comentarioUserNotRegistered;
     private boolean isanswer;
-
+    private Long level;
 
 }
