@@ -19,4 +19,6 @@ public interface TagService {
     void deleteById(Long tagId);
 
     Page<TagDTO> findAll(String acceptLanguage, Pageable pageable);
+
+    Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable);
 }
