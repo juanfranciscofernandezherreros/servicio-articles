@@ -3,18 +3,16 @@ package com.fernandez.api.articles.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+@ToString
+public class ComentariosUserNotRegisteredDTO {
 
     private Long id;
-    private String username;
-    private String name;
-    private String fistName;
     private String email;
-    private String imageProfile;
-    private String password;
+    private String username;
 
 }

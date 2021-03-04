@@ -1,7 +1,7 @@
 package com.fernandez.api.articles.service;
 
-import com.fernandez.api.articles.dto.UserDto;
+import com.fernandez.api.articles.dto.UserDTO;
 
 public interface UserService {
-    UserDto findByUsername(String username);
+    UserDTO findByUsername(String username);
 }
