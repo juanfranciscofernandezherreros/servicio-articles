@@ -1,20 +1,19 @@
 package com.fernandez.api.articles.service;
 
 
-import com.fernandez.api.articles.dto.ArticleDto;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 
 public interface ArticleService {
-    ArticleDto save(final ArticleDto articleDto);
+    ArticleDTO save(final ArticleDTO articleDTO);
 
     void deleteArticleById(Long id);
 
-    ArticleDto update(ArticleDto articleDto);
+    ArticleDTO update(ArticleDTO articleDTO);
 
-    Page<ArticleDto> findAllArticles(String acceptLanguage, String name, List<String> tags, List<String> categoria, Pageable pageable);
+    Page<ArticleDTO> findAllArticles(String acceptLanguage, String name, List<String> tags, List<String> categoria, Pageable pageable);
 
-    ArticleDto findArticleBySlugOrId(String slug, Long articleId);
+    ArticleDTO findArticleBySlugOrId(String slug,Long articleId);
 }

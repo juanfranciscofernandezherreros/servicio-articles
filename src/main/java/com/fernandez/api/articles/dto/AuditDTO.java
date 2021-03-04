@@ -3,12 +3,15 @@ package com.fernandez.api.articles.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagDto {
-    private Long id;
-    private String name;
-    private String language;
+@ToString
+public class AuditDTO {
+
+    private String createdOn;
+    private String updatedOn;
+
 }

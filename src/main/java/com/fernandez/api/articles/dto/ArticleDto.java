@@ -1,12 +1,9 @@
 package com.fernandez.api.articles.dto;
 
-import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,33 +11,41 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class ArticleDto {
+public class ArticleDTO {
 
-    private Long id;
-
-    @NonNull
-    private String title;
+    Long id;
 
     @NonNull
-    private String slug;
+    String title;
 
     @NonNull
-    private String description;
+    String slug;
 
     @NonNull
-    private String content;
+    String description;
 
     @NonNull
-    private String mainImage;
+    String content;
 
     @NonNull
-    private String language;
+    String mainImage;
 
-    private UserDto user;
+    @NonNull
+    String language;
 
-    private @NotNull List<TagDto> tags = new ArrayList<>();
+    UserDTO user;
 
-    private @NotNull List<CategoryDto> categories = new ArrayList<>();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    String createdDate;
+
+    Long totalComments;
+
+    AuditDTO auditDTO;
+
+    List<TagDTO> tags = new ArrayList<>();
+
+    List<CategoryDTO> categories = new ArrayList<>();
 
 }

@@ -38,8 +38,11 @@ public class Tag {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "language")
+    @Column(name = "language", nullable = false)
     private String language;
+
+    @Column(name = "slug", nullable = false)
+    private String slug;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "tags")
     @JsonBackReference
