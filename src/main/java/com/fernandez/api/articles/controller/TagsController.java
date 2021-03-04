@@ -1,7 +1,6 @@
 package com.fernandez.api.articles.controller;
 
 import com.fernandez.api.articles.constants.UrlMapping;
-import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.service.TagService;
 import lombok.RequiredArgsConstructor;
