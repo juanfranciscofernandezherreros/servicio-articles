@@ -149,8 +149,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ArticleDTO findArticleBySlug(final String slug) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(
-                articleRepository.findArticleBySlug(slug)
+        return modelMapper.map(articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
