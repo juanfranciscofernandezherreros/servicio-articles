@@ -7,7 +7,6 @@ import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.repository.CategoryRepository;
-import com.fernandez.api.articles.repository.CountCommentsBlogRepository;
 import com.fernandez.api.articles.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,6 @@
 package com.fernandez.api.articles.model;
 
-import com.fernandez.api.articles.model.Article;
-import com.fernandez.api.articles.model.User;
+import com.fernandez.api.articles.model.auditable.Audit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -26,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comentarios")
 public class Comentarios implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +31,18 @@ public class Comentarios implements Serializable {
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User authorComment;
 
-    @JoinColumn(name = "article_id")
     private Long articleId;
 
     @JoinColumn(name = "parent_id", insertable = false, updatable = false)
     private Long parentId;
 
-    private String dateTime;
+    @Embedded
+    private Audit audit = new Audit();
 
     private boolean isanswer;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "comentarios_usernotregistered" )
+    private ComentariosUserNotRegistered comentarioUserNotRegistered;
 
 }
