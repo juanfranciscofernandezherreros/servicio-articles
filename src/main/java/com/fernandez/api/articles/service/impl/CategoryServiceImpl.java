@@ -3,7 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.Properties;
 import com.fernandez.api.articles.dto.ArticleDto;
-import com.fernandez.api.articles.dto.CategoryDto;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.repository.CategoryRepository;
@@ -34,13 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public CategoryDto findByName(final String name) {
-        return modelMapper.map(repository.findByName(name), CategoryDto.class);
+    public CategoryDTO findByName(final String name) {
+        return modelMapper.map(repository.findByName(name), CategoryDTO.class);
     }
 
     @Override
-    public List<CategoryDto> categoryDtoList(final @NotNull ArticleDto articleDto) {
-        final Type listType = new TypeToken<List<CategoryDto>>() {}.getType();
+    public List<CategoryDTO> categoryDtoList(final @NotNull ArticleDto articleDto) {
+        final Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         return modelMapper.map(
                 articleDto.getCategories()
                         .stream()

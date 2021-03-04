@@ -3,7 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.Properties;
 import com.fernandez.api.articles.dto.ArticleDto;
-import com.fernandez.api.articles.dto.TagDto;
+import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Tag;
 import com.fernandez.api.articles.repository.TagsRepository;
@@ -31,12 +31,12 @@ public class TagsServiceImpl implements TagService {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    private TagDto tagDto;
+    private TagDTO tagDto;
 
     private Tag tag;
 
     @Override
-    public List<TagDto> tagDtoList(final @NotNull ArticleDto aricleDto) {
+    public List<TagDTO> tagDtoList(final @NotNull ArticleDto aricleDto) {
         return aricleDto.getTags()
                 .stream()
                 .map(tag -> findTagByNameAndLanguage(tag, aricleDto.getLanguage()))
@@ -49,12 +49,12 @@ public class TagsServiceImpl implements TagService {
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(Properties.TAG_NOT_FOUND)));
     }
 
-    private TagDto findTagByNameAndLanguage(final @NotNull TagDto tagDTO, final String language) {
+    private TagDTO findTagByNameAndLanguage(final @NotNull TagDTO tagDTO, final String language) {
         tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
         if (Objects.nonNull(tag)) {
-            tagDto = modelMapper.map(tag, TagDto.class);
+            tagDto = modelMapper.map(tag, TagDTO.class);
         } else {
-            tagDto = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDto.class);
+            tagDto = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
         }
         return tagDto;
     }

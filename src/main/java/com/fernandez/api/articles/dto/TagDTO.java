@@ -1,14 +1,18 @@
 package com.fernandez.api.articles.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagDto {
-    private Long id;
-    private String name;
-    private String language;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class TagDTO {
+    Long id;
+    String name;
+    String language;
+    String slug;
 }
