@@ -29,6 +29,13 @@ public class TagsController {
         return tagService.findAll(acceptLanguage,pageable);
     }
 
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM)
+    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") final String acceptLanguage,
+                                @PageableDefault(page = 0, size = 5) Pageable pageable) {
+        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
+        return tagService.findAllTagsRandom(acceptLanguage,pageable);
+    }
+
     @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
     public TagDTO findById(@RequestParam final Long tagId) {
         log.info("[CategoryController][findById] tagId={}", tagId);
