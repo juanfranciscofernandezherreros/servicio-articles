@@ -2,7 +2,7 @@ package com.fernandez.api.articles.service.impl;
 
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
-import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
