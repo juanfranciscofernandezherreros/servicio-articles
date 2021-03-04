@@ -1,6 +1,5 @@
 package com.fernandez.api.articles.service.impl;
 
-import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.ComentariosDTO;
 import com.fernandez.api.articles.model.Comentarios;
 import com.fernandez.api.articles.model.ComentariosUserNotRegistered;
@@ -33,18 +32,40 @@ public class ComentarioServiceImpl implements ComentarioService {
     private User foundUsername;
 
     @Override
+    public List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long blogsTranslation, List<ComentariosDTO> comentariosList) {
+        List<Comentarios> comentarios = commentsRepository.findAllByParentIdAndArticleId(comentarioId, blogsTranslation);
+        if (comentarios != null) {
+            for (Comentarios comentario : comentarios) {
+                if (comentario.getComentarioUserNotRegistered() == null) {
+                    comentariosList.add(mapFromDtoToEntity(comentario, level));
+                } else {
+                    comentariosList.add(mapFromDtoToEntity(comentario, level));
+                }
+                findAllComentariosByBlogTranslationId(comentario.getId(), level + 1, blogsTranslation, comentariosList);
+            }
+        }
+        return comentariosList;
+    }
+
+    @Override
     public ComentariosDTO save(ComentariosDTO comentariosDTO) {
         Comentarios comentarios = modelMapper.map(comentariosDTO, Comentarios.class);
-        if(Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered())) {
-            if(Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getEmail())) {
+        if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered())) {
+            if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getEmail())) {
                 foundEmail = userRepository.findByEmail(comentariosDTO.getComentarioUserNotRegistered().getEmail());
             }
-            if(Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getUsername())) {
+            if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getUsername())) {
                 foundUsername = userRepository.findByUsername(comentariosDTO.getComentarioUserNotRegistered().getUsername());
             }
             ComentariosUserNotRegistered comentariosUserNotRegistered = modelMapper.map(comentariosDTO.getComentarioUserNotRegistered(), ComentariosUserNotRegistered.class);
             comentarios.setComentarioUserNotRegistered(comentariosUserNotRegistered);
         }
-        return modelMapper.map(commentsRepository.save(comentarios),ComentariosDTO.class);
+        return modelMapper.map(commentsRepository.save(comentarios), ComentariosDTO.class);
+    }
+
+    private ComentariosDTO mapFromDtoToEntity(Comentarios comentarios,Long level) {
+        ComentariosDTO comentariosDTO = modelMapper.map(comentarios,ComentariosDTO.class);
+        comentariosDTO.setLevel(level);
+        return comentariosDTO;
     }
 }
