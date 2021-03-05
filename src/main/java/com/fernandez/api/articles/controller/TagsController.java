@@ -30,21 +30,21 @@ public class TagsController {
     private final TagService tagService;
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
-    public Page<TagDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
-                                     @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public Page<TagDTO> findAll(@RequestHeader("accept-language") String acceptLanguage,
+                                     @PageableDefault(size = 5) Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAll(acceptLanguage,pageable);
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM)
-    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") final String acceptLanguage,
-                                @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") String acceptLanguage,
+                                @PageableDefault(size = 5) Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAllTagsRandom(acceptLanguage,pageable);
     }
 
     @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO findById(@RequestParam final Long tagId) {
+    public TagDTO findById(@RequestParam Long tagId) {
         log.info("[CategoryController][findById] tagId={}", tagId);
         return tagService.findTagDtoById(tagId);
     }
@@ -62,7 +62,7 @@ public class TagsController {
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public void deleteTagById(@RequestParam final Long tagId) {
+    public void deleteTagById(@RequestParam Long tagId) {
         log.info("[TagsController][deleteById] tagId={}", tagId);
         tagService.deleteById(tagId);
     }

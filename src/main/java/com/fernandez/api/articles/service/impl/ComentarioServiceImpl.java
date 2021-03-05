@@ -26,11 +26,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     private final CommentsRepository commentsRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
-    private User foundEmail;
-
-    private User foundUsername;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long articleId, List<ComentariosDTO> comentariosList) {
@@ -39,11 +35,7 @@ public class ComentarioServiceImpl implements ComentarioService {
         List<Comentarios> comentarios = commentsRepository.findAllByParentIdAndArticleId(comentarioId, articleId);
         if (comentarios != null) {
             for (Comentarios comentario : comentarios) {
-                if (comentario.getComentarioUserNotRegistered() == null) {
-                    comentariosList.add(mapFromDtoToEntity(comentario, level));
-                } else {
-                    comentariosList.add(mapFromDtoToEntity(comentario, level));
-                }
+                comentariosList.add(mapFromDtoToEntity(comentario, level));
                 findAllComentariosByBlogTranslationId(comentario.getId(), level + 1, articleId, comentariosList);
             }
         }
@@ -56,10 +48,10 @@ public class ComentarioServiceImpl implements ComentarioService {
         Comentarios comentarios = modelMapper.map(comentariosDTO, Comentarios.class);
         if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered())) {
             if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getEmail())) {
-                foundEmail = userRepository.findByEmail(comentariosDTO.getComentarioUserNotRegistered().getEmail());
+                final User foundEmail = userRepository.findByEmail(comentariosDTO.getComentarioUserNotRegistered().getEmail());
             }
             if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getUsername())) {
-                foundUsername = userRepository.findByUsername(comentariosDTO.getComentarioUserNotRegistered().getUsername());
+                final User foundUsername = userRepository.findByUsername(comentariosDTO.getComentarioUserNotRegistered().getUsername());
             }
             ComentariosUserNotRegistered comentariosUserNotRegistered = modelMapper.map(comentariosDTO.getComentarioUserNotRegistered(), ComentariosUserNotRegistered.class);
             comentarios.setComentarioUserNotRegistered(comentariosUserNotRegistered);

@@ -13,15 +13,13 @@ import javax.transaction.Transactional;
 public class Messages {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(Messages.class);
-    private final MessageSource messageSource;
 
     private MessageSourceAccessor accessor;
 
     public Messages(MessageSource messageSource) {
-        this.messageSource = messageSource;
     }
 
-    public @NotNull String get(final @NotNull String code) {
+    public @NotNull String get(@NotNull String code) {
         return accessor.getMessage(code);
     }
 

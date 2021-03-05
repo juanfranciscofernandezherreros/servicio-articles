@@ -27,7 +27,7 @@ public class ComentariosController {
     private final ComentarioService comentarioService;
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.COMMENTS)
-    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam(required = true) final Long articleId) {
+    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam() Long articleId) {
         log.info("[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}", articleId);
         List<ComentariosDTO> tmpList = new ArrayList<ComentariosDTO>();
         return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,tmpList);

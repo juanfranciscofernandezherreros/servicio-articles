@@ -10,7 +10,7 @@ public class ArticlesLogicException extends ArticlesException {
     @Getter
     private final HttpStatus httpStatus;
 
-    public ArticlesLogicException(final HttpStatus httpStatus, final String message) {
+    public ArticlesLogicException(HttpStatus httpStatus, String message) {
         super(message);
         this.httpStatus = httpStatus;
     }

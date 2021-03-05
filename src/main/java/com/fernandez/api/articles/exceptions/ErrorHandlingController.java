@@ -19,19 +19,19 @@ import java.util.Objects;
 public class ErrorHandlingController {
 
     @ExceptionHandler(ArticlesLogicException.class)
-    public @NotNull ResponseEntity<ErrorMessage> logicException(final @NotNull ArticlesLogicException exception,
-                                                                final WebRequest request) {
+    public @NotNull ResponseEntity<ErrorMessage> logicException(@NotNull ArticlesLogicException exception,
+                                                                WebRequest request) {
         return buildResponseEntityException(new ErrorMessage(exception.getHttpStatus(),
                 exception.getMessage(), Objects.toString(exception.getMessage())));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public @NotNull ResponseEntity<ErrorMessage> dataIntegrationViolation(final @NotNull DataIntegrityViolationException exception,
-                                                                          final WebRequest request) {
+    public @NotNull ResponseEntity<ErrorMessage> dataIntegrationViolation(@NotNull DataIntegrityViolationException exception,
+                                                                          WebRequest request) {
         return buildResponseEntityException(new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), Objects.toString(exception.getMessage())));
     }
 
-    public @NotNull ResponseEntity<ErrorMessage> buildResponseEntityException(final @NotNull ErrorMessage error) {
+    public @NotNull ResponseEntity<ErrorMessage> buildResponseEntityException(@NotNull ErrorMessage error) {
         return new ResponseEntity<>(error, error.getStatusCode());
     }
 

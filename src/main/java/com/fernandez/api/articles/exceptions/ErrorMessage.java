@@ -10,7 +10,7 @@ public class ErrorMessage {
     private final String message;
     private final String description;
 
-    public ErrorMessage(final HttpStatus statusCode, final String message, final String description) {
+    public ErrorMessage(HttpStatus statusCode, String message, String description) {
         this.statusCode = statusCode;
         this.message = message;
         this.description = description;

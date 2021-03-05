@@ -34,10 +34,10 @@ public class TagsServiceImpl implements TagService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public List<TagDTO> tagDTOList(final ArticleDTO articleDTO) {
+    public List<TagDTO> tagDTOList(ArticleDTO articleDTO) {
         log.info("[TagsServiceImpl][tagDTOList] articleDTO={}" , articleDTO);
         return articleDTO.getTags()
                 .stream()
@@ -76,7 +76,7 @@ public class TagsServiceImpl implements TagService {
     public Page<TagDTO> findAll(String acceptLanguage, Pageable pageable) {
         log.info("[TagsServiceImpl][findAll] acceptLanguage={} pageable={}" , acceptLanguage , pageable);
         return tagsRepository.findAllByLanguage(acceptLanguage, pageable)
-                .map(tag -> mapFromEntityToDto(tag));
+                .map( this :: mapFromEntityToDto );
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TagsServiceImpl implements TagService {
         return modelMapper.map(tag,TagDTO.class);
     }
 
-    private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, final String language) {
+    private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, String language) {
         ModelMapper modelMapper = new ModelMapper();
         Tag tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
         if (Objects.nonNull(tag)) {

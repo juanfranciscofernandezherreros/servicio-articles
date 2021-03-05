@@ -34,16 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public CategoryDTO findByName(final String name) {
+    public CategoryDTO findByName(String name) {
         log.info("[CategoryServiceImpl][findByName] name={}", name);
         return modelMapper.map(categoryRepository.findByName(name), CategoryDTO.class);
     }
 
     @Override
-    public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
+    public List<CategoryDTO> categoryDTOList(ArticleDTO articleDTO) {
         log.info("[CategoryServiceImpl][categoryDTOList] articleDTO={}", articleDTO);
         Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         return modelMapper.map(
@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("[CategoryServiceImpl][findAll] acceptLanguage={} pageable={}", acceptLanguage ,pageable);
         return convertList2Page(categoryRepository.findAllByLanguage(acceptLanguage)
                  .stream()
-                 .map(category -> mapFromEntityToDto(category))
+                 .map( this :: mapFromEntityToDto )
                  .sorted(Comparator.comparing(CategoryDTO::getTotalArticles).reversed())
                  .collect(Collectors.toList()),pageable);
     }

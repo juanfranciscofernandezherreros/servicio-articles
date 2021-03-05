@@ -31,6 +31,6 @@ public class XClacksOverhead implements Filter {
     public void destroy() {}
 
     @Override
-    public void init(FilterConfig arg0) throws ServletException {}
+    public void init(FilterConfig arg0) {}
 
 }

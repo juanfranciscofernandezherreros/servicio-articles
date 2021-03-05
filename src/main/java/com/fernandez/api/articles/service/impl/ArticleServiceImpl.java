@@ -49,11 +49,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
 
     @Override
-    public ArticleDTO save(final ArticleDTO articleDTO) {
+    public ArticleDTO save(ArticleDTO articleDTO) {
         log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
         if (articleDTO.getCategories().size() > 0) {
             articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
@@ -69,14 +69,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticleById(final Long articleId) {
+    public void deleteArticleById(Long articleId) {
         log.info("[ArticleServiceImpl][deleteArticleById] articleId={}", articleId);
         articleRepository.delete(articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
     }
 
     @Override
-    public ArticleDTO update(final ArticleDTO articleDTO) {
+    public ArticleDTO update(ArticleDTO articleDTO) {
         log.info("[ArticleServiceImpl][update] articleDTO={}", articleDTO);
         if (articleDTO.getCategories().size() > 0) {
             articleRepository.findById(articleDTO.getId())
@@ -99,29 +99,29 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<ArticleDTO> findAllArticles(final String acceptLanguage,
-                                            final String name,
-                                            final List<String> tag,
-                                            final List<String> categories,
-                                            final Pageable pageable) {
+    public Page<ArticleDTO> findAllArticles(String acceptLanguage,
+                                            String name,
+                                            List<String> tag,
+                                            List<String> categories,
+                                            Pageable pageable) {
         log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} name={} tag={} categories={} pageable={}",
                 acceptLanguage , name , tag , categories , pageable);
         Page<ArticleDTO> articleList = null;
         if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map( this :: mapFromEntityToDto );
         }
         if (Objects.nonNull(name)) {
             articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, name, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map( this :: mapFromEntityToDto );
         }
         if (Objects.nonNull(categories)) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(categories), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map( this :: mapFromEntityToDto );
         }
         if (Objects.nonNull(tag)) {
             articleList = articleRepository.findByTagsIn(findAllTagsById(tag), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map( this :: mapFromEntityToDto );
         }
         return articleList;
     }
@@ -152,13 +152,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-    private ArticleDTO findArticleBySlug(final String slug) {
+    private ArticleDTO findArticleBySlug(String slug) {
         return modelMapper.map(articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
 
-    private ArticleDTO findArticleById(final Long articleId) {
+    private ArticleDTO findArticleById(Long articleId) {
         return modelMapper.map(
                 articleRepository.findById(articleId)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))

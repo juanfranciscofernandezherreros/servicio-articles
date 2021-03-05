@@ -30,16 +30,10 @@ public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    private User user;
-
     @Override
-    public UserDTO findByUsername(final String username) {
+    public UserDTO findByUsername(String username) {
         log.info("[UserServiceImpl][findByUsername] username={}" , username);
-        user = userRepository.findByUsername(username);
-        if (Objects.nonNull(user)) {
-            return modelMapper.map(user, UserDTO.class);
-        } else {
-            throw new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.USER_NOT_FOUND));
-        }
+        final User user = userRepository.findByUsername(username);
+        return modelMapper.map(user, UserDTO.class);
     }
 }

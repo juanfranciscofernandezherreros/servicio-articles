@@ -44,10 +44,10 @@ public class ArticleController {
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.ARTICLES)
-    public Page<ArticleDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
-                                    @RequestParam(required = false) final String name,
-                                    @RequestParam(required = false) final List<String> tags,
-                                    @RequestParam(required = false) final List<String> categories,
+    public Page<ArticleDTO> findAll(@RequestHeader("accept-language") String acceptLanguage,
+                                    @RequestParam(required = false) String name,
+                                    @RequestParam(required = false) List<String> tags,
+                                    @RequestParam(required = false) List<String> categories,
                                     @PageableDefault(size = 5) Pageable pageable) {
         log.info("[ArticleController][findAll] acceptLanguage={} name={} tags={} caregories={} pageable={}",
                 acceptLanguage , name , tags , categories , pageable);
@@ -55,14 +55,14 @@ public class ArticleController {
     }
 
     @GetMapping(value = UrlMapping.PUBLIC)
-    public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
-                                            @RequestParam(required = false) final String slug) {
+    public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) Long articleId,
+                                            @RequestParam(required = false) String slug) {
         log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug?{}" , articleId , slug);
         return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
-    public void deleteById(@RequestParam final Long id) {
+    public void deleteById(@RequestParam Long id) {
         log.info("[ArticleController][deleteById] id={}" , id );
         articleService.deleteArticleById(id);
     }
