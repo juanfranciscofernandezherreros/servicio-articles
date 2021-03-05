@@ -31,19 +31,19 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping (UrlMapping.PROTECTED + UrlMapping.ARTICLES )
+    @PostMapping (UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLES )
     public ArticleDTO save ( final @Validated @RequestBody ArticleDTO articleDTO ) {
         log.info ( "[ArticleController][save] articleDTO={}" , articleDTO );
         return articleService.save ( articleDTO );
     }
 
-    @PutMapping (UrlMapping.PROTECTED + UrlMapping.ARTICLES )
+    @PutMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.ARTICLES )
     public ArticleDTO update ( final @RequestBody ArticleDTO articleDTO ) {
         log.info ( "[ArticleController][update] articleDTO={}" , articleDTO );
         return articleService.update ( articleDTO );
     }
 
-    @GetMapping (UrlMapping.PUBLIC + UrlMapping.ARTICLES )
+    @GetMapping (UrlMapping.PUBLIC +  UrlMapping.V1 + UrlMapping.ARTICLES )
     public Page < ArticleDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
                                          final @RequestParam ( required = false ) String name ,
                                          final @RequestParam ( required = false ) List < String > tags ,
@@ -54,14 +54,14 @@ public class ArticleController {
         return articleService.findAllArticles ( acceptLanguage , name , tags , categories , pageable );
     }
 
-    @GetMapping (UrlMapping.PUBLIC )
+    @GetMapping (UrlMapping.PUBLIC + UrlMapping.V1)
     public ArticleDTO findArticleBySlugOrId ( final @RequestParam ( required = false ) Long articleId ,
                                               final @RequestParam ( required = false ) String slug ) {
         log.info ( "[ArticleController][findArticleBySlugOrId] articleId={} slug?{}" , articleId , slug );
         return articleService.findArticleBySlugOrId ( slug , articleId );
     }
 
-    @DeleteMapping (UrlMapping.PROTECTED + UrlMapping.ARTICLES )
+    @DeleteMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.ARTICLES )
     public void deleteById ( final @RequestParam Long id ) {
         log.info ( "[ArticleController][deleteById] id={}" , id );
         articleService.deleteArticleById ( id );

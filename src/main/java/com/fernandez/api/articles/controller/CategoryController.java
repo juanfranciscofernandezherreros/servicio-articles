@@ -29,32 +29,32 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping (UrlMapping.PUBLIC + UrlMapping.CATEGORIES )
+    @GetMapping (UrlMapping.PUBLIC +  UrlMapping.V1 + UrlMapping.CATEGORIES )
     public Page < CategoryDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
                                           final @PageableDefault ( size = 5 ) Pageable pageable ) {
         log.info ( "[CategoryController][findAll] acceptLanguage={} , pageable={}" , acceptLanguage , pageable );
         return categoryService.findAll ( acceptLanguage , pageable );
     }
 
-    @PostMapping (UrlMapping.PROTECTED + UrlMapping.CATEGORIES )
+    @PostMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
     public CategoryDTO save ( final @Validated @RequestBody CategoryDTO categoryDTO ) {
         log.info ( "[CategoryController][save] categoryDTO={}" , categoryDTO );
         return categoryService.save ( categoryDTO );
     }
 
-    @PutMapping (UrlMapping.PROTECTED + UrlMapping.CATEGORIES )
+    @PutMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
     public CategoryDTO update ( final @Validated @RequestBody CategoryDTO categoryDTO ) {
         log.info ( "[CategoryController][update] categoryDTO={}" , categoryDTO );
         return categoryService.save ( categoryDTO );
     }
 
-    @GetMapping (UrlMapping.PROTECTED + UrlMapping.CATEGORIES )
+    @GetMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
     public CategoryDTO findById ( final @RequestParam Long categoryId ) {
         log.info ( "[CategoryController][findById] categoryId={}" , categoryId );
         return categoryService.findCategoryDtoById ( categoryId );
     }
 
-    @DeleteMapping ( UrlMapping.PROTECTED + UrlMapping.CATEGORIES )
+    @DeleteMapping ( UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
     public void deleteCategoryById ( final @RequestParam Long categoryId ) {
         log.info ( "[CategoryController][deleteById] categoryId={}" , categoryId );
         categoryService.deleteById ( categoryId );
