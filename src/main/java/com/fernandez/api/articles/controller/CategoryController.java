@@ -24,6 +24,7 @@ public class CategoryController {
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.CATEGORIES)
     public Page<CategoryDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
                                      @PageableDefault(page = 0, size = 5) Pageable pageable) {
+        log.info("[CategoryController][findAll] acceptLanguage={} , pageable={}", acceptLanguage , pageable);
         Page<CategoryDTO> categoryDtoPage = categoryService.findAll(acceptLanguage,pageable);
         return categoryDtoPage;
     }

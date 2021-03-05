@@ -49,10 +49,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
+    private ModelMapper modelMapper = new ModelMapper();
+
+
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
-        log.debug("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
-        ModelMapper modelMapper = new ModelMapper();
+        log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
         if (articleDTO.getCategories().size() > 0) {
             articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
             articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
@@ -68,13 +70,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticleById(final Long articleId) {
+        log.info("[ArticleServiceImpl][deleteArticleById] articleId={}", articleId);
         articleRepository.delete(articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
     }
 
     @Override
     public ArticleDTO update(final ArticleDTO articleDTO) {
-        ModelMapper modelMapper = new ModelMapper();
+        log.info("[ArticleServiceImpl][update] articleDTO={}", articleDTO);
         if (articleDTO.getCategories().size() > 0) {
             articleRepository.findById(articleDTO.getId())
                     .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
@@ -101,7 +104,8 @@ public class ArticleServiceImpl implements ArticleService {
                                             final List<String> tag,
                                             final List<String> categories,
                                             final Pageable pageable) {
-        ModelMapper modelMapper = new ModelMapper();
+        log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} name={} tag={} categories={} pageable={}",
+                acceptLanguage , name , tag , categories , pageable);
         Page<ArticleDTO> articleList = null;
         if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
@@ -124,6 +128,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDTO findArticleBySlugOrId(String slug, Long articleId) {
+        log.info("ArticleServiceImpl");
         ArticleDTO articleDTO = null;
         if(Objects.nonNull(slug)){
             articleDTO = findArticleBySlug(slug);
@@ -148,14 +153,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private ArticleDTO findArticleBySlug(final String slug) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
 
     private ArticleDTO findArticleById(final Long articleId) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleRepository.findById(articleId)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
@@ -163,7 +166,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private ArticleDTO mapFromEntityToDto(Article article) {
-        ModelMapper modelMapper = new ModelMapper();
         ArticleDTO articleDto = modelMapper.map(article, ArticleDTO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = formatter.format(article.getAudit().getCreatedOn());

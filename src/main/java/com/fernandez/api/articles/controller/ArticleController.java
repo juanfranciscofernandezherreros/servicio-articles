@@ -10,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -25,7 +23,7 @@ public class ArticleController {
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
     public ArticleDTO save(@Validated @RequestBody ArticleDTO articleDTO) {
-        log.info("[ArticleController][Create] articleDTO={}", articleDTO);
+        log.info("[ArticleController][save] articleDTO={}", articleDTO);
         return articleService.save(articleDTO);
     }
 
@@ -40,18 +38,22 @@ public class ArticleController {
                                     @RequestParam(required = false) final String name,
                                     @RequestParam(required = false) final List<String> tags,
                                     @RequestParam(required = false) final List<String> categories,
-                                    @PageableDefault(page = 0, size = 5) Pageable pageable) {
+                                    @PageableDefault(size = 5) Pageable pageable) {
+        log.info("[ArticleController][findAll] acceptLanguage={} name={} tags={} caregories={} pageable={}",
+                acceptLanguage , name , tags , categories , pageable);
         return articleService.findAllArticles(acceptLanguage, name, tags, categories, pageable);
     }
 
     @GetMapping(value = UrlMapping.PUBLIC)
     public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
                                             @RequestParam(required = false) final String slug) {
+        log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug?{}" , articleId , slug);
         return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
     public void deleteById(@RequestParam final Long id) {
+        log.info("[ArticleController][deleteById] id={}" , id );
         articleService.deleteArticleById(id);
     }
 }

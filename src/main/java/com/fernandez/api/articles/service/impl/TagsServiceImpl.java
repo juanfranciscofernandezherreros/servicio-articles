@@ -38,6 +38,7 @@ public class TagsServiceImpl implements TagService {
 
     @Override
     public List<TagDTO> tagDTOList(final ArticleDTO articleDTO) {
+        log.info("[TagsServiceImpl][tagDTOList] articleDTO={}" , articleDTO);
         return articleDTO.getTags()
                 .stream()
                 .map(tag -> findTagByNameAndLanguage(tag, articleDTO.getLanguage()))
@@ -46,29 +47,34 @@ public class TagsServiceImpl implements TagService {
 
     @Override
     public Tag findTagById(Long tagsId) {
+        log.info("[TagsServiceImpl][findTagById] tagsId={}" , tagsId);
         return tagsRepository.findById(tagsId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
     }
 
     @Override
     public TagDTO findTagDtoById(Long tagId) {
+        log.info("[TagsServiceImpl][findTagDtoById] tagId={}" , tagId);
         return modelMapper.map(tagsRepository.findById(tagId), TagDTO.class);
     }
 
     @Override
     public TagDTO save(TagDTO tagDTO) {
+        log.info("[TagsServiceImpl][save] tagDTO={}" , tagDTO);
         Tag tag = modelMapper.map(tagDTO,Tag.class);
         return modelMapper.map(tagsRepository.save(tag), TagDTO.class);
     }
 
     @Override
     public void deleteById(Long tagId) {
+        log.info("[TagsServiceImpl][deleteById] tagId={}" , tagId);
         tagsRepository.delete(tagsRepository.findById(tagId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
     }
 
     @Override
     public Page<TagDTO> findAll(String acceptLanguage, Pageable pageable) {
+        log.info("[TagsServiceImpl][findAll] acceptLanguage={} pageable={}" , acceptLanguage , pageable);
         return tagsRepository.findAllByLanguage(acceptLanguage, pageable)
                 .map(tag -> mapFromEntityToDto(tag));
     }

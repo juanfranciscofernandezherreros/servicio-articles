@@ -33,8 +33,10 @@ public class ComentarioServiceImpl implements ComentarioService {
     private User foundUsername;
 
     @Override
-    public List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long blogsTranslation, List<ComentariosDTO> comentariosList) {
-        List<Comentarios> comentarios = commentsRepository.findAllByParentIdAndArticleId(comentarioId, blogsTranslation);
+    public List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long articleId, List<ComentariosDTO> comentariosList) {
+        log.info("[ComentarioServiceImpl][findAllComentariosByBlogTranslationId] comentarioId={} level={} articleId={} comentariosList={}", 
+                comentarioId , level , articleId , comentariosList);
+        List<Comentarios> comentarios = commentsRepository.findAllByParentIdAndArticleId(comentarioId, articleId);
         if (comentarios != null) {
             for (Comentarios comentario : comentarios) {
                 if (comentario.getComentarioUserNotRegistered() == null) {
@@ -42,7 +44,7 @@ public class ComentarioServiceImpl implements ComentarioService {
                 } else {
                     comentariosList.add(mapFromDtoToEntity(comentario, level));
                 }
-                findAllComentariosByBlogTranslationId(comentario.getId(), level + 1, blogsTranslation, comentariosList);
+                findAllComentariosByBlogTranslationId(comentario.getId(), level + 1, articleId, comentariosList);
             }
         }
         return comentariosList;
@@ -50,6 +52,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Override
     public ComentariosDTO save(ComentariosDTO comentariosDTO) {
+        log.info("[ComentarioServiceImpl][save] comentariosDTO={}" , comentariosDTO);
         Comentarios comentarios = modelMapper.map(comentariosDTO, Comentarios.class);
         if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered())) {
             if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getEmail())) {
