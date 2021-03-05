@@ -62,7 +62,7 @@ public class ArticleServiceImpl implements ArticleService {
             Article article = modelMapper.map(articleDTO, Article.class);
             return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.ONE_CATEGORY);
         }
     }
 
@@ -91,7 +91,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setAudit(audit);
             return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.MINIMUM_ONE_CATEGORY);
+            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.ONE_CATEGORY);
         }
     }
 
