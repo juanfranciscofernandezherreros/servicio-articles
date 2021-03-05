@@ -1,6 +1,7 @@
 package com.fernandez.api.articles.service;
 
 
+import com.fernandez.api.articles.dto.ArticleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

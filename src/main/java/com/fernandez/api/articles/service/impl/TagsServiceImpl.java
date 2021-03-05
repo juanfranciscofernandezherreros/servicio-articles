@@ -86,7 +86,6 @@ public class TagsServiceImpl implements TagService {
 
     private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, final String language) {
         ModelMapper modelMapper = new ModelMapper();
-        tagDTO.setLanguage(language);
         Tag tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
         if (Objects.nonNull(tag)) {
             tagDTO = modelMapper.map(tag, TagDTO.class);
