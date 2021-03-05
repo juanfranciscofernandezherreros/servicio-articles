@@ -38,11 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO findByName(final String name) {
+        log.info("[CategoryServiceImpl][findByName] name={}", name);
         return modelMapper.map(categoryRepository.findByName(name), CategoryDTO.class);
     }
 
     @Override
     public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
+        log.info("[CategoryServiceImpl][categoryDTOList] articleDTO={}", articleDTO);
         Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         return modelMapper.map(
                 articleDTO.getCategories()
@@ -53,7 +55,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryDTO> findAll(String acceptLanguage, Pageable pageable) {
-         return convertList2Page(categoryRepository.findAllByLanguage(acceptLanguage)
+        log.info("[CategoryServiceImpl][findAll] acceptLanguage={} pageable={}", acceptLanguage ,pageable);
+        return convertList2Page(categoryRepository.findAllByLanguage(acceptLanguage)
                  .stream()
                  .map(category -> mapFromEntityToDto(category))
                  .sorted(Comparator.comparing(CategoryDTO::getTotalArticles).reversed())
@@ -62,14 +65,30 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
+        log.info("[CategoryServiceImpl][save] categoryDTO={}", categoryDTO);
         Category category = modelMapper.map(categoryDTO,Category.class);
         return modelMapper.map(categoryRepository.save(category),CategoryDTO.class);
     }
 
     @Override
-    public void deleteById(Long id) {
-        categoryRepository.delete(categoryRepository.findById(id)
+    public void deleteById(Long categoryId) {
+        log.info("[CategoryServiceImpl][deleteById] categoryId={}", categoryId);
+        categoryRepository.delete(categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
+    }
+
+    @Override
+    public Category findCategoryById(Long categoryId) {
+        log.info("[CategoryServiceImpl][findCategoryById] categoryId={}", categoryId);
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
+    }
+
+    @Override
+    public CategoryDTO findCategoryDtoById(Long categoryId) {
+        log.info("[CategoryServiceImpl][findCategoryDtoById] categoryId={}", categoryId);
+        return modelMapper.map(categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))),CategoryDTO.class);
     }
 
     private CategoryDTO mapFromEntityToDto(Category category) {
@@ -82,18 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return categoryDto;
     }
-
-    @Override
-    public Category findCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
-    }
-
-    @Override
-    public CategoryDTO findCategoryDtoById(Long categoryDTO) {
-        return modelMapper.map(findCategoryById(categoryDTO),CategoryDTO.class);
-    }
-
+    
     private Page convertList2Page(List list, Pageable pageable) {
         int startIndex = (int) pageable.getOffset();
         int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ? list.size()
