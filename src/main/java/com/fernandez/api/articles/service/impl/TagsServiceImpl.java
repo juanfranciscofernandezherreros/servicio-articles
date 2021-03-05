@@ -61,7 +61,7 @@ public class TagsServiceImpl implements TagService {
     @Override
     public TagDTO save ( final TagDTO tagDTO ) {
         log.info ( "[TagsServiceImpl][save] tagDTO={}" , tagDTO );
-        Tag tag = modelMapper.map ( tagDTO , Tag.class );
+        final Tag tag = modelMapper.map ( tagDTO , Tag.class );
         return modelMapper.map ( tagsRepository.save ( tag ) , TagDTO.class );
     }
 
@@ -81,7 +81,7 @@ public class TagsServiceImpl implements TagService {
 
     @Override
     public Page < TagDTO > findAllTagsRandom ( final String acceptLanguage , final Pageable pageable ) {
-        List < Tag > list = tagsRepository.findAllByLanguage ( acceptLanguage );
+        final List < Tag > list = tagsRepository.findAllByLanguage ( acceptLanguage );
         Collections.shuffle ( list , new Random ( System.nanoTime ( ) ) );
         return convertList2Page ( list , pageable );
     }
@@ -91,8 +91,8 @@ public class TagsServiceImpl implements TagService {
     }
 
     private TagDTO findTagByNameAndLanguage ( final TagDTO tagDTO , final String language ) {
-        ModelMapper modelMapper = new ModelMapper ( );
-        Tag tag = tagsRepository.findByNameAndLanguage ( tagDTO.getName ( ) , language );
+        final ModelMapper modelMapper = new ModelMapper ( );
+        final Tag tag = tagsRepository.findByNameAndLanguage ( tagDTO.getName ( ) , language );
         if ( Objects.nonNull ( tag ) ) {
             modelMapper.map ( tag , TagDTO.class );
         } else {
@@ -102,10 +102,11 @@ public class TagsServiceImpl implements TagService {
     }
 
     private Page convertList2Page ( final List list , final Pageable pageable ) {
-        int startIndex = ( int ) pageable.getOffset ( );
-        int endIndex = ( int ) ( ( pageable.getOffset ( ) + pageable.getPageSize ( ) ) > list.size ( ) ? list.size ( )
+        final int startIndex = ( int ) pageable.getOffset ( );
+        final int endIndex = ( int ) ( ( pageable.getOffset ( ) + pageable.getPageSize ( ) ) > list.size ( ) ?
+                list.size ( )
                 : pageable.getOffset ( ) + pageable.getPageSize ( ) );
-        List subList = list.subList ( startIndex , endIndex );
+        final List subList = list.subList ( startIndex , endIndex );
         return new PageImpl ( subList , pageable , list.size ( ) );
     }
 }

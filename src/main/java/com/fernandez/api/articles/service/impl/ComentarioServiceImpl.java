@@ -34,9 +34,10 @@ public class ComentarioServiceImpl implements ComentarioService {
                                                                            final List < ComentariosDTO > comentariosList ) {
         log.info ( "[ComentarioServiceImpl][findAllComentariosByBlogTranslationId] comentarioId={} level={} articleId={} comentariosList={}" ,
                 comentarioId , level , articleId , comentariosList );
-        List < Comentarios > comentarios = commentsRepository.findAllByParentIdAndArticleId ( comentarioId , articleId );
+        final List < Comentarios > comentarios = commentsRepository.findAllByParentIdAndArticleId ( comentarioId ,
+                articleId );
         if ( comentarios != null ) {
-            for ( Comentarios comentario : comentarios ) {
+            for ( final Comentarios comentario : comentarios ) {
                 comentariosList.add ( mapFromDtoToEntity ( comentario , level ) );
                 findAllComentariosByBlogTranslationId ( comentario.getId ( ) , level + 1 , articleId , comentariosList );
             }
@@ -47,7 +48,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     @Override
     public ComentariosDTO save ( final ComentariosDTO comentariosDTO ) {
         log.info ( "[ComentarioServiceImpl][save] comentariosDTO={}" , comentariosDTO );
-        Comentarios comentarios = modelMapper.map ( comentariosDTO , Comentarios.class );
+        final Comentarios comentarios = modelMapper.map ( comentariosDTO , Comentarios.class );
         if ( Objects.nonNull ( comentariosDTO.getComentarioUserNotRegistered ( ) ) ) {
             if ( Objects.nonNull ( comentariosDTO.getComentarioUserNotRegistered ( ).getEmail ( ) ) ) {
                 userRepository.findByEmail ( comentariosDTO.getComentarioUserNotRegistered ( ).getEmail ( ) );
@@ -55,14 +56,15 @@ public class ComentarioServiceImpl implements ComentarioService {
             if ( Objects.nonNull ( comentariosDTO.getComentarioUserNotRegistered ( ).getUsername ( ) ) ) {
                 userRepository.findByUsername ( comentariosDTO.getComentarioUserNotRegistered ( ).getUsername ( ) );
             }
-            ComentariosUserNotRegistered comentariosUserNotRegistered = modelMapper.map ( comentariosDTO.getComentarioUserNotRegistered ( ) , ComentariosUserNotRegistered.class );
+            final ComentariosUserNotRegistered comentariosUserNotRegistered =
+                    modelMapper.map ( comentariosDTO.getComentarioUserNotRegistered ( ) , ComentariosUserNotRegistered.class );
             comentarios.setComentarioUserNotRegistered ( comentariosUserNotRegistered );
         }
         return modelMapper.map ( commentsRepository.save ( comentarios ) , ComentariosDTO.class );
     }
 
-    private ComentariosDTO mapFromDtoToEntity ( Comentarios comentarios , Long level ) {
-        ComentariosDTO comentariosDTO = modelMapper.map ( comentarios , ComentariosDTO.class );
+    private ComentariosDTO mapFromDtoToEntity ( final Comentarios comentarios , final Long level ) {
+        final ComentariosDTO comentariosDTO = modelMapper.map ( comentarios , ComentariosDTO.class );
         comentariosDTO.setLevel ( level );
         return comentariosDTO;
     }

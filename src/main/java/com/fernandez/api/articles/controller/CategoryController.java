@@ -33,8 +33,7 @@ public class CategoryController {
     public Page < CategoryDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
                                           final @PageableDefault ( size = 5 ) Pageable pageable ) {
         log.info ( "[CategoryController][findAll] acceptLanguage={} , pageable={}" , acceptLanguage , pageable );
-        Page < CategoryDTO > categoryDtoPage = categoryService.findAll ( acceptLanguage , pageable );
-        return categoryDtoPage;
+        return categoryService.findAll ( acceptLanguage , pageable );
     }
 
     @PostMapping (UrlMapping.PROTECTED + UrlMapping.CATEGORIES )

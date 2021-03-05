@@ -1,5 +1,6 @@
 package com.fernandez.api.articles.common;
 
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class Messages {
     
     private MessageSourceAccessor accessor;
