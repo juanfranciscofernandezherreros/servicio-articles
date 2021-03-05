@@ -14,7 +14,7 @@ public class ComentariosDTO {
     private Long id;
     private String contenido;
     private UserDTO authorComment;
-    private Long  articleId;
+    private Long articleId;
     private Long parentId;
     private AuditDTO auditDTO;
     private ComentariosUserNotRegisteredDTO comentarioUserNotRegistered;

@@ -9,17 +9,17 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface TagService {
-    List<TagDTO> tagDTOList(ArticleDTO articleDTO);
+    List < TagDTO > tagDTOList ( ArticleDTO articleDTO );
 
-    Tag findTagById(Long valueOf);
+    Tag findTagById ( Long valueOf );
 
-    TagDTO findTagDtoById(Long tagId);
+    TagDTO findTagDtoById ( Long tagId );
 
-    TagDTO save(TagDTO tagDTO);
+    TagDTO save ( TagDTO tagDTO );
 
-    void deleteById(Long tagId);
+    void deleteById ( Long tagId );
 
-    Page<TagDTO> findAll(String acceptLanguage, Pageable pageable);
+    Page < TagDTO > findAll ( String acceptLanguage , Pageable pageable );
 
-    Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable);
+    Page < TagDTO > findAllTagsRandom ( String acceptLanguage , Pageable pageable );
 }

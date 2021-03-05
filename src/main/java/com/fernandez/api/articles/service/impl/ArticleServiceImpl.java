@@ -49,128 +49,128 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper ( );
 
 
     @Override
-    public ArticleDTO save(final ArticleDTO articleDTO) {
-        log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
-        if (articleDTO.getCategories().size() > 0) {
-            articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
-            articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
-            if (articleDTO.getTags().size() > 0) {
-                articleDTO.setTags(tagService.tagDTOList(articleDTO));
+    public ArticleDTO save ( final ArticleDTO articleDTO ) {
+        log.info ( "[ArticleServiceImpl][save] articleDTO={}" , articleDTO );
+        if ( articleDTO.getCategories ( ).size ( ) > 0 ) {
+            articleDTO.setUser ( userService.findByUsername ( articleDTO.getUser ( ).getUsername ( ) ) );
+            articleDTO.setCategories ( categoryService.categoryDTOList ( articleDTO ) );
+            if ( articleDTO.getTags ( ).size ( ) > 0 ) {
+                articleDTO.setTags ( tagService.tagDTOList ( articleDTO ) );
             }
-            Article article = modelMapper.map(articleDTO, Article.class);
-            return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
+            Article article = modelMapper.map ( articleDTO , Article.class );
+            return modelMapper.map ( articleRepository.save ( article ) , ArticleDTO.class );
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.ONE_CATEGORY);
+            throw new ArticlesLogicException ( HttpStatus.BAD_REQUEST , PropertiesConstant.ONE_CATEGORY );
         }
     }
 
     @Override
-    public void deleteArticleById(final Long articleId) {
-        log.info("[ArticleServiceImpl][deleteArticleById] articleId={}", articleId);
-        articleRepository.delete(articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND))));
+    public void deleteArticleById ( final Long articleId ) {
+        log.info ( "[ArticleServiceImpl][deleteArticleById] articleId={}" , articleId );
+        articleRepository.delete ( articleRepository.findById ( articleId )
+                .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.ARTICLE_NOT_FOUND ) ) ) );
     }
 
     @Override
-    public ArticleDTO update(final ArticleDTO articleDTO) {
-        log.info("[ArticleServiceImpl][update] articleDTO={}", articleDTO);
-        if (articleDTO.getCategories().size() > 0) {
-            articleRepository.findById(articleDTO.getId())
-                    .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
-            Article article = modelMapper.map(articleDTO, Article.class);
-            Audit audit = new Audit();
-            DateFormat sourceFormat = new SimpleDateFormat("dd-MM-yyyy");
+    public ArticleDTO update ( final ArticleDTO articleDTO ) {
+        log.info ( "[ArticleServiceImpl][update] articleDTO={}" , articleDTO );
+        if ( articleDTO.getCategories ( ).size ( ) > 0 ) {
+            articleRepository.findById ( articleDTO.getId ( ) )
+                    .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.ARTICLE_NOT_FOUND ) ) );
+            Article article = modelMapper.map ( articleDTO , Article.class );
+            Audit audit = new Audit ( );
+            DateFormat sourceFormat = new SimpleDateFormat ( "dd-MM-yyyy" );
             Date createdOnDate = null;
             try {
-                createdOnDate = sourceFormat.parse(articleDTO.getAuditDTO().getCreatedOn());
-            } catch (ParseException e) {
-                e.printStackTrace();
+                createdOnDate = sourceFormat.parse ( articleDTO.getAuditDTO ( ).getCreatedOn ( ) );
+            } catch ( ParseException e ) {
+                log.error ( e.getMessage () );
             }
-            audit.setCreatedOn(createdOnDate);
-            article.setAudit(audit);
-            return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
+            audit.setCreatedOn ( createdOnDate );
+            article.setAudit ( audit );
+            return modelMapper.map ( articleRepository.save ( article ) , ArticleDTO.class );
         } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.ONE_CATEGORY);
+            throw new ArticlesLogicException ( HttpStatus.BAD_REQUEST , PropertiesConstant.ONE_CATEGORY );
         }
     }
 
     @Override
-    public Page<ArticleDTO> findAllArticles(final String acceptLanguage,
-                                            final String name,
-                                            final List<String> tag,
-                                            final List<String> categories,
-                                            final Pageable pageable) {
-        log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} name={} tag={} categories={} pageable={}",
-                acceptLanguage , name , tag , categories , pageable);
-        Page<ArticleDTO> articleList = null;
-        if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
-            articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+    public Page < ArticleDTO > findAllArticles ( final String acceptLanguage ,
+                                                 final String name ,
+                                                 final List < String > tag ,
+                                                 final List < String > categories ,
+                                                 final Pageable pageable ) {
+        log.info ( "[ArticleServiceImpl][findAllArticles] acceptLanguage={} name={} tag={} categories={} pageable={}" ,
+                acceptLanguage , name , tag , categories , pageable );
+        Page < ArticleDTO > articleList = null;
+        if ( Objects.isNull ( name ) && Objects.isNull ( categories ) && Objects.isNull ( tag ) ) {
+            articleList = articleRepository.findAllByLanguage ( acceptLanguage , pageable )
+                    .map ( this :: mapFromEntityToDto );
         }
-        if (Objects.nonNull(name)) {
-            articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, name, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+        if ( Objects.nonNull ( name ) ) {
+            articleList = articleRepository.findArticleByLanguageAndTitle ( acceptLanguage , name , pageable )
+                    .map ( this :: mapFromEntityToDto );
         }
-        if (Objects.nonNull(categories)) {
-            articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(categories), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+        if ( Objects.nonNull ( categories ) ) {
+            articleList = articleRepository.findByCategoriesIn ( findAllCategoriesById ( categories ) , pageable )
+                    .map ( this :: mapFromEntityToDto );
         }
-        if (Objects.nonNull(tag)) {
-            articleList = articleRepository.findByTagsIn(findAllTagsById(tag), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+        if ( Objects.nonNull ( tag ) ) {
+            articleList = articleRepository.findByTagsIn ( findAllTagsById ( tag ) , pageable )
+                    .map ( this :: mapFromEntityToDto );
         }
         return articleList;
     }
 
     @Override
-    public ArticleDTO findArticleBySlugOrId(String slug, Long articleId) {
-        log.info("ArticleServiceImpl");
+    public ArticleDTO findArticleBySlugOrId ( final String slug , final Long articleId ) {
+        log.info ( "ArticleServiceImpl" );
         ArticleDTO articleDTO = null;
-        if(Objects.nonNull(slug)){
-            articleDTO = findArticleBySlug(slug);
+        if ( Objects.nonNull ( slug ) ) {
+            articleDTO = findArticleBySlug ( slug );
         }
-        if(Objects.nonNull(articleId)){
-            articleDTO = findArticleById(articleId);
+        if ( Objects.nonNull ( articleId ) ) {
+            articleDTO = findArticleById ( articleId );
         }
         return articleDTO;
     }
 
-    private List<Category> findAllCategoriesById(List<String> categories) {
-        return categories.stream()
-                .map(category -> categoryService.findCategoryById(Long.valueOf(category)))
-                .collect(Collectors.toList());
+    private List < Category > findAllCategoriesById ( final List < String > categories ) {
+        return categories.stream ( )
+                .map ( category -> categoryService.findCategoryById ( Long.valueOf ( category ) ) )
+                .collect ( Collectors.toList ( ) );
     }
 
-    private List<Tag> findAllTagsById(List<String> tags) {
-        return tags.stream()
-                .map(tag -> tagService.findTagById(Long.valueOf(tag)))
-                .collect(Collectors.toList());
+    private List < Tag > findAllTagsById ( final List < String > tags ) {
+        return tags.stream ( )
+                .map ( tag -> tagService.findTagById ( Long.valueOf ( tag ) ) )
+                .collect ( Collectors.toList ( ) );
     }
 
 
-    private ArticleDTO findArticleBySlug(final String slug) {
-        return modelMapper.map(articleRepository.findArticleBySlug(slug)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
+    private ArticleDTO findArticleBySlug ( final String slug ) {
+        return modelMapper.map ( articleRepository.findArticleBySlug ( slug )
+                        .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.ARTICLE_NOT_FOUND ) ) )
+                , ArticleDTO.class );
     }
 
-    private ArticleDTO findArticleById(final Long articleId) {
-        return modelMapper.map(
-                articleRepository.findById(articleId)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
+    private ArticleDTO findArticleById ( final Long articleId ) {
+        return modelMapper.map (
+                articleRepository.findById ( articleId )
+                        .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.ARTICLE_NOT_FOUND ) ) )
+                , ArticleDTO.class );
     }
 
-    private ArticleDTO mapFromEntityToDto(Article article) {
-        ArticleDTO articleDto = modelMapper.map(article, ArticleDTO.class);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = formatter.format(article.getAudit().getCreatedOn());
-        articleDto.setCreatedDate(formattedDate);
-        articleDto.setTotalComments(countCommentsBlogRepository.countCommentsFromArticle(article.getId()));
+    private ArticleDTO mapFromEntityToDto ( final Article article ) {
+        ArticleDTO articleDto = modelMapper.map ( article , ArticleDTO.class );
+        SimpleDateFormat formatter = new SimpleDateFormat ( "dd-MM-yyyy" );
+        String formattedDate = formatter.format ( article.getAudit ( ).getCreatedOn ( ) );
+        articleDto.setCreatedDate ( formattedDate );
+        articleDto.setTotalComments ( countCommentsBlogRepository.countCommentsFromArticle ( article.getId ( ) ) );
         return articleDto;
     }
 }

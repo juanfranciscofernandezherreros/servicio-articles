@@ -9,54 +9,62 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
+@RequestMapping ( value = UrlMapping.ROOT, produces = { APPLICATION_JSON_VALUE } )
 public class TagsController {
 
     private final TagService tagService;
 
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
-    public Page<TagDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
-                                     @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
-        return tagService.findAll(acceptLanguage,pageable);
+    @GetMapping ( value = UrlMapping.PUBLIC + UrlMapping.TAGS )
+    public Page < TagDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
+                                     final @PageableDefault ( size = 5 ) Pageable pageable ) {
+        log.info ( "[TagsController][findAll] acceptLanguage={} tagId={}" , acceptLanguage , pageable );
+        return tagService.findAll ( acceptLanguage , pageable );
     }
 
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM)
-    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") final String acceptLanguage,
-                                @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
-        return tagService.findAllTagsRandom(acceptLanguage,pageable);
+    @GetMapping ( value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM )
+    public Page < TagDTO > findAllTagsRandom ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
+                                               final @PageableDefault ( size = 5 ) Pageable pageable ) {
+        log.info ( "[TagsController][findAll] acceptLanguage={} tagId={}" , acceptLanguage , pageable );
+        return tagService.findAllTagsRandom ( acceptLanguage , pageable );
     }
 
-    @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO findById(@RequestParam final Long tagId) {
-        log.info("[CategoryController][findById] tagId={}", tagId);
-        return tagService.findTagDtoById(tagId);
+    @GetMapping ( value = UrlMapping.PROTECTED + UrlMapping.TAGS )
+    public TagDTO findById ( final @RequestParam Long tagId ) {
+        log.info ( "[CategoryController][findById] tagId={}" , tagId );
+        return tagService.findTagDtoById ( tagId );
     }
 
-    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO save(@Validated @RequestBody TagDTO tagDTO) {
-        log.info("[TagsController][save] tagDTO={}", tagDTO);
-        return tagService.save(tagDTO);
+    @PostMapping ( value = UrlMapping.PROTECTED + UrlMapping.TAGS )
+    public TagDTO save ( final @Validated @RequestBody TagDTO tagDTO ) {
+        log.info ( "[TagsController][save] tagDTO={}" , tagDTO );
+        return tagService.save ( tagDTO );
     }
 
-    @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO update(@Validated @RequestBody TagDTO tagDTO) {
-        log.info("[TagsController][update] tagDTO={}", tagDTO);
-        return tagService.save(tagDTO);
+    @PutMapping ( value = UrlMapping.PROTECTED + UrlMapping.TAGS )
+    public TagDTO update ( final @Validated @RequestBody TagDTO tagDTO ) {
+        log.info ( "[TagsController][update] tagDTO={}" , tagDTO );
+        return tagService.save ( tagDTO );
     }
 
-    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public void deleteTagById(@RequestParam final Long tagId) {
-        log.info("[TagsController][deleteById] tagId={}", tagId);
-        tagService.deleteById(tagId);
+    @DeleteMapping ( value = UrlMapping.PROTECTED + UrlMapping.TAGS )
+    public void deleteTagById ( final @RequestParam Long tagId ) {
+        log.info ( "[TagsController][deleteById] tagId={}" , tagId );
+        tagService.deleteById ( tagId );
     }
 
 }

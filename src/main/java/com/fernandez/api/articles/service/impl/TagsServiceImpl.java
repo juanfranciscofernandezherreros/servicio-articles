@@ -34,78 +34,78 @@ public class TagsServiceImpl implements TagService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper ( );
 
     @Override
-    public List<TagDTO> tagDTOList(final ArticleDTO articleDTO) {
-        log.info("[TagsServiceImpl][tagDTOList] articleDTO={}" , articleDTO);
-        return articleDTO.getTags()
-                .stream()
-                .map(tag -> findTagByNameAndLanguage(tag, articleDTO.getLanguage()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Tag findTagById(Long tagsId) {
-        log.info("[TagsServiceImpl][findTagById] tagsId={}" , tagsId);
-        return tagsRepository.findById(tagsId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
+    public List < TagDTO > tagDTOList ( final ArticleDTO articleDTO ) {
+        log.info ( "[TagsServiceImpl][tagDTOList] articleDTO={}" , articleDTO );
+        return articleDTO.getTags ( )
+                .stream ( )
+                .map ( tag -> findTagByNameAndLanguage ( tag , articleDTO.getLanguage ( ) ) )
+                .collect ( Collectors.toList ( ) );
     }
 
     @Override
-    public TagDTO findTagDtoById(Long tagId) {
-        log.info("[TagsServiceImpl][findTagDtoById] tagId={}" , tagId);
-        return modelMapper.map(tagsRepository.findById(tagId), TagDTO.class);
+    public Tag findTagById ( final Long tagsId ) {
+        log.info ( "[TagsServiceImpl][findTagById] tagsId={}" , tagsId );
+        return tagsRepository.findById ( tagsId )
+                .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.TAG_NOT_FOUND ) ) );
     }
 
     @Override
-    public TagDTO save(TagDTO tagDTO) {
-        log.info("[TagsServiceImpl][save] tagDTO={}" , tagDTO);
-        Tag tag = modelMapper.map(tagDTO,Tag.class);
-        return modelMapper.map(tagsRepository.save(tag), TagDTO.class);
+    public TagDTO findTagDtoById ( final Long tagId ) {
+        log.info ( "[TagsServiceImpl][findTagDtoById] tagId={}" , tagId );
+        return modelMapper.map ( tagsRepository.findById ( tagId ) , TagDTO.class );
     }
 
     @Override
-    public void deleteById(Long tagId) {
-        log.info("[TagsServiceImpl][deleteById] tagId={}" , tagId);
-        tagsRepository.delete(tagsRepository.findById(tagId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
+    public TagDTO save ( final TagDTO tagDTO ) {
+        log.info ( "[TagsServiceImpl][save] tagDTO={}" , tagDTO );
+        Tag tag = modelMapper.map ( tagDTO , Tag.class );
+        return modelMapper.map ( tagsRepository.save ( tag ) , TagDTO.class );
     }
 
     @Override
-    public Page<TagDTO> findAll(String acceptLanguage, Pageable pageable) {
-        log.info("[TagsServiceImpl][findAll] acceptLanguage={} pageable={}" , acceptLanguage , pageable);
-        return tagsRepository.findAllByLanguage(acceptLanguage, pageable)
-                .map(tag -> mapFromEntityToDto(tag));
+    public void deleteById ( final Long tagId ) {
+        log.info ( "[TagsServiceImpl][deleteById] tagId={}" , tagId );
+        tagsRepository.delete ( tagsRepository.findById ( tagId )
+                .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.CATEGORY_NOT_FOUND ) ) ) );
     }
 
     @Override
-    public Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable) {
-        List<Tag> list = tagsRepository.findAllByLanguage(acceptLanguage);
-        Collections.shuffle(list, new Random(System.nanoTime()));
-        return convertList2Page(list,pageable);
+    public Page < TagDTO > findAll ( final String acceptLanguage , final Pageable pageable ) {
+        log.info ( "[TagsServiceImpl][findAll] acceptLanguage={} pageable={}" , acceptLanguage , pageable );
+        return tagsRepository.findAllByLanguage ( acceptLanguage , pageable )
+                .map ( this :: mapFromEntityToDto );
     }
 
-    private TagDTO mapFromEntityToDto(Tag tag) {
-        return modelMapper.map(tag,TagDTO.class);
+    @Override
+    public Page < TagDTO > findAllTagsRandom ( final String acceptLanguage , final Pageable pageable ) {
+        List < Tag > list = tagsRepository.findAllByLanguage ( acceptLanguage );
+        Collections.shuffle ( list , new Random ( System.nanoTime ( ) ) );
+        return convertList2Page ( list , pageable );
     }
 
-    private TagDTO findTagByNameAndLanguage(TagDTO tagDTO, final String language) {
-        ModelMapper modelMapper = new ModelMapper();
-        Tag tag = tagsRepository.findByNameAndLanguage(tagDTO.getName(), language);
-        if (Objects.nonNull(tag)) {
-            tagDTO = modelMapper.map(tag, TagDTO.class);
+    private TagDTO mapFromEntityToDto ( final Tag tag ) {
+        return modelMapper.map ( tag , TagDTO.class );
+    }
+
+    private TagDTO findTagByNameAndLanguage ( final TagDTO tagDTO , final String language ) {
+        ModelMapper modelMapper = new ModelMapper ( );
+        Tag tag = tagsRepository.findByNameAndLanguage ( tagDTO.getName ( ) , language );
+        if ( Objects.nonNull ( tag ) ) {
+            modelMapper.map ( tag , TagDTO.class );
         } else {
-            tagDTO = modelMapper.map(tagsRepository.save(modelMapper.map(tagDTO, Tag.class)), TagDTO.class);
+            modelMapper.map ( tagsRepository.save ( modelMapper.map ( tagDTO , Tag.class ) ) , TagDTO.class );
         }
         return tagDTO;
     }
 
-    private Page convertList2Page(List list, Pageable pageable) {
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ? list.size()
-                : pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
+    private Page convertList2Page ( final List list , final Pageable pageable ) {
+        int startIndex = ( int ) pageable.getOffset ( );
+        int endIndex = ( int ) ( ( pageable.getOffset ( ) + pageable.getPageSize ( ) ) > list.size ( ) ? list.size ( )
+                : pageable.getOffset ( ) + pageable.getPageSize ( ) );
+        List subList = list.subList ( startIndex , endIndex );
+        return new PageImpl ( subList , pageable , list.size ( ) );
     }
 }
