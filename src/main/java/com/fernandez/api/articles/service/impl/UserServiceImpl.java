@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
 
     private final @NotNull Messages messages;
 
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper ( );
 
     @Override
-    public UserDTO findByUsername(String username) {
-        log.info("[UserServiceImpl][findByUsername] username={}" , username);
-        final User user = userRepository.findByUsername(username);
-        return modelMapper.map(user, UserDTO.class);
+    public UserDTO findByUsername ( final String username ) {
+        log.info ( "[UserServiceImpl][findByUsername] username={}" , username );
+        final User user = userRepository.findByUsername ( username );
+        return modelMapper.map ( user , UserDTO.class );
     }
 }

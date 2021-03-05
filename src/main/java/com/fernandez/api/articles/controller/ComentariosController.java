@@ -21,22 +21,22 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
+@RequestMapping ( value = UrlMapping.ROOT, produces = { APPLICATION_JSON_VALUE } )
 public class ComentariosController {
 
     private final ComentarioService comentarioService;
 
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.COMMENTS)
-    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam() Long articleId) {
-        log.info("[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}", articleId);
-        List<ComentariosDTO> tmpList = new ArrayList<ComentariosDTO>();
-        return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,tmpList);
+    @GetMapping ( value = UrlMapping.PUBLIC + UrlMapping.COMMENTS )
+    public List < ComentariosDTO > findAllCommentsFromArticle ( final @RequestParam () Long articleId ) {
+        log.info ( "[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}" , articleId );
+        List < ComentariosDTO > tmpList = new ArrayList < ComentariosDTO > ( );
+        return comentarioService.findAllComentariosByBlogTranslationId ( 0 , 0 , articleId , tmpList );
     }
 
-    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.COMMENTS)
-    public ComentariosDTO save(@Validated @RequestBody ComentariosDTO comentariosDTO) {
-        log.info("[ComentariosController][save] comentariosDTO={}", comentariosDTO);
-        return comentarioService.save(comentariosDTO);
+    @PostMapping ( value = UrlMapping.PROTECTED + UrlMapping.COMMENTS )
+    public ComentariosDTO save ( final @Validated @RequestBody ComentariosDTO comentariosDTO ) {
+        log.info ( "[ComentariosController][save] comentariosDTO={}" , comentariosDTO );
+        return comentarioService.save ( comentariosDTO );
     }
 
 }

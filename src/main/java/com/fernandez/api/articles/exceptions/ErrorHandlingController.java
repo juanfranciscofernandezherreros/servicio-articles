@@ -18,21 +18,21 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ErrorHandlingController {
 
-    @ExceptionHandler(ArticlesLogicException.class)
-    public @NotNull ResponseEntity<ErrorMessage> logicException(@NotNull ArticlesLogicException exception,
-                                                                WebRequest request) {
-        return buildResponseEntityException(new ErrorMessage(exception.getHttpStatus(),
-                exception.getMessage(), Objects.toString(exception.getMessage())));
+    @ExceptionHandler ( ArticlesLogicException.class )
+    public @NotNull ResponseEntity < ErrorMessage > logicException ( final @NotNull ArticlesLogicException exception ,
+                                                                     final WebRequest request ) {
+        return buildResponseEntityException ( new ErrorMessage ( exception.getHttpStatus ( ) ,
+                exception.getMessage ( ) , Objects.toString ( exception.getMessage ( ) ) ) );
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public @NotNull ResponseEntity<ErrorMessage> dataIntegrationViolation(@NotNull DataIntegrityViolationException exception,
-                                                                          WebRequest request) {
-        return buildResponseEntityException(new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage(), Objects.toString(exception.getMessage())));
+    @ExceptionHandler ( DataIntegrityViolationException.class )
+    public @NotNull ResponseEntity < ErrorMessage > dataIntegrationViolation ( final @NotNull DataIntegrityViolationException exception ,
+                                                                               final WebRequest request ) {
+        return buildResponseEntityException ( new ErrorMessage ( HttpStatus.BAD_REQUEST , exception.getMessage ( ) , Objects.toString ( exception.getMessage ( ) ) ) );
     }
 
-    public @NotNull ResponseEntity<ErrorMessage> buildResponseEntityException(@NotNull ErrorMessage error) {
-        return new ResponseEntity<>(error, error.getStatusCode());
+    public @NotNull ResponseEntity < ErrorMessage > buildResponseEntityException ( final @NotNull ErrorMessage error ) {
+        return new ResponseEntity <> ( error , error.getStatusCode ( ) );
     }
 
 }

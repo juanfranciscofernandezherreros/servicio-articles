@@ -16,37 +16,37 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
-@Accessors(chain = true)
+@Accessors ( chain = true )
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table ( name = "user" )
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
+    @Column ( name = "id" )
     private Long id;
 
-    @Column(unique = true, name = "username", length = 20, nullable = false)
+    @Column ( unique = true, name = "username", length = 20, nullable = false )
     private String username;
 
-    @Column(name = "name", nullable = false)
+    @Column ( name = "name", nullable = false )
     private String name;
 
-    @Column(name = "first_name")
+    @Column ( name = "first_name" )
     private String fistName;
 
-    @Column(name = "second_surname")
+    @Column ( name = "second_surname" )
     private String lastName;
 
-    @Column(name = "email", unique = true, length = 100, nullable = false)
+    @Column ( name = "email", unique = true, length = 100, nullable = false )
     private String email;
 
-    @Column(name = "image_profile", length = 500000)
+    @Column ( name = "image_profile", length = 500000 )
     private String imageProfile;
 
-    @Column(name = "password", length = 60, nullable = false)
+    @Column ( name = "password", length = 60, nullable = false )
     private String password;
 
 }

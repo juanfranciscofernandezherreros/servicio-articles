@@ -21,29 +21,29 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Accessors(chain = true)
+@Accessors ( chain = true )
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tag")
+@Table ( name = "tag" )
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
+    @Column ( name = "id" )
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column ( name = "name", nullable = false, unique = true )
     private String name;
 
-    @Column(name = "language", nullable = false)
+    @Column ( name = "language", nullable = false )
     private String language;
 
-    @Column(name = "slug", nullable = false)
+    @Column ( name = "slug", nullable = false )
     private String slug;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "tags")
+    @ManyToMany ( fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST , CascadeType.MERGE }, mappedBy = "tags" )
     @JsonBackReference
-    private Set<Article> tags = new HashSet<>();
+    private Set < Article > tags = new HashSet <> ( );
 
 }

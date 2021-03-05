@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults ( level = AccessLevel.PRIVATE )
 @ToString
 public class ArticleDTO {
 
@@ -41,15 +41,15 @@ public class ArticleDTO {
 
     UserDTO user;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty ( access = JsonProperty.Access.READ_ONLY )
     String createdDate;
 
     Long totalComments;
 
     AuditDTO auditDTO;
 
-    List<TagDTO> tags = new ArrayList<>();
+    List < TagDTO > tags = new ArrayList <> ( );
 
-    List<CategoryDTO> categories = new ArrayList<>();
+    List < CategoryDTO > categories = new ArrayList <> ( );
 
 }

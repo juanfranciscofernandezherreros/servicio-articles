@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ArticleService {
-    ArticleDTO save(ArticleDTO articleDTO);
+    ArticleDTO save ( ArticleDTO articleDTO );
 
-    void deleteArticleById(Long id);
+    void deleteArticleById ( Long id );
 
-    ArticleDTO update(ArticleDTO articleDTO);
+    ArticleDTO update ( ArticleDTO articleDTO );
 
-    Page<ArticleDTO> findAllArticles(String acceptLanguage, String name, List<String> tags, List<String> categoria, Pageable pageable);
+    Page < ArticleDTO > findAllArticles ( String acceptLanguage , String name , List < String > tags , List < String > categoria , Pageable pageable );
 
-    ArticleDTO findArticleBySlugOrId(String slug,Long articleId);
+    ArticleDTO findArticleBySlugOrId ( String slug , Long articleId );
 }

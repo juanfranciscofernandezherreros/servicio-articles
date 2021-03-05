@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository < User, Long > {
 
-    @NotNull User findByUsername(String username);
+    @NotNull User findByUsername ( String username );
 
-    User findByEmail(String email);
+    User findByEmail ( String email );
 }

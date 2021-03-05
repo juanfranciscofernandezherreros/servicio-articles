@@ -20,36 +20,36 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Accessors(chain = true)
+@Accessors ( chain = true )
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "comentarios")
+@Table ( name = "comentarios" )
 public class Comentarios implements Serializable {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
     private Long id;
 
     private String contenido;
 
     @OneToOne
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @JoinColumn ( name = "author_id", referencedColumnName = "id" )
     private User authorComment;
 
     private Long articleId;
 
-    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    @JoinColumn ( name = "parent_id", insertable = false, updatable = false )
     private Long parentId;
 
     @Embedded
-    private Audit audit = new Audit();
+    private Audit audit = new Audit ( );
 
     private boolean isanswer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "comentarios_usernotregistered" )
+    @OneToOne ( cascade = CascadeType.ALL )
+    @JoinColumn ( name = "comentarios_usernotregistered" )
     private ComentariosUserNotRegistered comentarioUserNotRegistered;
 
 }
