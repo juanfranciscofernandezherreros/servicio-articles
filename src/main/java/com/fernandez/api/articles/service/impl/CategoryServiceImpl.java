@@ -10,6 +10,7 @@ import com.fernandez.api.articles.repository.CategoryRepository;
 import com.fernandez.api.articles.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
@@ -34,12 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final Messages messages;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
-    @Override
-    public CategoryDTO findByName(final String name) {
-        return modelMapper.map(categoryRepository.findByName(name), CategoryDTO.class);
-    }
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
@@ -52,27 +48,27 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryDTO> findAll(String acceptLanguage, Pageable pageable) {
+    public Page<CategoryDTO> findAll(final String acceptLanguage, final Pageable pageable) {
          return convertList2Page(categoryRepository.findAllByLanguage(acceptLanguage)
                  .stream()
-                 .map(category -> mapFromEntityToDto(category))
+                 .map(this::mapFromEntityToDto)
                  .sorted(Comparator.comparing(CategoryDTO::getTotalArticles).reversed())
                  .collect(Collectors.toList()),pageable);
     }
 
     @Override
-    public CategoryDTO save(CategoryDTO categoryDTO) {
+    public CategoryDTO save(final CategoryDTO categoryDTO) {
         Category category = modelMapper.map(categoryDTO,Category.class);
         return modelMapper.map(categoryRepository.save(category),CategoryDTO.class);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         categoryRepository.delete(categoryRepository.findById(id)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
     }
 
-    private CategoryDTO mapFromEntityToDto(Category category) {
+    private CategoryDTO mapFromEntityToDto(final Category category) {
         CategoryDTO categoryDto = modelMapper.map(category,CategoryDTO.class);
         Long totalArticles = categoryRepository.countTotalArticlesFromCategory(category);
         if(totalArticles>0) {
@@ -84,17 +80,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findCategoryById(Long categoryId) {
+    public Category findCategoryById(final Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
     }
 
     @Override
-    public CategoryDTO findCategoryDtoById(Long categoryDTO) {
+    public CategoryDTO findCategoryDtoById(final Long categoryDTO) {
         return modelMapper.map(findCategoryById(categoryDTO),CategoryDTO.class);
     }
 
-    private Page convertList2Page(List list, Pageable pageable) {
+    private Page convertList2Page(final List list, final Pageable pageable) {
+        return getPage(list, pageable);
+    }
+
+    @NotNull
+    static Page getPage(final List list, final Pageable pageable) {
         int startIndex = (int) pageable.getOffset();
         int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ? list.size()
                 : pageable.getOffset() + pageable.getPageSize());

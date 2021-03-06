@@ -23,24 +23,24 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
-    public ArticleDTO save(@Validated @RequestBody ArticleDTO articleDTO) {
+    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLES)
+    public ArticleDTO save(final @Validated @RequestBody ArticleDTO articleDTO) {
         log.info("[ArticleController][Create] articleDTO={}", articleDTO);
         return articleService.save(articleDTO);
     }
 
     @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
-    public ArticleDTO update(@RequestBody ArticleDTO articleDTO) {
+    public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) {
         log.info("[ArticleController][update] articleDTO={}", articleDTO);
         return articleService.update(articleDTO);
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.ARTICLES)
-    public Page<ArticleDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
+    public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
                                     @RequestParam(required = false) final String name,
                                     @RequestParam(required = false) final List<String> tags,
                                     @RequestParam(required = false) final List<String> categories,
-                                    @PageableDefault(page = 0, size = 5) Pageable pageable) {
+                                    @PageableDefault(size = 5) final Pageable pageable) {
         return articleService.findAllArticles(acceptLanguage, name, tags, categories, pageable);
     }
 

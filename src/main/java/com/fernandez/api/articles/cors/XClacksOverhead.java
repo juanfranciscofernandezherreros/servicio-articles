@@ -10,8 +10,9 @@ import java.io.IOException;
 public class XClacksOverhead implements Filter {
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res,
-                         FilterChain chain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest req,
+                         final ServletResponse res,
+                         final FilterChain chain) throws IOException, ServletException {
 
         HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,11 +22,4 @@ public class XClacksOverhead implements Filter {
         response.setHeader("Access-Control-Max-Age", "86400");
         chain.doFilter(req, res);
     }
-
-    @Override
-    public void destroy() {}
-
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {}
-
 }

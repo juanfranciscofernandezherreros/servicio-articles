@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDTO findByName(String name);
-
     Category findCategoryById(Long categoryDTO);
 
     CategoryDTO findCategoryDtoById(Long categoryDTO);

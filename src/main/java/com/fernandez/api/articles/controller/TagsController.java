@@ -22,15 +22,15 @@ public class TagsController {
     private final TagService tagService;
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
-    public Page<TagDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
-                                     @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public Page<TagDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                     @PageableDefault(size = 5) final Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAll(acceptLanguage,pageable);
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS + UrlMapping.RANDOM)
-    public Page<TagDTO> findAllTagsRandom(@RequestHeader("accept-language") final String acceptLanguage,
-                                @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public Page<TagDTO> findAllTagsRandom(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                @PageableDefault(size = 5) final Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAllTagsRandom(acceptLanguage,pageable);
     }
@@ -42,13 +42,13 @@ public class TagsController {
     }
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO save(@Validated @RequestBody TagDTO tagDTO) {
+    public TagDTO save(@Validated @RequestBody final TagDTO tagDTO) {
         log.info("[TagsController][save] tagDTO={}", tagDTO);
         return tagService.save(tagDTO);
     }
 
     @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
-    public TagDTO update(@Validated @RequestBody TagDTO tagDTO) {
+    public TagDTO update(@Validated @RequestBody final TagDTO tagDTO) {
         log.info("[TagsController][update] tagDTO={}", tagDTO);
         return tagService.save(tagDTO);
     }

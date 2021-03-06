@@ -41,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final UserService userService;
 
-    private final CountCommentsBlogRepository countCommentsBlogRepository;
+    private final CountCommentsBlogRepository countCommentsRepository;
 
     private final CategoryService categoryService;
 
@@ -49,10 +49,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
+    private final ModelMapper modelMapper = new ModelMapper();
+
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
         log.debug("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
-        ModelMapper modelMapper = new ModelMapper();
         if (articleDTO.getCategories().size() > 0) {
             articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
             articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
@@ -74,7 +75,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDTO update(final ArticleDTO articleDTO) {
-        ModelMapper modelMapper = new ModelMapper();
         if (articleDTO.getCategories().size() > 0) {
             articleRepository.findById(articleDTO.getId())
                     .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
@@ -85,7 +85,7 @@ public class ArticleServiceImpl implements ArticleService {
             try {
                 createdOnDate = sourceFormat.parse(articleDTO.getAuditDTO().getCreatedOn());
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
             audit.setCreatedOn(createdOnDate);
             article.setAudit(audit);
@@ -101,29 +101,28 @@ public class ArticleServiceImpl implements ArticleService {
                                             final List<String> tag,
                                             final List<String> categories,
                                             final Pageable pageable) {
-        ModelMapper modelMapper = new ModelMapper();
         Page<ArticleDTO> articleList = null;
         if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(name)) {
             articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, name, pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(categories)) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(categories), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(tag)) {
             articleList = articleRepository.findByTagsIn(findAllTagsById(tag), pageable)
-                    .map(article -> mapFromEntityToDto(article));
+                    .map(this::mapFromEntityToDto);
         }
         return articleList;
     }
 
     @Override
-    public ArticleDTO findArticleBySlugOrId(String slug, Long articleId) {
+    public ArticleDTO findArticleBySlugOrId(final String slug, final Long articleId) {
         ArticleDTO articleDTO = null;
         if(Objects.nonNull(slug)){
             articleDTO = findArticleBySlug(slug);
@@ -134,13 +133,13 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDTO;
     }
 
-    private List<Category> findAllCategoriesById(List<String> categories) {
+    private List<Category> findAllCategoriesById(final List<String> categories) {
         return categories.stream()
                 .map(category -> categoryService.findCategoryById(Long.valueOf(category)))
                 .collect(Collectors.toList());
     }
 
-    private List<Tag> findAllTagsById(List<String> tags) {
+    private List<Tag> findAllTagsById(final List<String> tags) {
         return tags.stream()
                 .map(tag -> tagService.findTagById(Long.valueOf(tag)))
                 .collect(Collectors.toList());
@@ -155,20 +154,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private ArticleDTO findArticleById(final Long articleId) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(
                 articleRepository.findById(articleId)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);
     }
 
-    private ArticleDTO mapFromEntityToDto(Article article) {
-        ModelMapper modelMapper = new ModelMapper();
+    private ArticleDTO mapFromEntityToDto(final Article article) {
         ArticleDTO articleDto = modelMapper.map(article, ArticleDTO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = formatter.format(article.getAudit().getCreatedOn());
         articleDto.setCreatedDate(formattedDate);
-        articleDto.setTotalComments(countCommentsBlogRepository.countCommentsFromArticle(article.getId()));
+        articleDto.setTotalComments(countCommentsRepository.countCommentsFromArticle(article.getId()));
         return articleDto;
     }
 }

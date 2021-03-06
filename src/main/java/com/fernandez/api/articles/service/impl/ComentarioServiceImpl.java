@@ -3,7 +3,6 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.dto.ComentariosDTO;
 import com.fernandez.api.articles.model.Comentarios;
 import com.fernandez.api.articles.model.ComentariosUserNotRegistered;
-import com.fernandez.api.articles.model.User;
 import com.fernandez.api.articles.repository.CommentsRepository;
 import com.fernandez.api.articles.repository.UserRepository;
 import com.fernandez.api.articles.service.ComentarioService;
@@ -26,22 +25,14 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     private final CommentsRepository commentsRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
-    private User foundEmail;
-
-    private User foundUsername;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long blogsTranslation, List<ComentariosDTO> comentariosList) {
+    public List<ComentariosDTO> findAllComentariosByBlogTranslationId(final long comentarioId, final long level, Long blogsTranslation, final List<ComentariosDTO> comentariosList) {
         List<Comentarios> comentarios = commentsRepository.findAllByParentIdAndArticleId(comentarioId, blogsTranslation);
         if (comentarios != null) {
             for (Comentarios comentario : comentarios) {
-                if (comentario.getComentarioUserNotRegistered() == null) {
-                    comentariosList.add(mapFromDtoToEntity(comentario, level));
-                } else {
-                    comentariosList.add(mapFromDtoToEntity(comentario, level));
-                }
+                comentariosList.add(mapFromDtoToEntity(comentario, level));
                 findAllComentariosByBlogTranslationId(comentario.getId(), level + 1, blogsTranslation, comentariosList);
             }
         }
@@ -49,14 +40,14 @@ public class ComentarioServiceImpl implements ComentarioService {
     }
 
     @Override
-    public ComentariosDTO save(ComentariosDTO comentariosDTO) {
+    public ComentariosDTO save(final ComentariosDTO comentariosDTO) {
         Comentarios comentarios = modelMapper.map(comentariosDTO, Comentarios.class);
         if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered())) {
             if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getEmail())) {
-                foundEmail = userRepository.findByEmail(comentariosDTO.getComentarioUserNotRegistered().getEmail());
+                userRepository.findByEmail(comentariosDTO.getComentarioUserNotRegistered().getEmail());
             }
             if (Objects.nonNull(comentariosDTO.getComentarioUserNotRegistered().getUsername())) {
-                foundUsername = userRepository.findByUsername(comentariosDTO.getComentarioUserNotRegistered().getUsername());
+                userRepository.findByUsername(comentariosDTO.getComentarioUserNotRegistered().getUsername());
             }
             ComentariosUserNotRegistered comentariosUserNotRegistered = modelMapper.map(comentariosDTO.getComentarioUserNotRegistered(), ComentariosUserNotRegistered.class);
             comentarios.setComentarioUserNotRegistered(comentariosUserNotRegistered);
@@ -64,7 +55,7 @@ public class ComentarioServiceImpl implements ComentarioService {
         return modelMapper.map(commentsRepository.save(comentarios), ComentariosDTO.class);
     }
 
-    private ComentariosDTO mapFromDtoToEntity(Comentarios comentarios,Long level) {
+    private ComentariosDTO mapFromDtoToEntity(final Comentarios comentarios,final Long level) {
         ComentariosDTO comentariosDTO = modelMapper.map(comentarios,ComentariosDTO.class);
         comentariosDTO.setLevel(level);
         return comentariosDTO;

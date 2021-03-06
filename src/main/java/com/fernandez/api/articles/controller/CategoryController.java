@@ -22,20 +22,19 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.CATEGORIES)
-    public Page<CategoryDTO> findAll(@RequestHeader("accept-language") final String acceptLanguage,
-                                     @PageableDefault(page = 0, size = 5) Pageable pageable) {
-        Page<CategoryDTO> categoryDtoPage = categoryService.findAll(acceptLanguage,pageable);
-        return categoryDtoPage;
+    public Page<CategoryDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                     @PageableDefault(size = 5) final Pageable pageable) {
+        return categoryService.findAll(acceptLanguage,pageable);
     }
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.CATEGORIES)
-    public CategoryDTO save(@Validated @RequestBody CategoryDTO categoryDTO) {
+    public CategoryDTO save(final @Validated @RequestBody CategoryDTO categoryDTO) {
         log.info("[CategoryController][save] categoryDTO={}", categoryDTO);
         return categoryService.save(categoryDTO);
     }
 
     @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.CATEGORIES)
-    public CategoryDTO update(@Validated @RequestBody CategoryDTO categoryDTO) {
+    public CategoryDTO update(final @Validated @RequestBody CategoryDTO categoryDTO) {
         log.info("[CategoryController][update] categoryDTO={}", categoryDTO);
         return categoryService.save(categoryDTO);
     }

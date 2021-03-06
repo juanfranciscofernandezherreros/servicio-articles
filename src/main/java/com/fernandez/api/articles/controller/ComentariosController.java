@@ -22,14 +22,14 @@ public class ComentariosController {
     private final ComentarioService comentarioService;
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.COMMENTS)
-    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam(required = true) final Long articleId) {
+    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam() final Long articleId) {
         log.info("[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}", articleId);
-        List<ComentariosDTO> tmpList = new ArrayList<ComentariosDTO>();
+        List<ComentariosDTO> tmpList = new ArrayList<>();
         return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,tmpList);
     }
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.COMMENTS)
-    public ComentariosDTO save(@Validated @RequestBody ComentariosDTO comentariosDTO) {
+    public ComentariosDTO save(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
         log.info("[ComentariosController][save] comentariosDTO={}", comentariosDTO);
         return comentarioService.save(comentariosDTO);
     }
