@@ -29,7 +29,7 @@ public class ArticleController {
         return articleService.save(articleDTO);
     }
 
-    @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
+    @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLES)
     public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) {
         log.info("[ArticleController][update] articleDTO={}", articleDTO);
         return articleService.update(articleDTO);
@@ -44,14 +44,15 @@ public class ArticleController {
         return articleService.findAllArticles(acceptLanguage, name, tags, categories, pageable);
     }
 
-    @GetMapping(value = UrlMapping.PUBLIC)
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLES)
     public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
                                             @RequestParam(required = false) final String slug) {
+        log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug={}", articleId , slug);
         return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
-    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.ARTICLES)
-    public void deleteById(@RequestParam final Long id) {
+    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLES)
+    public void deleteArticleById(@RequestParam final Long id) {
         articleService.deleteArticleById(id);
     }
 }
