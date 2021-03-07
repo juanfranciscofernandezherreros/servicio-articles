@@ -14,6 +14,7 @@ import com.fernandez.api.articles.service.ArticleService;
 import com.fernandez.api.articles.service.CategoryService;
 import com.fernandez.api.articles.service.TagService;
 import com.fernandez.api.articles.service.UserService;
+import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -97,25 +98,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<ArticleDTO> findAllArticles(final String acceptLanguage,
-                                            final String name,
-                                            final List<String> tag,
-                                            final List<String> categories,
+                                            final ArticleWrapper articleWrapper,
                                             final Pageable pageable) {
         Page<ArticleDTO> articleList = null;
-        if (Objects.isNull(name) && Objects.isNull(categories) && Objects.isNull(tag)) {
+        if (Objects.isNull(articleWrapper.getName()) && Objects.isNull(articleWrapper.getCategories()) && Objects.isNull(articleWrapper.getTags())) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
                     .map(this::mapFromEntityToDto);
         }
-        if (Objects.nonNull(name)) {
-            articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, name, pageable)
+        if (Objects.nonNull(articleWrapper.getName())) {
+            articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, articleWrapper.getName(), pageable)
                     .map(this::mapFromEntityToDto);
         }
-        if (Objects.nonNull(categories)) {
-            articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(categories), pageable)
+        if (Objects.nonNull(articleWrapper.getCategories())) {
+            articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(articleWrapper.getCategories()), pageable)
                     .map(this::mapFromEntityToDto);
         }
-        if (Objects.nonNull(tag)) {
-            articleList = articleRepository.findByTagsIn(findAllTagsById(tag), pageable)
+        if (Objects.nonNull(articleWrapper.getTags())) {
+            articleList = articleRepository.findByTagsIn(findAllTagsById(articleWrapper.getTags()), pageable)
                     .map(this::mapFromEntityToDto);
         }
         return articleList;
