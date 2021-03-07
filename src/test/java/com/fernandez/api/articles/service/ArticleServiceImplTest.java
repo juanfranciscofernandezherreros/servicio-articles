@@ -1,7 +1,5 @@
 package com.fernandez.api.articles.service;
 
-import com.fernandez.api.articles.dto.UserDTO;
-import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.repository.ArticleRepository;
 import com.fernandez.api.articles.service.impl.ArticleServiceImpl;
 import com.fernandez.api.articles.util.ArticleDtoUtils;
@@ -12,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
