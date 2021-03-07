@@ -24,10 +24,13 @@ public class ArticleServiceImplTest {
     private UserService userService;
 
     @Mock
+    private CategoryService categoryService;
+
+    @Mock
     private ArticleRepository articleRepository;
 
     @Test
-    public void saveArticleServiceTest() {
+    public void saveArticleTest() {
         when(userService.findByUsername(Mockito.any())).thenReturn(UserDtoUtils.mockUserDtoObject());
         when(articleRepository.save(Mockito.any())).thenReturn(ArticleDtoUtils.mockArticleObject());
         articleService.save(ArticleDtoUtils.mockArticleDtoObject());
