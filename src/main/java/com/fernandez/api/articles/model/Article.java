@@ -2,10 +2,7 @@ package com.fernandez.api.articles.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fernandez.api.articles.model.auditable.Audit;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -18,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(name = "articles")
 public class Article {
 

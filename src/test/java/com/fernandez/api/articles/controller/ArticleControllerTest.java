@@ -6,6 +6,7 @@ import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.UserDTO;
 import com.fernandez.api.articles.service.ArticleService;
+import com.fernandez.api.articles.util.ArticleDtoUtils;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,22 +61,22 @@ public class ArticleControllerTest {
     @Test
     public void saveArticleTest() throws Exception {
         mockMvc.perform(post(UrlMapping.ROOT + UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
-                .content(objectMapper.writeValueAsString(mockArticleDtoObject()))
+                .content(objectMapper.writeValueAsString(ArticleDtoUtils.mockArticleDtoObject()))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-        verify(service,times(1)).save(mockArticleDtoObject());
+        verify(service,times(1)).save(ArticleDtoUtils.mockArticleDtoObject());
         verifyNoMoreInteractions(service);
     }
 
     @Test
     public void updateArticleTest() throws Exception {
         mockMvc.perform(put(UrlMapping.ROOT + UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
-                .content(objectMapper.writeValueAsString(mockArticleDtoObject()))
+                .content(objectMapper.writeValueAsString(ArticleDtoUtils.mockArticleDtoObject()))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-        verify(service,times(1)).update(mockArticleDtoObject());
+        verify(service,times(1)).update(ArticleDtoUtils.mockArticleDtoObject());
         verifyNoMoreInteractions(service);
     }
 
@@ -118,27 +119,6 @@ public class ArticleControllerTest {
         return articleWrapper;
     }
 
-    private ArticleDTO mockArticleDtoObject() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername("kfh1992");
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName("Categoria1");
-        categoryDTO.setLanguage("es-ES");
-        categoryDTO.setSlug("Categoria1-Slug");
-        categoryDTOList.add(categoryDTO);
-        categoryDTOList.add(categoryDTO);
-        categoryDTOList.add(categoryDTO);
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setTitle("Title");
-        articleDTO.setSlug("Slug");
-        articleDTO.setDescription("Description");
-        articleDTO.setContent("Content");
-        articleDTO.setMainImage("Image");
-        articleDTO.setLanguage("es-ES");
-        articleDTO.setUser(userDTO);
-        articleDTO.setCategories(categoryDTOList);
-        return articleDTO;
-    }
+
 
 }

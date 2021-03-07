@@ -61,8 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
             articleDTO.setTags(tagService.tagDTOList(articleDTO));
         }
         Article article = modelMapper.map(articleDTO, Article.class);
-        Article newArticle = articleRepository.save(article);
-        return modelMapper.map(newArticle, ArticleDTO.class);
+        return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
     }
 
     @Override
