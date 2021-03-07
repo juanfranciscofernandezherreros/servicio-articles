@@ -72,37 +72,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO update(final ArticleDTO articleDTO) {
-        log.info("[ArticleServiceImpl][update] articleDTO={}", articleDTO);
-        if (articleDTO.getCategories().size() > 0) {
-            articleRepository.findById(articleDTO.getId())
-                    .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)));
-            Article article = modelMapper.map(articleDTO, Article.class);
-            Audit audit = new Audit();
-            DateFormat sourceFormat = new SimpleDateFormat("dd-MM-yyyy");
-            Date createdOnDate = null;
-            try {
-                createdOnDate = sourceFormat.parse(articleDTO.getAuditDTO().getCreatedOn());
-            } catch (ParseException e) {
-                log.error(e.getMessage());
-            }
-            audit.setCreatedOn(createdOnDate);
-            article.setAudit(audit);
-            return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
-        } else {
-            throw new ArticlesLogicException(HttpStatus.BAD_REQUEST, PropertiesConstant.ONE_CATEGORY);
-        }
-    }
-
-    @Override
     public Page<ArticleDTO> findAllArticles(final String acceptLanguage,
                                             final ArticleWrapper articleWrapper,
                                             final Pageable pageable) {
         log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} articleWrapper={} pageable={} ", acceptLanguage , articleWrapper , pageable);
         Page<ArticleDTO> articleList = null;
         if (Objects.isNull(articleWrapper.getName()) && Objects.isNull(articleWrapper.getCategories()) && Objects.isNull(articleWrapper.getTags())) {
-            articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable)
-                    .map(this::mapFromEntityToDto);
+            articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable).map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(articleWrapper.getName())) {
             articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, articleWrapper.getName(), pageable)
@@ -146,7 +122,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private ArticleDTO findArticleBySlug(final String slug) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(articleRepository.findArticleBySlug(slug)
                         .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
                 , ArticleDTO.class);

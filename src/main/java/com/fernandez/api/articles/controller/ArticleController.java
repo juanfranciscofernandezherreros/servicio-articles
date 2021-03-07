@@ -32,7 +32,7 @@ public class ArticleController {
     @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
     public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) {
         log.info("[ArticleController][update] articleDTO={}", articleDTO);
-        return articleService.update(articleDTO);
+        return articleService.save(articleDTO);
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLES)

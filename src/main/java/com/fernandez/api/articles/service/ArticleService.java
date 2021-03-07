@@ -13,8 +13,6 @@ public interface ArticleService {
 
     void deleteArticleById(Long id);
 
-    ArticleDTO update(ArticleDTO articleDTO);
-
     Page<ArticleDTO> findAllArticles(String acceptLanguage, ArticleWrapper articleWrapper, Pageable pageable);
 
     ArticleDTO findArticleBySlugOrId(String slug,Long articleId);

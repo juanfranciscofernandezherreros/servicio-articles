@@ -76,7 +76,7 @@ public class ArticleControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-        verify(service,times(1)).update(ArticleDtoUtils.mockArticleDtoObject());
+        verify(service,times(1)).save(ArticleDtoUtils.mockArticleDtoObject());
         verifyNoMoreInteractions(service);
     }
 
