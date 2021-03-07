@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -25,8 +24,8 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
-    public ArticleDTO save(final @Validated @RequestBody ArticleDTO articleDTO) {
-        log.info("[ArticleController][Create] articleDTO={}", articleDTO);
+    public ArticleDTO save(final @Valid @RequestBody ArticleDTO articleDTO) {
+        log.info("[ArticleController][save] articleDTO={}", articleDTO);
         return articleService.save(articleDTO);
     }
 
@@ -40,6 +39,7 @@ public class ArticleController {
     public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
                                     final ArticleWrapper articleWrapper,
                                     @PageableDefault(size = 5) final Pageable pageable) {
+        log.info("[ArticleController][findAll] acceptLanguage={} articleWrapper={} pageable={}", acceptLanguage , articleWrapper,pageable );
         return articleService.findAllArticles(acceptLanguage, articleWrapper, pageable);
     }
 
@@ -52,6 +52,7 @@ public class ArticleController {
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
     public void deleteArticleById(@RequestParam final Long id) {
+        log.info("[ArticleController][deleteArticleById] id={}", id);
         articleService.deleteArticleById(id);
     }
 }

@@ -5,6 +5,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,34 +21,44 @@ public class ArticleDTO {
     Long id;
 
     @NonNull
+    @NotEmpty
     String title;
 
     @NonNull
+    @NotEmpty
     String slug;
 
     @NonNull
+    @NotEmpty
     String description;
 
     @NonNull
+    @NotEmpty
     String content;
 
     @NonNull
+    @NotEmpty
     String mainImage;
 
     @NonNull
+    @NotEmpty
     String language;
+    @NonNull
 
+    @Valid
     UserDTO user;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     String createdDate;
 
+    @Size(max=3)
+    List<TagDTO> tags = new ArrayList<>();
+
+    @Size(min=1 , max=3)
+    List<CategoryDTO> categories = new ArrayList<>();
+
     Long totalComments;
 
     AuditDTO auditDTO;
-
-    List<TagDTO> tags = new ArrayList<>();
-
-    List<CategoryDTO> categories = new ArrayList<>();
 
 }

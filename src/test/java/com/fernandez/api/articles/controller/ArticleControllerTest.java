@@ -3,6 +3,8 @@ package com.fernandez.api.articles.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fernandez.api.articles.constants.UrlMapping;
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.UserDTO;
 import com.fernandez.api.articles.service.ArticleService;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.mockito.Mockito.*;
@@ -55,7 +58,7 @@ public class ArticleControllerTest {
     }
 
     @Test
-    public void createArticleTest() throws Exception {
+    public void saveArticleTest() throws Exception {
         mockMvc.perform(post(UrlMapping.ROOT + UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
                 .content(objectMapper.writeValueAsString(mockArticleDtoObject()))
                 .accept(MediaType.APPLICATION_JSON)
@@ -116,6 +119,16 @@ public class ArticleControllerTest {
     }
 
     private ArticleDTO mockArticleDtoObject() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("kfh1992");
+        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setName("Categoria1");
+        categoryDTO.setLanguage("es-ES");
+        categoryDTO.setSlug("Categoria1-Slug");
+        categoryDTOList.add(categoryDTO);
+        categoryDTOList.add(categoryDTO);
+        categoryDTOList.add(categoryDTO);
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setTitle("Title");
         articleDTO.setSlug("Slug");
@@ -123,6 +136,8 @@ public class ArticleControllerTest {
         articleDTO.setContent("Content");
         articleDTO.setMainImage("Image");
         articleDTO.setLanguage("es-ES");
+        articleDTO.setUser(userDTO);
+        articleDTO.setCategories(categoryDTOList);
         return articleDTO;
     }
 
