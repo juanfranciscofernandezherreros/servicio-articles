@@ -15,41 +15,40 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults ( level = AccessLevel.PRIVATE )
 @ToString
 public class ArticleDTO {
 
-    Long id;
+    private Long id;
 
     @NonNull
-    String title;
+    private String title;
 
     @NonNull
-    String slug;
+    private String slug;
 
     @NonNull
-    String description;
+    private String description;
 
     @NonNull
-    String content;
+    private String content;
 
     @NonNull
-    String mainImage;
+    private String mainImage;
 
     @NonNull
-    String language;
+    private String language;
 
-    UserDTO user;
+    private UserDTO user;
 
     @JsonProperty ( access = JsonProperty.Access.READ_ONLY )
-    String createdDate;
+    private String createdDate;
 
-    Long totalComments;
+    private Long totalComments;
 
-    AuditDTO auditDTO;
+    private AuditDTO auditDTO;
 
-    List < TagDTO > tags = new ArrayList <> ( );
+    private List < TagDTO > tags = new ArrayList <> ( );
 
-    List < CategoryDTO > categories = new ArrayList <> ( );
+    private List < CategoryDTO > categories = new ArrayList <> ( );
 
 }

@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List < CategoryDTO > categoryDTOList ( final ArticleDTO articleDTO ) {
         log.info ( "[CategoryServiceImpl][categoryDTOList] articleDTO={}" , articleDTO );
-        Type listType = new TypeToken < List < CategoryDTO > > ( ) {
+        final Type listType = new TypeToken < List < CategoryDTO > > ( ) {
         }.getType ( );
         return modelMapper.map (
                 articleDTO.getCategories ( )
@@ -67,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO save ( final CategoryDTO categoryDTO ) {
         log.info ( "[CategoryServiceImpl][save] categoryDTO={}" , categoryDTO );
-        Category category = modelMapper.map ( categoryDTO , Category.class );
+        final Category category = modelMapper.map ( categoryDTO , Category.class );
         return modelMapper.map ( categoryRepository.save ( category ) , CategoryDTO.class );
     }
 
@@ -93,8 +93,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private CategoryDTO mapFromEntityToDto ( final Category category ) {
-        CategoryDTO categoryDto = modelMapper.map ( category , CategoryDTO.class );
-        Long totalArticles = categoryRepository.countTotalArticlesFromCategory ( category );
+        final CategoryDTO categoryDto = modelMapper.map ( category , CategoryDTO.class );
+        final Long totalArticles = categoryRepository.countTotalArticlesFromCategory ( category );
         if ( totalArticles > 0 ) {
             categoryDto.setTotalArticles ( totalArticles );
         } else {
@@ -104,10 +104,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private Page convertList2Page ( final List list , final Pageable pageable ) {
-        int startIndex = ( int ) pageable.getOffset ( );
-        int endIndex = ( int ) ( ( pageable.getOffset ( ) + pageable.getPageSize ( ) ) > list.size ( ) ? list.size ( )
+        final int startIndex = ( int ) pageable.getOffset ( );
+        final int endIndex = ( int ) ( ( pageable.getOffset ( ) + pageable.getPageSize ( ) ) > list.size ( ) ?
+                list.size ( )
                 : pageable.getOffset ( ) + pageable.getPageSize ( ) );
-        List subList = list.subList ( startIndex , endIndex );
+        final List subList = list.subList ( startIndex , endIndex );
         return new PageImpl ( subList , pageable , list.size ( ) );
     }
 

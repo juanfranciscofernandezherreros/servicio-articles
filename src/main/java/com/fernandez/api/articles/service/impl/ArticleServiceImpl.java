@@ -61,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
             if ( articleDTO.getTags ( ).size ( ) > 0 ) {
                 articleDTO.setTags ( tagService.tagDTOList ( articleDTO ) );
             }
-            Article article = modelMapper.map ( articleDTO , Article.class );
+            final Article article = modelMapper.map ( articleDTO , Article.class );
             return modelMapper.map ( articleRepository.save ( article ) , ArticleDTO.class );
         } else {
             throw new ArticlesLogicException ( HttpStatus.BAD_REQUEST , PropertiesConstant.ONE_CATEGORY );
@@ -81,9 +81,9 @@ public class ArticleServiceImpl implements ArticleService {
         if ( articleDTO.getCategories ( ).size ( ) > 0 ) {
             articleRepository.findById ( articleDTO.getId ( ) )
                     .orElseThrow ( ( ) -> new ArticlesLogicException ( HttpStatus.NOT_FOUND , messages.get ( PropertiesConstant.ARTICLE_NOT_FOUND ) ) );
-            Article article = modelMapper.map ( articleDTO , Article.class );
-            Audit audit = new Audit ( );
-            DateFormat sourceFormat = new SimpleDateFormat ( "dd-MM-yyyy" );
+            final Article article = modelMapper.map ( articleDTO , Article.class );
+            final Audit audit = new Audit ( );
+            final DateFormat sourceFormat = new SimpleDateFormat ( "dd-MM-yyyy" );
             Date createdOnDate = null;
             try {
                 createdOnDate = sourceFormat.parse ( articleDTO.getAuditDTO ( ).getCreatedOn ( ) );
@@ -166,9 +166,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private ArticleDTO mapFromEntityToDto ( final Article article ) {
-        ArticleDTO articleDto = modelMapper.map ( article , ArticleDTO.class );
-        SimpleDateFormat formatter = new SimpleDateFormat ( "dd-MM-yyyy" );
-        String formattedDate = formatter.format ( article.getAudit ( ).getCreatedOn ( ) );
+        final ArticleDTO articleDto = modelMapper.map ( article , ArticleDTO.class );
+        final SimpleDateFormat formatter = new SimpleDateFormat ( "dd-MM-yyyy" );
+        final String formattedDate = formatter.format ( article.getAudit ( ).getCreatedOn ( ) );
         articleDto.setCreatedDate ( formattedDate );
         articleDto.setTotalComments ( countCommentsBlogRepository.countCommentsFromArticle ( article.getId ( ) ) );
         return articleDto;
