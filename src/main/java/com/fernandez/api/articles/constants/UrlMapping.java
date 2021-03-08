@@ -12,5 +12,6 @@ public final class UrlMapping {
     public static final String TAGS= "/tags";
     public static final String TAG = "/tag";
     public static final String COMMENTS = "/comments";
+    public static final String COMMENT = "/comment";
     public static final String RANDOM = "/random";
 }
