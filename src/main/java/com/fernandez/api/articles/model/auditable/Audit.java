@@ -1,6 +1,7 @@
 package com.fernandez.api.articles.model.auditable;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -12,22 +13,23 @@ import java.util.Date;
 @Getter
 @Setter
 @Embeddable
+@RequiredArgsConstructor
 public class Audit {
 
-    @Column(name = "created_on")
+    @Column ( name = "created_on" )
     private Date createdOn;
 
-    @Column(name = "updated_on")
+    @Column ( name = "updated_on" )
     private Date updatedOn;
 
     @PrePersist
-    public void prePersist() {
-        createdOn = new Date();
+    public void prePersist ( ) {
+        createdOn = new Date ( );
     }
 
     @PreUpdate
-    public void preUpdate() {
-        updatedOn = new Date();
+    public void preUpdate ( ) {
+        updatedOn = new Date ( );
     }
 
 }

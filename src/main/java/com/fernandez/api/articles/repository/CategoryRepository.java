@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepository extends JpaRepository < Category, Long > {
 
-    List<Category> findAllByLanguage(String acceptLanguage);
+    List < Category > findAllByLanguage ( String acceptLanguage );
 
-    Category findByName(String name);
+    Category findByName ( String name );
 
-    @Query(value = "SELECT count(*) FROM articles_categories WHERE articles_categories.categories_id=?1", nativeQuery = true)
-    Long countTotalArticlesFromCategory(Category category);
+    @Query ( value = "SELECT count(*) FROM articles_categories WHERE articles_categories.categories_id=?1", nativeQuery = true )
+    Long countTotalArticlesFromCategory ( Category category );
 
 }

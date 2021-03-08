@@ -9,10 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TagsRepository extends JpaRepository<Tag, Long> {
+public interface TagsRepository extends JpaRepository < Tag, Long > {
 
-    Tag findByNameAndLanguage(String name, String language);
-    Page<Tag> findAllByLanguage(String acceptLanguage, Pageable pageable);
-    List<Tag> findAllByLanguage(String acceptLanguage);
+    Tag findByNameAndLanguage ( String name , String language );
+
+    Page < Tag > findAllByLanguage ( String acceptLanguage , Pageable pageable );
+
+    List < Tag > findAllByLanguage ( String acceptLanguage );
 
 }

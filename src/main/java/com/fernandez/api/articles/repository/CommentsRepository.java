@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentsRepository extends JpaRepository<Comentarios, Long> {
-    List<Comentarios> findAllByParentIdAndArticleId(long comentarioId, Long blogsTranslation);
+public interface CommentsRepository extends JpaRepository < Comentarios, Long > {
+    List < Comentarios > findAllByParentIdAndArticleId ( long comentarioId , Long blogsTranslation );
 }

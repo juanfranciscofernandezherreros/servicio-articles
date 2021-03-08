@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CountCommentsBlogRepository extends JpaRepository<Comentarios, Long> {
+public interface CountCommentsBlogRepository extends JpaRepository < Comentarios, Long > {
 
-    @Query("SELECT COUNT(c) FROM Comentarios c WHERE c.articleId=:articleId")
-    Long countCommentsFromArticle(@Param("articleId") Long articleId);
+    @Query ( "SELECT COUNT(c) FROM Comentarios c WHERE c.articleId=:articleId" )
+    Long countCommentsFromArticle ( @Param ( "articleId" ) Long articleId );
 
 }
