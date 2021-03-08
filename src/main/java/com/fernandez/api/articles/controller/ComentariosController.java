@@ -6,12 +6,7 @@ import com.fernandez.api.articles.service.ComentarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +16,39 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping ( value = UrlMapping.ROOT, produces = { APPLICATION_JSON_VALUE } )
+@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
 public class ComentariosController {
 
     private final ComentarioService comentarioService;
 
-    @GetMapping ( UrlMapping.PUBLIC +  UrlMapping.V1 + UrlMapping.COMMENTS )
-    public List < ComentariosDTO > findAllCommentsFromArticle ( final @RequestParam () Long articleId ) {
-        log.info ( "[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}" , articleId );
-        final List < ComentariosDTO > tmpList = new ArrayList < ComentariosDTO > ( );
-        return comentarioService.findAllComentariosByBlogTranslationId ( 0 , 0 , articleId , tmpList );
+    @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.COMMENTS)
+    public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam() final Long articleId) {
+        log.info("[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}", articleId);
+        return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,new ArrayList<>());
     }
 
-    @PostMapping ( UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.COMMENTS )
-    public ComentariosDTO save ( final @Validated @RequestBody ComentariosDTO comentariosDTO ) {
-        log.info ( "[ComentariosController][save] comentariosDTO={}" , comentariosDTO );
-        return comentarioService.save ( comentariosDTO );
+    @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.COMMENT)
+    public ComentariosDTO findCommentById(@RequestParam() final Long commentId) {
+        log.info("[ComentariosController][findCommentById] commentId={}", commentId);
+        return comentarioService.findCommentById(commentId);
+    }
+
+    @PostMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
+    public ComentariosDTO save(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
+        log.info("[ComentariosController][save] comentariosDTO={}", comentariosDTO);
+        return comentarioService.save(comentariosDTO);
+    }
+
+    @PutMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
+    public ComentariosDTO update(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
+        log.info("[ComentariosController][update] comentariosDTO={}", comentariosDTO);
+        return comentarioService.save(comentariosDTO);
+    }
+
+    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
+    public void deleteCommentById(final @RequestParam(required = false) Long commentId) {
+        log.info("[ComentariosController][deleteCommentById] commentId={}", commentId);
+        comentarioService.deleteById(commentId);
     }
 
 }

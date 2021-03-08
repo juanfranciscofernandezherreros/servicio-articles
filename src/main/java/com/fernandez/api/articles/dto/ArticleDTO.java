@@ -1,54 +1,64 @@
 package com.fernandez.api.articles.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class ArticleDTO {
 
-    private Long id;
+    Long id;
 
     @NonNull
-    private String title;
+    @NotEmpty
+    String title;
 
     @NonNull
-    private String slug;
+    @NotEmpty
+    String slug;
 
     @NonNull
-    private String description;
+    @NotEmpty
+    String description;
 
     @NonNull
-    private String content;
+    @NotEmpty
+    String content;
 
     @NonNull
-    private String mainImage;
+    @NotEmpty
+    String mainImage;
 
     @NonNull
-    private String language;
+    @NotEmpty
+    String language;
+    @NonNull
 
-    private UserDTO user;
+    @Valid
+    UserDTO user;
 
-    @JsonProperty ( access = JsonProperty.Access.READ_ONLY )
-    private String createdDate;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    String createdDate;
 
-    private Long totalComments;
+    @Size(max=3)
+    List<TagDTO> tags = new ArrayList<>();
 
-    private AuditDTO auditDTO;
+    @Size(min=1 , max=3)
+    List<CategoryDTO> categories = new ArrayList<>();
 
-    private List < TagDTO > tags = new ArrayList <> ( );
+    Long totalComments;
 
-    private List < CategoryDTO > categories = new ArrayList <> ( );
+    AuditDTO auditDTO;
 
 }

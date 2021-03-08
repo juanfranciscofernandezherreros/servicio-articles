@@ -9,55 +9,46 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping ( value = UrlMapping.ROOT, produces = { APPLICATION_JSON_VALUE } )
+@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final CategoryService service;
 
-    @GetMapping (UrlMapping.PUBLIC +  UrlMapping.V1 + UrlMapping.CATEGORIES )
-    public Page < CategoryDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
-                                          final @PageableDefault ( size = 5 ) Pageable pageable ) {
-        log.info ( "[CategoryController][findAll] acceptLanguage={} , pageable={}" , acceptLanguage , pageable );
-        return categoryService.findAll ( acceptLanguage , pageable );
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.CATEGORIES)
+    public Page<CategoryDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                     @PageableDefault(size = 5) final Pageable pageable) {
+        log.info("[CategoryController][findAll] acceptLanguage={} pageable={}", acceptLanguage,pageable);
+        return service.findAll(acceptLanguage,pageable);
     }
 
-    @PostMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
-    public CategoryDTO save ( final @Validated @RequestBody CategoryDTO categoryDTO ) {
-        log.info ( "[CategoryController][save] categoryDTO={}" , categoryDTO );
-        return categoryService.save ( categoryDTO );
+    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY)
+    public CategoryDTO save(final @Validated @RequestBody CategoryDTO categoryDTO) {
+        log.info("[CategoryController][save] categoryDTO={}", categoryDTO);
+        return service.save(categoryDTO);
     }
 
-    @PutMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
-    public CategoryDTO update ( final @Validated @RequestBody CategoryDTO categoryDTO ) {
-        log.info ( "[CategoryController][update] categoryDTO={}" , categoryDTO );
-        return categoryService.save ( categoryDTO );
+    @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY)
+    public CategoryDTO update(final @Validated @RequestBody CategoryDTO categoryDTO) {
+        log.info("[CategoryController][update] categoryDTO={}", categoryDTO);
+        return service.save(categoryDTO);
     }
 
-    @GetMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
-    public CategoryDTO findById ( final @RequestParam Long categoryId ) {
-        log.info ( "[CategoryController][findById] categoryId={}" , categoryId );
-        return categoryService.findCategoryDtoById ( categoryId );
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.CATEGORY)
+    public CategoryDTO findById(@RequestParam final Long categoryId) {
+        log.info("[CategoryController][findById] categoryId={}", categoryId);
+        return service.findCategoryDtoById(categoryId);
     }
 
-    @DeleteMapping ( UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.CATEGORIES )
-    public void deleteCategoryById ( final @RequestParam Long categoryId ) {
-        log.info ( "[CategoryController][deleteById] categoryId={}" , categoryId );
-        categoryService.deleteById ( categoryId );
+    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY)
+    public void deleteCategoryById(@RequestParam final Long categoryId) {
+        log.info("[CategoryController][deleteById] categoryId={}", categoryId);
+        service.deleteCategoryById(categoryId);
     }
 
 }

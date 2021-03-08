@@ -3,67 +3,56 @@ package com.fernandez.api.articles.controller;
 import com.fernandez.api.articles.constants.UrlMapping;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.service.ArticleService;
+import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping ( value = UrlMapping.ROOT, produces = { APPLICATION_JSON_VALUE } )
+@RequestMapping(value = UrlMapping.ROOT, produces = {APPLICATION_JSON_VALUE})
 public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping (UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLES )
-    public ArticleDTO save ( final @Validated @RequestBody ArticleDTO articleDTO ) {
-        log.info ( "[ArticleController][save] articleDTO={}" , articleDTO );
-        return articleService.save ( articleDTO );
+    @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
+    public ArticleDTO save(final @Valid @RequestBody ArticleDTO articleDTO) {
+        log.info("[ArticleController][save] articleDTO={}", articleDTO);
+        return articleService.save(articleDTO);
     }
 
-    @PutMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.ARTICLES )
-    public ArticleDTO update ( final @RequestBody ArticleDTO articleDTO ) {
-        log.info ( "[ArticleController][update] articleDTO={}" , articleDTO );
-        return articleService.update ( articleDTO );
+    @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
+    public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) {
+        log.info("[ArticleController][update] articleDTO={}", articleDTO);
+        return articleService.save(articleDTO);
     }
 
-    @GetMapping (UrlMapping.PUBLIC +  UrlMapping.V1 + UrlMapping.ARTICLES )
-    public Page < ArticleDTO > findAll ( final @RequestHeader ( "accept-language" ) String acceptLanguage ,
-                                         final @RequestParam ( required = false ) String name ,
-                                         final @RequestParam ( required = false ) List < String > tags ,
-                                         final @RequestParam ( required = false ) List < String > categories ,
-                                         final @PageableDefault ( size = 5 ) Pageable pageable ) {
-        log.info ( "[ArticleController][findAll] acceptLanguage={} name={} tags={} categories={} pageable={}" ,
-                acceptLanguage , name , tags , categories , pageable );
-        return articleService.findAllArticles ( acceptLanguage , name , tags , categories , pageable );
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLES)
+    public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                    final ArticleWrapper articleWrapper,
+                                    @PageableDefault(size = 5) final Pageable pageable) {
+        log.info("[ArticleController][findAll] acceptLanguage={} articleWrapper={} pageable={}", acceptLanguage , articleWrapper,pageable );
+        return articleService.findAllArticles(acceptLanguage, articleWrapper, pageable);
     }
 
-    @GetMapping (UrlMapping.PUBLIC + UrlMapping.V1)
-    public ArticleDTO findArticleBySlugOrId ( final @RequestParam ( required = false ) Long articleId ,
-                                              final @RequestParam ( required = false ) String slug ) {
-        log.info ( "[ArticleController][findArticleBySlugOrId] articleId={} slug?{}" , articleId , slug );
-        return articleService.findArticleBySlugOrId ( slug , articleId );
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLE)
+    public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
+                                            @RequestParam(required = false) final String slug) {
+        log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug={}", articleId , slug);
+        return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
-    @DeleteMapping (UrlMapping.PROTECTED +  UrlMapping.V1 + UrlMapping.ARTICLES )
-    public void deleteById ( final @RequestParam Long id ) {
-        log.info ( "[ArticleController][deleteById] id={}" , id );
-        articleService.deleteArticleById ( id );
+    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
+    public void deleteArticleById(@RequestParam final Long id) {
+        log.info("[ArticleController][deleteArticleById] id={}", id);
+        articleService.deleteArticleById(id);
     }
 }

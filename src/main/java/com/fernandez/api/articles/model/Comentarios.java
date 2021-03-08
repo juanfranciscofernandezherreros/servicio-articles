@@ -6,50 +6,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.*;
 
 @Getter
 @Setter
-@Accessors ( chain = true )
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table ( name = "comentarios" )
-public class Comentarios implements Serializable {
-
+@Table(name = "comentarios")
+public class Comentarios {
 
     @Id
-    @GeneratedValue ( strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String contenido;
 
     @OneToOne
-    @JoinColumn ( name = "author_id", referencedColumnName = "id" )
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User authorComment;
 
     private Long articleId;
 
-    @JoinColumn ( name = "parent_id", insertable = false, updatable = false )
+    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
     private Long parentId;
 
     @Embedded
-    private Audit audit = new Audit ( );
+    private Audit audit = new Audit();
 
     private boolean isanswer;
 
-    @OneToOne ( cascade = CascadeType.ALL )
-    @JoinColumn ( name = "comentarios_usernotregistered" )
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "comentarios_usernotregistered" )
     private ComentariosUserNotRegistered comentarioUserNotRegistered;
 
 }
