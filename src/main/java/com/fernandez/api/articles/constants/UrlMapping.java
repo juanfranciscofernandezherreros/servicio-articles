@@ -5,7 +5,6 @@ public final class UrlMapping {
     public static final String V1 = "/v1";
     public static final String PROTECTED = "/protected";
     public static final String PUBLIC = "/public";
-    public static final String V1 = "/v1";
     public static final String ARTICLES = "/articles";
     public static final String ARTICLE = "/article";
     public static final String CATEGORIES = "/categories";
