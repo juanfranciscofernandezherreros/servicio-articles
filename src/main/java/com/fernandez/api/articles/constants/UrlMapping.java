@@ -10,7 +10,7 @@ public final class UrlMapping {
     public static final String CATEGORIES = "/categories";
     public static final String CATEGORY = "/category";
     public static final String TAGS= "/tags";
+    public static final String TAG = "/tag";
     public static final String COMMENTS = "/comments";
     public static final String RANDOM = "/random";
-
 }
