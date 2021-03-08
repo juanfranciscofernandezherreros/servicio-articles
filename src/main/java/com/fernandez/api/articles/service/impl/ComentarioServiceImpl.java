@@ -1,6 +1,10 @@
 package com.fernandez.api.articles.service.impl;
 
+import com.fernandez.api.articles.common.Messages;
+import com.fernandez.api.articles.constants.PropertiesConstant;
+import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.ComentariosDTO;
+import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Comentarios;
 import com.fernandez.api.articles.model.ComentariosUserNotRegistered;
 import com.fernandez.api.articles.repository.CommentsRepository;
@@ -9,6 +13,7 @@ import com.fernandez.api.articles.service.ComentarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,6 +31,8 @@ public class ComentarioServiceImpl implements ComentarioService {
     private final CommentsRepository commentsRepository;
 
     private final ModelMapper modelMapper = new ModelMapper();
+
+    private final Messages messages;
 
     @Override
     public List<ComentariosDTO> findAllComentariosByBlogTranslationId(final long comentarioId, final long level, Long blogsTranslation, final List<ComentariosDTO> comentariosList) {
@@ -53,6 +60,19 @@ public class ComentarioServiceImpl implements ComentarioService {
             comentarios.setComentarioUserNotRegistered(comentariosUserNotRegistered);
         }
         return modelMapper.map(commentsRepository.save(comentarios), ComentariosDTO.class);
+    }
+
+    @Override
+    public ComentariosDTO findCommentById(Long commentId) {
+        return modelMapper.map(commentsRepository.findById(commentId)
+                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.COMMENT_NOT_FOUND)))
+                , ComentariosDTO.class);
+    }
+
+    @Override
+    public void deleteById(Long commentId) {
+        commentsRepository.delete(commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.COMMENT_NOT_FOUND))));
     }
 
     private ComentariosDTO mapFromDtoToEntity(final Comentarios comentarios,final Long level) {

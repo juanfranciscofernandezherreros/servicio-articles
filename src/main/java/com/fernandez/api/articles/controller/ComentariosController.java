@@ -27,10 +27,28 @@ public class ComentariosController {
         return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,new ArrayList<>());
     }
 
+    @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.COMMENT)
+    public ComentariosDTO findCommentById(@RequestParam() final Long commentId) {
+        log.info("[ComentariosController][findCommentById] commentId={}", commentId);
+        return comentarioService.findCommentById(commentId);
+    }
+
     @PostMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
     public ComentariosDTO save(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
         log.info("[ComentariosController][save] comentariosDTO={}", comentariosDTO);
         return comentarioService.save(comentariosDTO);
+    }
+
+    @PutMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
+    public ComentariosDTO update(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
+        log.info("[ComentariosController][update] comentariosDTO={}", comentariosDTO);
+        return comentarioService.save(comentariosDTO);
+    }
+
+    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
+    public void deleteCommentById(final @RequestParam(required = false) Long commentId) {
+        log.info("[ComentariosController][deleteCommentById] commentId={}", commentId);
+        comentarioService.deleteById(commentId);
     }
 
 }
