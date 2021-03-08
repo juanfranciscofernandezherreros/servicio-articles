@@ -24,8 +24,7 @@ public class ComentariosController {
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.COMMENTS)
     public List<ComentariosDTO> findAllCommentsFromArticle(@RequestParam() final Long articleId) {
         log.info("[ComentariosController][findAllCommentsFromArticle] comentariosDTO={}", articleId);
-        List<ComentariosDTO> tmpList = new ArrayList<>();
-        return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,tmpList);
+        return comentarioService.findAllComentariosByBlogTranslationId(0, 0, articleId,new ArrayList<>());
     }
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.COMMENTS)

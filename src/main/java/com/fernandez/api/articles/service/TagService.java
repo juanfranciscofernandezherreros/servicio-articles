@@ -11,8 +11,6 @@ import java.util.List;
 public interface TagService {
     List<TagDTO> tagDTOList(ArticleDTO articleDTO);
 
-    Tag findTagById(Long valueOf);
-
     TagDTO findTagDtoById(Long tagId);
 
     TagDTO save(TagDTO tagDTO);
@@ -22,4 +20,6 @@ public interface TagService {
     Page<TagDTO> findAll(String acceptLanguage, Pageable pageable);
 
     Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable);
+
+    Tag findTagById(Long tagId);
 }

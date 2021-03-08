@@ -35,7 +35,7 @@ public class TagsController {
         return tagService.findAllTagsRandom(acceptLanguage,pageable);
     }
 
-    @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.TAGS)
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.TAGS)
     public TagDTO findById(@RequestParam final Long tagId) {
         log.info("[CategoryController][findById] tagId={}", tagId);
         return tagService.findTagDtoById(tagId);

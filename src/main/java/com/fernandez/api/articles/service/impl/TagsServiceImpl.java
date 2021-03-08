@@ -46,12 +46,6 @@ public class TagsServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findTagById(final Long tagsId) {
-        return tagsRepository.findById(tagsId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
-    }
-
-    @Override
     public TagDTO findTagDtoById(final Long tagId) {
         return modelMapper.map(tagsRepository.findById(tagId), TagDTO.class);
     }
@@ -79,6 +73,12 @@ public class TagsServiceImpl implements TagService {
         List<Tag> list = tagsRepository.findAllByLanguage(acceptLanguage);
         Collections.shuffle(list, new Random(System.nanoTime()));
         return convertList2Page(list,pageable);
+    }
+
+    @Override
+    public Tag findTagById(Long tagId) {
+        return tagsRepository.findById(tagId)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
     }
 
     private TagDTO mapFromEntityToDto(final Tag tag) {
