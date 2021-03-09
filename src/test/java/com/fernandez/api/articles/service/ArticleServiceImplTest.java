@@ -5,15 +5,12 @@ import com.fernandez.api.articles.repository.ArticleRepository;
 import com.fernandez.api.articles.service.impl.ArticleServiceImpl;
 import com.fernandez.api.articles.util.ArticleDtoUtils;
 import com.fernandez.api.articles.util.UserDtoUtils;
-import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
