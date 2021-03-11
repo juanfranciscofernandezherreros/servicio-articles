@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.nio.channels.FileChannel;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public interface ArticleRepository extends JpaRepository < Article, Long > {
 
     Page < Article > findArticleByLanguageAndTitle ( String acceptLanguage , String name , Pageable pageable );
 
-    Page < Article > findAllByLanguage ( String acceptLanguage , Pageable pageable );
+    List < Article > findAllByLanguage ( String acceptLanguage);
 
-
+    Page<Article> findAllByLanguage(String acceptLanguage, Pageable pageable);
 }

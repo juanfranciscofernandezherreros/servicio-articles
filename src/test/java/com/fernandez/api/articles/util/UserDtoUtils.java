@@ -8,7 +8,7 @@ public class UserDtoUtils {
         userDTO.setUsername("kfh1992");
         userDTO.setEmail("kfh1992@gmail.com");
         userDTO.setName("Name");
-        userDTO.setFistName("FirstName");
+        userDTO.setFirstName("FirstName");
         return userDTO;
     }
 

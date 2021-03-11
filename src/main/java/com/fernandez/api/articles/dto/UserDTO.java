@@ -19,7 +19,7 @@ public class UserDTO {
     private String username;
 
     private String name;
-    private String fistName;
+    private String firstName;
     private String email;
     private String imageProfile;
     private String password;

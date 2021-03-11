@@ -8,7 +8,7 @@ public class UserEntityUtils {
         user.setUsername("kfh1992");
         user.setEmail("kfh1992@gmail.com");
         user.setName("Name");
-        user.setFistName("FirstName");
+        user.setFirstName("FirstName");
         return user;
     }
 }

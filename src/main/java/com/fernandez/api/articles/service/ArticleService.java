@@ -15,5 +15,7 @@ public interface ArticleService {
 
     Page<ArticleDTO> findAllArticles(String acceptLanguage, ArticleWrapper articleWrapper, Pageable pageable);
 
-    ArticleDTO findArticleBySlugOrId(String slug,Long articleId);
+    ArticleDTO findArticleBySlugOrId(String slug, Long articleId);
+
+    Page findAllArticlesRandom(final String acceptLanguage, final Pageable pageable);
 }
