@@ -43,6 +43,13 @@ public class ArticleController {
         return articleService.findAllArticles(acceptLanguage, articleWrapper, pageable);
     }
 
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLES + UrlMapping.RANDOM)
+    public Page<ArticleDTO> findAllArticlesRandom(@RequestHeader("Accept-Language") final String acceptLanguage,
+                                    @PageableDefault(size = 18) final Pageable pageable) {
+        log.info("[ArticleController][findAll] acceptLanguage={} , pageable={}", acceptLanguage ,pageable );
+        return articleService.findAllArticlesRandom(acceptLanguage, pageable);
+    }
+
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLE)
     public ArticleDTO findArticleBySlugOrId(@RequestParam(required = false) final Long articleId,
                                             @RequestParam(required = false) final String slug) {
