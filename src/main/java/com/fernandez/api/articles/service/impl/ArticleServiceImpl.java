@@ -18,6 +18,7 @@ import com.fernandez.api.articles.service.UserService;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
@@ -77,21 +78,21 @@ public class ArticleServiceImpl implements ArticleService {
         log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} articleWrapper={} pageable={} ", acceptLanguage , articleWrapper , pageable);
         List<Article> articles = new ArrayList<Article>();
         Page<ArticleDTO> articleList = null;
-        if (Objects.isNull(articleWrapper.getName()) && Objects.isNull(articleWrapper.getCategories()) && Objects.isNull(articleWrapper.getTags())) {
+        if (StringUtils.isEmpty(articleWrapper.getTitle()) && Objects.isNull(articleWrapper.getCategories()) && Objects.isNull(articleWrapper.getTags())) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable).map(this::mapFromEntityToDto);
         }
-        if (Objects.nonNull(articleWrapper.getName())) {
-            articleList = articleRepository.findArticleByLanguageAndTitle(acceptLanguage, articleWrapper.getName(), pageable)
+        if (!StringUtils.isEmpty(articleWrapper.getTitle())) {
+            articleList = articleRepository.findArticleByLanguageAndTitleContaining(acceptLanguage, articleWrapper.getTitle(), pageable)
                     .map(this::mapFromEntityToDto);
         }
-        if (Objects.nonNull(articleWrapper.getCategories())) {
+        /*if (Objects.nonNull(articleWrapper.getCategories())) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(articleWrapper.getCategories()), pageable)
                     .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(articleWrapper.getTags())) {
             articleList = articleRepository.findByTagsIn(findAllTagsById(articleWrapper.getTags()), pageable)
                     .map(this::mapFromEntityToDto);
-        }
+        }*/
         return articleList;
     }
 

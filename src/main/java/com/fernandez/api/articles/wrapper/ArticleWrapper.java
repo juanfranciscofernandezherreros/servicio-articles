@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 public class ArticleWrapper {
 
-    private String name;
+    private String title;
 
     private List<String> tags;
 
