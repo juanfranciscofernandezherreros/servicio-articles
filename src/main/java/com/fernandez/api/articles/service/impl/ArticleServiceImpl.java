@@ -20,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -98,10 +96,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page findAllArticlesRandom(final String acceptLanguage, final Pageable pageable) {
-        List<Article> list = articleRepository.findAllByLanguage(acceptLanguage);
-        Collections.shuffle(list, new Random(System.nanoTime()));
-        return convertList2Page(list,pageable);
+    public Page<ArticleDTO> findAllArticlesRandom(final String acceptLanguage, final Pageable pageable) {
+        return articleRepository.findAllByLanguage(acceptLanguage,pageable).map(this::mapFromEntityToDto);
     }
 
     @Override
@@ -150,18 +146,5 @@ public class ArticleServiceImpl implements ArticleService {
         articleDto.setCreatedDate(formattedDate);
         articleDto.setTotalComments(countCommentsRepository.countCommentsFromArticle(article.getId()));
         return articleDto;
-    }
-
-    private Page convertList2Page(final List list, final Pageable pageable) {
-        return getPage(list, pageable);
-    }
-
-    @NotNull
-    static Page getPage(final List list, final Pageable pageable) {
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ? list.size()
-                : pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
     }
 }
