@@ -21,7 +21,7 @@ public interface ArticleRepository extends JpaRepository < Article, Long > {
 
     Page < Article > findByCategoriesIn ( List < Category > categories , Pageable pageable );
 
-    Page < Article > findArticleByLanguageAndTitle ( String acceptLanguage , String name , Pageable pageable );
+    Page < Article > findArticleByLanguageAndTitleContaining( String acceptLanguage , String name , Pageable pageable );
 
     Page <Article> findAllByLanguage(String acceptLanguage, Pageable pageable);
 }
