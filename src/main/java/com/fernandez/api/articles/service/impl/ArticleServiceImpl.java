@@ -85,14 +85,14 @@ public class ArticleServiceImpl implements ArticleService {
             articleList = articleRepository.findArticleByLanguageAndTitleContaining(acceptLanguage, articleWrapper.getTitle(), pageable)
                     .map(this::mapFromEntityToDto);
         }
-        /*if (Objects.nonNull(articleWrapper.getCategories())) {
+        if (Objects.nonNull(articleWrapper.getCategories())) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(articleWrapper.getCategories()), pageable)
                     .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(articleWrapper.getTags())) {
             articleList = articleRepository.findByTagsIn(findAllTagsById(articleWrapper.getTags()), pageable)
                     .map(this::mapFromEntityToDto);
-        }*/
+        }
         return articleList;
     }
 
