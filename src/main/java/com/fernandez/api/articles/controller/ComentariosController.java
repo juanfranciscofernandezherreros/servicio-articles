@@ -34,13 +34,13 @@ public class ComentariosController {
     }
 
     @PostMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
-    public ComentariosDTO save(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
+    public ComentariosDTO save(final @Validated @RequestBody ComentariosDTO comentariosDTO) throws Exception {
         log.info("[ComentariosController][save] comentariosDTO={}", comentariosDTO);
         return comentarioService.save(comentariosDTO);
     }
 
     @PutMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.COMMENT)
-    public ComentariosDTO update(final @Validated @RequestBody ComentariosDTO comentariosDTO) {
+    public ComentariosDTO update(final @Validated @RequestBody ComentariosDTO comentariosDTO) throws Exception {
         log.info("[ComentariosController][update] comentariosDTO={}", comentariosDTO);
         return comentarioService.save(comentariosDTO);
     }

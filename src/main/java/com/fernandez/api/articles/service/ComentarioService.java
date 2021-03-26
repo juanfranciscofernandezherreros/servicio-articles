@@ -5,7 +5,7 @@ import com.fernandez.api.articles.dto.ComentariosDTO;
 import java.util.List;
 
 public interface ComentarioService {
-    ComentariosDTO save(ComentariosDTO comentariosDTO);
+    ComentariosDTO save(ComentariosDTO comentariosDTO) throws Exception;
     ComentariosDTO findCommentById(Long comentarioId);
     List<ComentariosDTO> findAllComentariosByBlogTranslationId(long comentarioId, long level, Long articleId, List<ComentariosDTO> comentariosList);
     void deleteById(Long commentId);
