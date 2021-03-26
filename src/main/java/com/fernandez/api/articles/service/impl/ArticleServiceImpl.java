@@ -11,10 +11,7 @@ import com.fernandez.api.articles.model.Tag;
 import com.fernandez.api.articles.model.auditable.Audit;
 import com.fernandez.api.articles.repository.ArticleRepository;
 import com.fernandez.api.articles.repository.CountCommentsBlogRepository;
-import com.fernandez.api.articles.service.ArticleService;
-import com.fernandez.api.articles.service.CategoryService;
-import com.fernandez.api.articles.service.TagService;
-import com.fernandez.api.articles.service.UserService;
+import com.fernandez.api.articles.service.*;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +44,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategoryService categoryService;
 
     private final TagService tagService;
+
+    private final ComentarioService comentarioService;
 
     private final Messages messages;
 
@@ -128,16 +127,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private ArticleDTO findArticleBySlug(final String slug) {
-        return modelMapper.map(articleRepository.findArticleBySlug(slug)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
+        return mapFromEntityToDto(articleRepository.findArticleBySlug(slug));
     }
 
     private ArticleDTO findArticleById(final Long articleId) {
-        return modelMapper.map(
-                articleRepository.findById(articleId)
-                        .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.ARTICLE_NOT_FOUND)))
-                , ArticleDTO.class);
+        return mapFromEntityToDto(articleRepository.findById(articleId).get());
+
     }
 
     private ArticleDTO mapFromEntityToDto(final Article article) {
@@ -145,6 +140,7 @@ public class ArticleServiceImpl implements ArticleService {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = formatter.format(article.getAudit().getCreatedOn());
         articleDto.setCreatedDate(formattedDate);
+        articleDto.setComentarios(comentarioService.findAllComentariosByBlogTranslationId(0, 0, article.getId(),new ArrayList<>()));
         articleDto.setTotalComments(countCommentsRepository.countCommentsFromArticle(article.getId()));
         return articleDto;
     }

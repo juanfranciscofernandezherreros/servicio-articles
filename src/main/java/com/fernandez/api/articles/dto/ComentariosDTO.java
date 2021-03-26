@@ -21,7 +21,10 @@ public class ComentariosDTO {
     @NotEmpty
     private String contenido;
 
-    @Valid
+    private String username;
+
+    private String email;
+
     private UserDTO authorComment;
 
     @NonNull
@@ -32,7 +35,6 @@ public class ComentariosDTO {
 
     private AuditDTO auditDTO;
 
-    private ComentariosUserNotRegisteredDTO comentarioUserNotRegistered;
 
     private boolean isanswer;
 

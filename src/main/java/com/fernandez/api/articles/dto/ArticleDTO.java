@@ -57,6 +57,8 @@ public class ArticleDTO {
     @Size(min=1 , max=3)
     List<CategoryDTO> categories = new ArrayList<>();
 
+    List<ComentariosDTO> comentarios = new ArrayList<>();
+
     Long totalComments;
 
     AuditDTO auditDTO;
