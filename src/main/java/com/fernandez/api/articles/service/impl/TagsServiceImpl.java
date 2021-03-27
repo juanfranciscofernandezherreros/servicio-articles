@@ -3,6 +3,7 @@ package com.fernandez.api.articles.service.impl;
 import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Tag;
@@ -51,6 +52,11 @@ public class TagsServiceImpl implements TagService {
     }
 
     @Override
+    public TagDTO findTagDtoBySlug(final String slug) {
+        return modelMapper.map(tagsRepository.findBySlug(slug), TagDTO.class);
+    }
+
+    @Override
     public TagDTO save(final TagDTO tagDTO) {
         Tag tag = modelMapper.map(tagDTO,Tag.class);
         return modelMapper.map(tagsRepository.save(tag), TagDTO.class);
@@ -79,6 +85,19 @@ public class TagsServiceImpl implements TagService {
     public Tag findTagById(Long tagId) {
         return tagsRepository.findById(tagId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND)));
+    }
+
+    @Override
+    public TagDTO findTagBySlugOrId(Long tagId, String slug) {
+        log.info("[CategoryServiceImpl][findCategoryBySlugOrId] slug={} tagId={} slug={}", tagId , slug);
+        TagDTO tagDTO = null;
+        if(Objects.nonNull(tagId)){
+            tagDTO = findTagDtoById(tagId);
+        }
+        if(Objects.nonNull(slug)){
+            tagDTO = findTagDtoBySlug(slug);
+        }
+        return tagDTO;
     }
 
     private TagDTO mapFromEntityToDto(final Tag tag) {

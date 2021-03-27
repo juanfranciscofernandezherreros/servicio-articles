@@ -42,9 +42,10 @@ public class TagsController {
     }
 
     @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.TAG)
-    public TagDTO findById(@RequestParam final Long tagId) {
-        log.info("[CategoryController][findById] tagId={}", tagId);
-        return tagService.findTagDtoById(tagId);
+    public TagDTO findTagBySlugOrId(@RequestParam(required = false) final Long tagId,
+                                    @RequestParam(required = false) final String slug) {
+        log.info("[findTagBySlugOrId][findById] tagId={} slug={}" + tagId,slug);
+        return tagService.findTagBySlugOrId(tagId,slug);
     }
 
 

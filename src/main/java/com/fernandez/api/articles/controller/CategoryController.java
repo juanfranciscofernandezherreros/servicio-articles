@@ -40,9 +40,10 @@ public class CategoryController {
     }
 
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.CATEGORY)
-    public CategoryDTO findById(@RequestParam final Long categoryId) {
+    public CategoryDTO findCategoryBySlugOrId(@RequestParam(required = false) final Long categoryId,
+                                                @RequestParam(required = false) final String slug) {
         log.info("[CategoryController][findById] categoryId={}", categoryId);
-        return service.findCategoryDtoById(categoryId);
+        return service.findCategoryBySlugOrId(categoryId,slug);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY)

@@ -22,4 +22,8 @@ public interface TagService {
     Page<TagDTO> findAllTagsRandom(String acceptLanguage, Pageable pageable);
 
     Tag findTagById(Long tagId);
+
+    TagDTO findTagBySlugOrId(Long tagId, String slug);
+
+    TagDTO findTagDtoBySlug(final String slug);
 }

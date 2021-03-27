@@ -16,4 +16,7 @@ public class ArticleWrapper {
 
     private List<String> categories;
 
+    private List<String> categoriesSlug;
+
+
 }
