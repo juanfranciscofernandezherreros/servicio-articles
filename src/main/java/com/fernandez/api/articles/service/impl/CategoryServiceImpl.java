@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -68,6 +69,21 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
     }
 
+    @Override
+    public CategoryDTO findCategoryBySlugOrId(Long categoryId,String slug) {
+        log.info("[CategoryServiceImpl][findCategoryBySlugOrId] slug={} categoryId={} slug={}", categoryId , slug);
+        CategoryDTO categoryDTO = null;
+        if(Objects.nonNull(categoryId)){
+            categoryDTO = findCategoryDtoById(categoryId);
+        }
+        if(Objects.nonNull(slug)){
+            categoryDTO = findCategoryDtoBySlug(slug);
+        }
+        return categoryDTO;
+    }
+
+
+
     private CategoryDTO mapFromEntityToDto(final Category category) {
         CategoryDTO categoryDto = modelMapper.map(category,CategoryDTO.class);
         Long totalArticles = categoryRepository.countTotalArticlesFromCategory(category);
@@ -86,8 +102,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findCategoryBySlug(final String slug) {
+        return categoryRepository.findBySlug(slug)
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND)));
+    }
+
+    @Override
     public CategoryDTO findCategoryDtoById(final Long categoryDTO) {
         return modelMapper.map(findCategoryById(categoryDTO),CategoryDTO.class);
+    }
+
+    @Override
+    public CategoryDTO findCategoryDtoBySlug(final String slug) {
+        return modelMapper.map(findCategoryBySlug(slug),CategoryDTO.class);
     }
 
     private Page convertList2Page(final List list, final Pageable pageable) {

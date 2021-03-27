@@ -15,6 +15,12 @@ public interface CategoryService {
 
     Category findCategoryById(Long categoryId);
 
+    Category findCategoryBySlug(String slug);
+
+    CategoryDTO findCategoryBySlugOrId(Long categoryId,String slug);
+
+    CategoryDTO findCategoryDtoBySlug(final String slug);
+
     List<CategoryDTO> categoryDTOList(ArticleDTO articleDTO);
 
     Page<CategoryDTO> findAll(String acceptLanguage, Pageable pageable);

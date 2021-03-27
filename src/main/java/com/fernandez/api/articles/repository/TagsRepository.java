@@ -17,4 +17,5 @@ public interface TagsRepository extends JpaRepository < Tag, Long > {
 
     List < Tag > findAllByLanguage ( String acceptLanguage );
 
+    Tag findBySlug(String slug);
 }
