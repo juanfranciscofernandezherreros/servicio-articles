@@ -38,7 +38,7 @@ public class ArticleController {
     @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLES)
     public Page<ArticleDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
                                     final ArticleWrapper articleWrapper,
-                                    @PageableDefault(size = 1) final Pageable pageable) {
+                                    @PageableDefault(size = 6) final Pageable pageable) {
         log.info("[ArticleController][findAll] acceptLanguage={} articleWrapper={} pageable={}", acceptLanguage , articleWrapper,pageable );
         return articleService.findAllArticles(acceptLanguage, articleWrapper, pageable);
     }
