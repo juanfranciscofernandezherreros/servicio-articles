@@ -4,13 +4,16 @@ import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.UserDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
 import com.fernandez.api.articles.model.Tag;
+import com.fernandez.api.articles.model.User;
 import com.fernandez.api.articles.model.auditable.Audit;
 import com.fernandez.api.articles.repository.ArticleRepository;
 import com.fernandez.api.articles.repository.CountCommentsBlogRepository;
+import com.fernandez.api.articles.repository.UserRepository;
 import com.fernandez.api.articles.service.*;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Messages messages;
 
+    private final UserRepository userRepository;
+    
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
@@ -84,6 +89,13 @@ public class ArticleServiceImpl implements ArticleService {
             articleList = articleRepository.findArticleByLanguageAndTitleContaining(acceptLanguage, articleWrapper.getTitle(), pageable)
                     .map(this::mapFromEntityToDto);
         }
+
+        if (!StringUtils.isEmpty(articleWrapper.getUsername ())) {
+            User user = userRepository.findByUsername (articleWrapper.getUsername ());
+            articleList = articleRepository.findArticleByLanguageAndUser(acceptLanguage, user,pageable)
+                    .map(this::mapFromEntityToDto);
+        }
+        
         if (Objects.nonNull(articleWrapper.getCategories())) {
             articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(articleWrapper.getCategories()), pageable)
                     .map(this::mapFromEntityToDto);
