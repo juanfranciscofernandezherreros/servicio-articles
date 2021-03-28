@@ -34,8 +34,7 @@ public class ComentariosDTO {
     private Long parentId;
 
     private AuditDTO auditDTO;
-
-
+    
     private boolean isanswer;
 
     @NonNull

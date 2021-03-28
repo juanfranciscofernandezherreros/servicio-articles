@@ -37,6 +37,8 @@ public class Comentarios {
 
     private boolean isanswer;
 
+    private Long level;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "comentarios_usernotregistered" )
     private ComentariosUserNotRegistered comentarioUserNotRegistered;
