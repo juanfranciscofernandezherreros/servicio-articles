@@ -82,7 +82,7 @@ public class ArticleServiceImpl implements ArticleService {
         log.info("[ArticleServiceImpl][findAllArticles] acceptLanguage={} articleWrapper={} pageable={} ", acceptLanguage , articleWrapper , pageable);
         List<Article> articles = new ArrayList<Article>();
         Page<ArticleDTO> articleList = null;
-        if (StringUtils.isEmpty(articleWrapper.getTitle()) && Objects.isNull(articleWrapper.getCategories()) && Objects.isNull(articleWrapper.getTags())) {
+        if (StringUtils.isEmpty(articleWrapper.getTitle()) && Objects.isNull(articleWrapper.getCategories ()) && Objects.isNull(articleWrapper.getTags())) {
             articleList = articleRepository.findAllByLanguage(acceptLanguage, pageable).map(this::mapFromEntityToDto);
         }
         if (!StringUtils.isEmpty(articleWrapper.getTitle())) {
@@ -92,16 +92,17 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (!StringUtils.isEmpty(articleWrapper.getUsername ())) {
             User user = userRepository.findByUsername (articleWrapper.getUsername ());
-            articleList = articleRepository.findArticleByLanguageAndUser(acceptLanguage, user,pageable)
-                    .map(this::mapFromEntityToDto);
+            articleList = articleRepository.findArticleByLanguageAndUser(acceptLanguage, user,pageable).map(this::mapFromEntityToDto);
         }
-        
+
         if (Objects.nonNull(articleWrapper.getCategories())) {
-            articleList = articleRepository.findByCategoriesIn(findAllCategoriesById(articleWrapper.getCategories()), pageable)
+            articleList = articleRepository.findByCategoriesInOrderByAudit_CreatedOnDesc(findAllCategoriesById(articleWrapper.getCategories()), pageable)
                     .map(this::mapFromEntityToDto);
         }
         if (Objects.nonNull(articleWrapper.getTags())) {
-            articleList = articleRepository.findByTagsIn(findAllTagsById(articleWrapper.getTags()), pageable)
+            articleList =
+                    articleRepository.findByTagsInOrderByAudit_CreatedOnDesc(findAllTagsById(articleWrapper.getTags()),
+                            pageable)
                     .map(this::mapFromEntityToDto);
         }
         return articleList;
@@ -155,5 +156,19 @@ public class ArticleServiceImpl implements ArticleService {
         articleDto.setComentarios(comentarioService.findAllComentariosByBlogTranslationId(0, 0, article.getId(),new ArrayList<>()));
         articleDto.setTotalComments(countCommentsRepository.countCommentsFromArticle(article.getId()));
         return articleDto;
+    }
+
+
+    private Page convertList2Page(final List list, final Pageable pageable) {
+        return getPage(list, pageable);
+    }
+
+    @NotNull
+    static Page getPage(final List list, final Pageable pageable) {
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ? list.size()
+                : pageable.getOffset() + pageable.getPageSize());
+        List subList = list.subList(startIndex, endIndex);
+        return new PageImpl(subList, pageable, list.size());
     }
 }

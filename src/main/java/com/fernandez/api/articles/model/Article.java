@@ -48,10 +48,11 @@ public class Article {
     private User user;
 
     @Embedded
+    @OrderColumn(name = "audit.createdOn DESC")
     private Audit audit = new Audit();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinTable(name = "articles_tags", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "tagstranslations_id")})
+    @JoinTable(name = "articles_tags", joinColumns = {@JoinColumn(name = "articles_id")}, inverseJoinColumns = {@JoinColumn(name = "tags_id")})
     @JsonManagedReference
     private List<Tag> tags = new ArrayList<>();
 
