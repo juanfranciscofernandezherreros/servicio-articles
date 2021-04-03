@@ -15,4 +15,5 @@ public final class UrlMapping {
     public static final String COMMENT = "/comment";
     public static final String RANDOM = "/random";
     public static final String ARCHIVES ="/archives";
+    public static final String USERS = "/users";
 }
