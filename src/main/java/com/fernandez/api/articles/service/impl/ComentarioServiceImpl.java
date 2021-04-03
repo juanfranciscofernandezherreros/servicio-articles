@@ -16,6 +16,8 @@ import com.fernandez.api.articles.service.ComentarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +94,15 @@ public class ComentarioServiceImpl implements ComentarioService {
     public void deleteById(Long commentId) {
         commentsRepository.delete(commentsRepository.findById(commentId)
                 .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.COMMENT_NOT_FOUND))));
+    }
+
+    @Override
+    public Page <ComentariosDTO> findAllComments ( final String acceptLanguage , final Pageable pageable ) {
+        return commentsRepository.findAll(pageable).map(this::mapToDto);
+    }
+
+    private ComentariosDTO mapToDto ( final Comentarios comentarios ) {
+        return modelMapper.map(comentarios,ComentariosDTO.class);
     }
 
     private ComentariosDTO mapFromDtoToEntity(final Comentarios comentarios,final Long level) {
