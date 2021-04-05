@@ -26,16 +26,16 @@ public class TagsController {
         log.info("[TagsController][save] tagDTO={}", tagDTO);
         return tagService.save(tagDTO);
     }
-
+    
     @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.TAGS)
     public Page<TagDTO> findAll(@RequestHeader("Accept-Language") final String acceptLanguage,
-                                     @PageableDefault(size = 5) final Pageable pageable) {
+                                @PageableDefault(size = 5) final Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAll(acceptLanguage,pageable);
     }
 
     @GetMapping(UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.TAGS + UrlMapping.RANDOM)
-    public Page<TagDTO> findAllTagsRandom(@RequestHeader("Accept-Language") final String acceptLanguage,
+    public Page<TagDTO> findAllTagsRandom (@RequestHeader("Accept-Language") final String acceptLanguage,
                                 @PageableDefault(size = 5) final Pageable pageable) {
         log.info("[TagsController][findAll] acceptLanguage={} tagId={}", acceptLanguage , pageable);
         return tagService.findAllTagsRandom(acceptLanguage,pageable);
