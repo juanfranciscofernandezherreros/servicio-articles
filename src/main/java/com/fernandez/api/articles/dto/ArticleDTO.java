@@ -43,8 +43,11 @@ public class ArticleDTO {
     @NonNull
     @NotEmpty
     String language;
-    @NonNull
 
+    @NonNull
+    @NotEmpty
+    String username;
+    
     @Valid
     UserDTO user;
 
@@ -53,9 +56,9 @@ public class ArticleDTO {
 
     @Size(max=3)
     List<TagDTO> tags = new ArrayList<>();
-
+    
     @Size(min=1 , max=3)
-    List<CategoryDTO> categories = new ArrayList<>();
+    List<CategoryDTO> categories;
 
     List<ComentariosDTO> comentarios = new ArrayList<>();
 

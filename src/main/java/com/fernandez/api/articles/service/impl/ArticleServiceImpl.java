@@ -59,7 +59,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDTO save(final ArticleDTO articleDTO) {
         log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
-        articleDTO.setUser(userService.findByUsername(articleDTO.getUser().getUsername()));
+        articleDTO.setUser(userService.findByUsername(articleDTO.getUsername()));
         articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
         if (articleDTO.getTags().size() > 0) {
             articleDTO.setTags(tagService.tagDTOList(articleDTO));

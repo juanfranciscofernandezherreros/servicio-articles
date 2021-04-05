@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -30,5 +31,11 @@ public class UserController {
 	public Page<UserDTO> findAll( @PageableDefault (size = 6) final Pageable pageable) {
 		log.info("[UserController][findAll] pageable={}",pageable );
 		return service.findAll(pageable);
+	}
+
+	@GetMapping (value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.USER)
+	public UserDTO findByUsername(@RequestParam (required = true) final String username) {
+		log.info("[UserController][findByUsername]");
+		return service.findByUsername(username);
 	}
 }
