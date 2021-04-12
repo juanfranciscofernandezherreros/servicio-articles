@@ -63,8 +63,7 @@ public class TagsControllerTest {
 
     @Test
     public void deleteTagByIdTest() throws Exception {
-        mockMvc.perform(delete(UrlMapping.ROOT + UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG)
-                .param("tagId","1")
+        mockMvc.perform(delete(UrlMapping.ROOT + UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG + UrlMapping.ID)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
         verify(service,times(1)).deleteById(1L);

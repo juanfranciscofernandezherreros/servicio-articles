@@ -17,4 +17,5 @@ public final class UrlMapping {
     public static final String ARCHIVES ="/archives";
     public static final String USERS = "/users";
     public static final String USER = "/user";
+    public static final String ID = "/{id}";
 }

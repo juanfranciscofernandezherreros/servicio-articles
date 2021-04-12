@@ -52,13 +52,13 @@ public class TagsController {
     @PutMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG)
     public TagDTO update(@Validated @RequestBody final TagDTO tagDTO) {
         log.info("[TagsController][update] tagDTO={}", tagDTO);
-        return tagService.save(tagDTO);
+        return tagService.update(tagDTO);
     }
 
-    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG)
-    public void deleteTagById(@RequestParam final Long tagId) {
-        log.info("[TagsController][deleteById] tagId={}", tagId);
-        tagService.deleteById(tagId);
+    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG + UrlMapping.ID)
+    public void deleteTagById(@PathVariable final Long id) {
+        log.info("[TagsController][deleteById] id={}", id);
+        tagService.deleteById(id);
     }
 
 }

@@ -15,6 +15,8 @@ public interface TagService {
 
     TagDTO save(TagDTO tagDTO);
 
+    TagDTO update(TagDTO tagDTO) ;
+
     void deleteById(Long tagId);
 
     Page<TagDTO> findAll(String acceptLanguage, Pageable pageable);
@@ -25,5 +27,5 @@ public interface TagService {
 
     TagDTO findTagBySlugOrId(Long tagId, String slug);
 
-    TagDTO findTagDtoBySlug(final String slug);
+    TagDTO findTagDtoBySlug(String slug);
 }
