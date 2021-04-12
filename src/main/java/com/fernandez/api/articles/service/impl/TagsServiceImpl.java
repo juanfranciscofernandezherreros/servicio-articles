@@ -18,10 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.fernandez.api.articles.service.impl.CategoryServiceImpl.getPage;
@@ -48,12 +45,30 @@ public class TagsServiceImpl implements TagService {
 
     @Override
     public TagDTO findTagDtoById(final Long tagId) {
-        return modelMapper.map(tagsRepository.findById(tagId), TagDTO.class);
+        Tag tag = tagsRepository.findById(tagId).get();
+        return modelMapper.map(tag, TagDTO.class);
     }
 
     @Override
     public TagDTO findTagDtoBySlug(final String slug) {
         return modelMapper.map(tagsRepository.findBySlug(slug), TagDTO.class);
+    }
+
+    @Override
+    public TagDTO update(final TagDTO tagDTO) {
+        Tag tagUpdated = null;
+        Optional<Tag> tag = tagsRepository.findById(tagDTO.getId());
+        if(tag.isPresent()){
+            Tag tagFounded = tag.get() ;
+            tagFounded.setId(tagDTO.getId());
+            tagFounded.setName(tagDTO.getName());
+            tagFounded.setSlug(tagDTO.getSlug());
+            tagFounded.setLanguage(tagDTO.getLanguage());
+            tagUpdated = tagsRepository.save(tagFounded);
+            return modelMapper.map(tagUpdated, TagDTO.class);
+        }else{
+            throw new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND));
+        }
     }
 
     @Override
@@ -65,7 +80,7 @@ public class TagsServiceImpl implements TagService {
     @Override
     public void deleteById(final Long tagId) {
         tagsRepository.delete(tagsRepository.findById(tagId)
-                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.CATEGORY_NOT_FOUND))));
+                .orElseThrow(() -> new ArticlesLogicException(HttpStatus.NOT_FOUND, messages.get(PropertiesConstant.TAG_NOT_FOUND))));
     }
 
     @Override
