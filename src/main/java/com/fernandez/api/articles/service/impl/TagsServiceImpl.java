@@ -6,18 +6,21 @@ import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
+import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Tag;
 import com.fernandez.api.articles.repository.TagsRepository;
 import com.fernandez.api.articles.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,8 +48,14 @@ public class TagsServiceImpl implements TagService {
 
     @Override
     public TagDTO findTagDtoById(final Long tagId) {
+        TagDTO tagDTO = new TagDTO();
         Tag tag = tagsRepository.findById(tagId).get();
-        return modelMapper.map(tag, TagDTO.class);
+        tagDTO.setId(tag.getId());
+        tagDTO.setName(tag.getName());
+        tagDTO.setLanguage(tag.getLanguage());
+        tagDTO.setSlug(tag.getSlug());
+        tagDTO.setArticles(tag.getTags().stream().map(x->mapToArticle(x)).collect(Collectors.toList()));
+        return tagDTO;
     }
 
     @Override
@@ -124,6 +133,14 @@ public class TagsServiceImpl implements TagService {
             tagDTO.setTotalArticles(0L);
         }
         return tagDTO;
+    }
+
+
+    private ArticleDTO mapToArticle(Article article) {
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(article.getId());
+        articleDTO.setTitle(article.getTitle());
+        return articleDTO;
     }
 
     private TagDTO findTagByNameAndLanguage(final TagDTO tagDTO, final String language) {

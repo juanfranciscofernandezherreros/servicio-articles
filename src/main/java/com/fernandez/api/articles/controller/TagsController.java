@@ -55,6 +55,7 @@ public class TagsController {
         return tagService.update(tagDTO);
     }
 
+
     @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG + UrlMapping.ID)
     public void deleteTagById(@PathVariable final Long id) {
         log.info("[TagsController][deleteById] id={}", id);

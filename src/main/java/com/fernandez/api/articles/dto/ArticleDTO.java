@@ -66,4 +66,5 @@ public class ArticleDTO {
 
     AuditDTO auditDTO;
 
+
 }

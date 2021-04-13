@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +30,7 @@ public class TagDTO {
     private String slug;
 
     private Long totalArticles;
+
+    List<ArticleDTO> articles = new ArrayList<>();
 
 }
