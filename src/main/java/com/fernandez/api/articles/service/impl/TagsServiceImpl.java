@@ -116,7 +116,14 @@ public class TagsServiceImpl implements TagService {
     }
 
     private TagDTO mapFromEntityToDto(final Tag tag) {
-        return modelMapper.map(tag,TagDTO.class);
+        TagDTO tagDTO =  modelMapper.map(tag,TagDTO.class);
+        Long totalArticles = tagsRepository.countTotalArticlesFromTag(tag);
+        if(totalArticles>0) {
+            tagDTO.setTotalArticles(totalArticles);
+        }else{
+            tagDTO.setTotalArticles(0L);
+        }
+        return tagDTO;
     }
 
     private TagDTO findTagByNameAndLanguage(final TagDTO tagDTO, final String language) {

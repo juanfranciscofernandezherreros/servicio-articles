@@ -24,4 +24,7 @@ public class TagDTO {
     @NonNull
     @NotEmpty
     private String slug;
+
+    private Long totalArticles;
+
 }
