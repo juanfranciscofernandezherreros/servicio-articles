@@ -62,4 +62,12 @@ public class TagsController {
         tagService.deleteById(id);
     }
 
+    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.TAG + UrlMapping.TAG_ID + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID)
+    public void deleteArticleFromTag(@PathVariable final Long tagId,
+                                     @PathVariable final Long articleId) {
+        log.info("[TagsController][deleteArticleFromTag] tagId={} articleId={}", tagId ,articleId);
+        tagService.deleteArticleFromTag(tagId,articleId);
+    }
+
+
 }

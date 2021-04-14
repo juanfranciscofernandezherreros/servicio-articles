@@ -64,6 +64,11 @@ public class TagsServiceImpl implements TagService {
     }
 
     @Override
+    public void deleteArticleFromTag(Long tagId, Long articleId) {
+        tagsRepository.deleteArticleFromTag(tagId,articleId);
+    }
+
+    @Override
     public TagDTO update(final TagDTO tagDTO) {
         Tag tagUpdated = null;
         Optional<Tag> tag = tagsRepository.findById(tagDTO.getId());

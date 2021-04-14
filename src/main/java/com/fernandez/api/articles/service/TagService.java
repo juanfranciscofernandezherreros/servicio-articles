@@ -28,4 +28,6 @@ public interface TagService {
     TagDTO findTagBySlugOrId(Long tagId, String slug);
 
     TagDTO findTagDtoBySlug(String slug);
+
+    void deleteArticleFromTag(Long tagId, Long articleId);
 }
