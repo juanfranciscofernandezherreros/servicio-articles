@@ -70,8 +70,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO findCategoryBySlugOrId(Long categoryId,String slug) {
-        log.info("[CategoryServiceImpl][findCategoryBySlugOrId] slug={} categoryId={} slug={}", categoryId , slug);
+    public CategoryDTO findCategoryByIdOrSlug(Long categoryId,String slug) {
+        log.info("[CategoryServiceImpl][findCategoryBySlugOrId] categoryId={} slug={}", categoryId , slug);
         CategoryDTO categoryDTO = null;
         if(Objects.nonNull(categoryId)){
             categoryDTO = findCategoryDtoById(categoryId);

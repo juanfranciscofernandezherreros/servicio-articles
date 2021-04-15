@@ -17,7 +17,7 @@ public interface CategoryService {
 
     Category findCategoryBySlug(String slug);
 
-    CategoryDTO findCategoryBySlugOrId(Long categoryId,String slug);
+    CategoryDTO findCategoryByIdOrSlug(Long categoryId,String slug);
 
     CategoryDTO findCategoryDtoBySlug(final String slug);
 
