@@ -4,8 +4,11 @@ import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
+import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
+import com.fernandez.api.articles.model.Tag;
 import com.fernandez.api.articles.repository.CategoryRepository;
 import com.fernandez.api.articles.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +73,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void deleteArticleWithCategory(Long categoryId, Long articleId) {
+        categoryRepository.deleteArticleFromCategory(categoryId,articleId);
+    }
+
+    @Override
     public CategoryDTO findCategoryByIdOrSlug(Long categoryId,String slug) {
         log.info("[CategoryServiceImpl][findCategoryBySlugOrId] categoryId={} slug={}", categoryId , slug);
         CategoryDTO categoryDTO = null;
@@ -108,8 +116,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO findCategoryDtoById(final Long categoryDTO) {
-        return modelMapper.map(findCategoryById(categoryDTO),CategoryDTO.class);
+    public CategoryDTO findCategoryDtoById(final Long categoryId) {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        Category category = categoryRepository.findById(categoryId).get();
+        categoryDTO.setId(category.getId());
+        categoryDTO.setName(category.getName());
+        categoryDTO.setLanguage(category.getLanguage());
+        categoryDTO.setSlug(category.getSlug());
+        categoryDTO.setArticles(category.getCategories().stream().map(x->mapToArticle(x)).collect(Collectors.toList()));
+        return categoryDTO;
     }
 
     @Override
@@ -128,6 +143,13 @@ public class CategoryServiceImpl implements CategoryService {
                 : pageable.getOffset() + pageable.getPageSize());
         List subList = list.subList(startIndex, endIndex);
         return new PageImpl(subList, pageable, list.size());
+    }
+
+    private ArticleDTO mapToArticle(Article article) {
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(article.getId());
+        articleDTO.setTitle(article.getTitle());
+        return articleDTO;
     }
 
 }

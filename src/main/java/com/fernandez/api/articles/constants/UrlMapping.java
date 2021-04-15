@@ -19,5 +19,6 @@ public final class UrlMapping {
     public static final String USER = "/user";
     public static final String ID = "/{id}";
     public static final String TAG_ID = "/{tagId}";
+    public static final String CATEGORY_ID = "/{categoryId}";
     public static final String ARTICLE_ID = "/{articleId}";
 }

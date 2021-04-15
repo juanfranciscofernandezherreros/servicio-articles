@@ -52,4 +52,11 @@ public class CategoryController {
         service.deleteCategoryById(id);
     }
 
+    @DeleteMapping(UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY + UrlMapping.CATEGORY_ID + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID)
+    public void deleteArticleWithCategory(@PathVariable final Long categoryId,
+                                     @PathVariable final Long articleId) {
+        log.info("[CategoryController][deleteArticleFromTag] categoryId={} articleId={}", categoryId ,articleId);
+        service.deleteArticleWithCategory(categoryId,articleId);
+    }
+
 }

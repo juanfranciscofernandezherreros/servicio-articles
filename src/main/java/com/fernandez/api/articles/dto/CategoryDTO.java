@@ -9,6 +9,8 @@ import org.springframework.lang.NonNull;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,4 +33,7 @@ public class CategoryDTO {
     private String slug;
 
     private Long totalArticles;
+
+    List<ArticleDTO> articles = new ArrayList<>();
+
 }

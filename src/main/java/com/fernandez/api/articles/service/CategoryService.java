@@ -29,4 +29,5 @@ public interface CategoryService {
 
     void deleteCategoryById(Long id);
 
+    void deleteArticleWithCategory(Long categoryId, Long articleId);
 }
