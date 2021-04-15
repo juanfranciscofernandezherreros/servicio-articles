@@ -46,10 +46,10 @@ public class CategoryController {
         return service.findCategoryByIdOrSlug(categoryId,slug);
     }
 
-    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY)
-    public void deleteCategoryById(@RequestParam final Long categoryId) {
-        log.info("[CategoryController][deleteById] categoryId={}", categoryId);
-        service.deleteCategoryById(categoryId);
+    @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.CATEGORY + UrlMapping.ID)
+    public void deleteCategoryById(@PathVariable final Long id) {
+        log.info("[CategoryController][deleteById] categoryId={}", id);
+        service.deleteCategoryById(id);
     }
 
 }
