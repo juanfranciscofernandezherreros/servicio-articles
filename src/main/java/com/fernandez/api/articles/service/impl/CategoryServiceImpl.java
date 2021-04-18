@@ -42,6 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
+    public List<Category> findAllCategories(final String acceptLanguage){
+        return categoryRepository.findAllByLanguage(acceptLanguage);
+    }
+
+    @Override
     public List<CategoryDTO> categoryDTOList(final ArticleDTO articleDTO) {
         Type listType = new TypeToken<List<CategoryDTO>>() {}.getType();
         return modelMapper.map(

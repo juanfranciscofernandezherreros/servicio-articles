@@ -2,9 +2,12 @@ package com.fernandez.api.articles.service;
 
 
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 
 public interface ArticleService {
@@ -18,4 +21,5 @@ public interface ArticleService {
 
     Page findAllArticlesRandom(final String acceptLanguage, final Pageable pageable);
 
+    List<CategoryDTO> findCategoriesFromArticle(final String acceptLanguage, final Long articleId);
 }

@@ -2,6 +2,7 @@ package com.fernandez.api.articles.controller;
 
 import com.fernandez.api.articles.constants.UrlMapping;
 import com.fernandez.api.articles.dto.ArticleDTO;
+import com.fernandez.api.articles.dto.CategoryDTO;
 import com.fernandez.api.articles.service.ArticleService;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -55,6 +58,12 @@ public class ArticleController {
                                             @RequestParam(required = false) final String slug) {
         log.info("[ArticleController][findArticleBySlugOrId] articleId={} slug={}", articleId , slug);
         return articleService.findArticleBySlugOrId(slug,articleId);
+    }
+
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID + UrlMapping.CATEGORIES)
+    public List<CategoryDTO> findCategoriesFromArticle(@RequestHeader("Accept-Language") final String acceptLanguage,@PathVariable final Long articleId) {
+        log.info("[ArticleController][findCategoriesFromArticle] articleId={}", articleId);
+        return articleService.findCategoriesFromArticle(acceptLanguage,articleId);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)

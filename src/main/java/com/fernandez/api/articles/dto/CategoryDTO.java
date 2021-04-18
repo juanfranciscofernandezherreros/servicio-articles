@@ -34,6 +34,8 @@ public class CategoryDTO {
 
     private Long totalArticles;
 
+    private boolean hasCategory;
+
     List<ArticleDTO> articles = new ArrayList<>();
 
 }

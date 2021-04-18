@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface CategoryService {
 
+    List<Category> findAllCategories(final String acceptLanguage);
+
     CategoryDTO findCategoryDtoById(Long categoryDTO);
 
     Category findCategoryById(Long categoryId);

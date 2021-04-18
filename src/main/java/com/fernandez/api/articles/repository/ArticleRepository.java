@@ -34,6 +34,8 @@ public interface ArticleRepository extends JpaRepository < Article, Long > {
 
     @Query ("SELECT p FROM #{#entityName} p WHERE  p.language = :acceptLanguage AND p.user = :user ORDER BY audit.createdOn DESC")
     Page <Article> findArticleByLanguageAndUser ( String acceptLanguage , User user , Pageable pageable );
-    
+
+    @Query ( value = "SELECT ARTICLES_CATEGORIES.CATEGORIES_ID FROM ARTICLES_CATEGORIES WHERE ARTICLES_CATEGORIES.ARTICLES_ID=:articlesId", nativeQuery = true )
+    List<Long> findAllCategoriesFromArticle(@Param("articlesId") Long articlesId);
 }
 

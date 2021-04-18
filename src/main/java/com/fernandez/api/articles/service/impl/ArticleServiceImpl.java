@@ -18,6 +18,7 @@ import com.fernandez.api.articles.service.*;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -115,6 +117,27 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Page<ArticleDTO> findAllArticlesRandom(final String acceptLanguage, final Pageable pageable) {
         return articleRepository.findAllByLanguage(acceptLanguage,pageable).map(this::mapFromEntityToDto);
+    }
+
+    @Override
+    public List<CategoryDTO> findCategoriesFromArticle(String acceptLanguage, Long articleId) {
+        List<Category> categoriesList = categoryService.findAllCategories(acceptLanguage);
+        List<Long> categoriesListFromArticle = articleRepository.findAllCategoriesFromArticle(articleId);
+        return checkCategories(categoriesList,categoriesListFromArticle);
+    }
+
+    private List<CategoryDTO> checkCategories(List<Category> categoriesList, List<Long> categoriesListFromArticle) {
+        List<CategoryDTO> categoryDTOS = new ArrayList<>();
+        for(Category one : categoriesList) {
+            CategoryDTO categoryDTO = modelMapper.map(one,CategoryDTO.class);
+            for(Long two : categoriesListFromArticle) {
+                if(one.getId().equals(two)) {
+                    categoryDTO.setHasCategory(true);
+                }
+            }
+            categoryDTOS.add(categoryDTO);
+        }
+        return categoryDTOS;
     }
 
     @Override
