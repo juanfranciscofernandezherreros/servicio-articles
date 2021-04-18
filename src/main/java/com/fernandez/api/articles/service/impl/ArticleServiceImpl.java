@@ -60,7 +60,11 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleDTO save(final ArticleDTO articleDTO) {
         log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
         articleDTO.setUser(userService.findByUsername(articleDTO.getUsername()));
-        articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
+        if(Objects.nonNull(articleDTO.getCategories())) {
+            if( articleDTO.getCategories().size() > 0) {
+                articleDTO.setCategories(categoryService.categoryDTOList(articleDTO));
+            }
+        }
         if (articleDTO.getTags().size() > 0) {
             articleDTO.setTags(tagService.tagDTOList(articleDTO));
         }
