@@ -4,7 +4,7 @@ import com.fernandez.api.articles.common.Messages;
 import com.fernandez.api.articles.constants.PropertiesConstant;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
-import com.fernandez.api.articles.dto.UserDTO;
+import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Article;
 import com.fernandez.api.articles.model.Category;
@@ -18,7 +18,6 @@ import com.fernandez.api.articles.service.*;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -27,12 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -59,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ArticleDTO save(final ArticleDTO articleDTO) {
+    public ArticleDTO save(final ArticleDTO articleDTO) throws ParseException {
         log.info("[ArticleServiceImpl][save] articleDTO={}", articleDTO);
         articleDTO.setUser(userService.findByUsername(articleDTO.getUsername()));
         if(Objects.nonNull(articleDTO.getCategories())) {
@@ -71,6 +68,12 @@ public class ArticleServiceImpl implements ArticleService {
             articleDTO.setTags(tagService.tagDTOList(articleDTO));
         }
         Article article = modelMapper.map(articleDTO, Article.class);
+        if(articleDTO.getCreatedDate()!=null) {
+            Audit audit = new Audit();
+            Date date1=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(articleDTO.getCreatedDate());
+            audit.setCreatedOn(date1);
+            article.setAudit(audit);
+        }
         return modelMapper.map(articleRepository.save(article), ArticleDTO.class);
     }
 
@@ -126,6 +129,27 @@ public class ArticleServiceImpl implements ArticleService {
         return checkCategories(categoriesList,categoriesListFromArticle);
     }
 
+    @Override
+    public List<TagDTO> findTagsFromArticle(String acceptLanguage, Long articleId) {
+        List<Tag> tagsList = tagService.findAllTagsByLanguage(acceptLanguage);
+        List<Long> tagsListFromArticle = articleRepository.findAllTagsFromArticle(articleId);
+        return checkTags(tagsList,tagsListFromArticle);
+    }
+
+    private List<TagDTO> checkTags(List<Tag> tagsList, List<Long> tagsListFromArticle) {
+        List<TagDTO> tagDTOList = new ArrayList<TagDTO>();
+        for(Tag one : tagsList) {
+            TagDTO tagDTO = modelMapper.map(one,TagDTO.class);
+            for(Long two : tagsListFromArticle) {
+                if(one.getId().equals(two)) {
+                    tagDTO.setHasTag(true);
+                }
+            }
+            tagDTOList.add(tagDTO);
+        }
+        return tagDTOList;
+    }
+
     private List<CategoryDTO> checkCategories(List<Category> categoriesList, List<Long> categoriesListFromArticle) {
         List<CategoryDTO> categoryDTOS = new ArrayList<>();
         for(Category one : categoriesList) {
@@ -177,7 +201,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ArticleDTO mapFromEntityToDto(final Article article) {
         ArticleDTO articleDto = modelMapper.map(article, ArticleDTO.class);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String formattedDate = formatter.format(article.getAudit().getCreatedOn());
         articleDto.setCreatedDate(formattedDate);
         articleDto.setComentarios(comentarioService.findAllComentariosByBlogTranslationId(0, 0, article.getId(),new ArrayList<>()));

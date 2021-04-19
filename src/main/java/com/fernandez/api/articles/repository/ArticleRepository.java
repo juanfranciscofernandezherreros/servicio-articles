@@ -37,5 +37,8 @@ public interface ArticleRepository extends JpaRepository < Article, Long > {
 
     @Query ( value = "SELECT ARTICLES_CATEGORIES.CATEGORIES_ID FROM ARTICLES_CATEGORIES WHERE ARTICLES_CATEGORIES.ARTICLES_ID=:articlesId", nativeQuery = true )
     List<Long> findAllCategoriesFromArticle(@Param("articlesId") Long articlesId);
+
+    @Query ( value = "SELECT ARTICLES_TAGS.TAGS_ID FROM ARTICLES_TAGS WHERE ARTICLES_TAGS.ARTICLES_ID=:articlesId", nativeQuery = true )
+    List<Long> findAllTagsFromArticle(@Param("articlesId") Long articlesId);
 }
 

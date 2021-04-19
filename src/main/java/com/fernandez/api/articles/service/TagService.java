@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface TagService {
+
+
     List<TagDTO> tagDTOList(ArticleDTO articleDTO);
 
     TagDTO findTagDtoById(Long tagId);
@@ -30,4 +32,6 @@ public interface TagService {
     TagDTO findTagDtoBySlug(String slug);
 
     void deleteArticleFromTag(Long tagId, Long articleId);
+
+    List<Tag> findAllTagsByLanguage(String acceptLanguage);
 }

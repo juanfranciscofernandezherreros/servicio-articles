@@ -69,6 +69,11 @@ public class TagsServiceImpl implements TagService {
     }
 
     @Override
+    public List<Tag> findAllTagsByLanguage(String acceptLanguage) {
+        return tagsRepository.findAllByLanguage(acceptLanguage);
+    }
+
+    @Override
     public TagDTO update(final TagDTO tagDTO) {
         Tag tagUpdated = null;
         Optional<Tag> tag = tagsRepository.findById(tagDTO.getId());

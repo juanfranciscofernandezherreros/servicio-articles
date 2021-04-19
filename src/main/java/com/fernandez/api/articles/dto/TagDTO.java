@@ -33,4 +33,6 @@ public class TagDTO {
 
     List<ArticleDTO> articles = new ArrayList<>();
 
+    private boolean hasTag;
+
 }

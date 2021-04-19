@@ -3,6 +3,7 @@ package com.fernandez.api.articles.controller;
 import com.fernandez.api.articles.constants.UrlMapping;
 import com.fernandez.api.articles.dto.ArticleDTO;
 import com.fernandez.api.articles.dto.CategoryDTO;
+import com.fernandez.api.articles.dto.TagDTO;
 import com.fernandez.api.articles.service.ArticleService;
 import com.fernandez.api.articles.wrapper.ArticleWrapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -27,13 +29,13 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
-    public ArticleDTO save(final @Valid @RequestBody ArticleDTO articleDTO) {
+    public ArticleDTO save(final @Valid @RequestBody ArticleDTO articleDTO) throws ParseException {
         log.info("[ArticleController][save] articleDTO={}", articleDTO);
         return articleService.save(articleDTO);
     }
 
     @PutMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
-    public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) {
+    public ArticleDTO update(final @RequestBody ArticleDTO articleDTO) throws ParseException {
         log.info("[ArticleController][update] articleDTO={}", articleDTO);
         return articleService.save(articleDTO);
     }
@@ -60,10 +62,16 @@ public class ArticleController {
         return articleService.findArticleBySlugOrId(slug,articleId);
     }
 
-    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID + UrlMapping.CATEGORIES)
+    @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID + UrlMapping.CATEGORIES)
     public List<CategoryDTO> findCategoriesFromArticle(@RequestHeader("Accept-Language") final String acceptLanguage,@PathVariable final Long articleId) {
         log.info("[ArticleController][findCategoriesFromArticle] articleId={}", articleId);
         return articleService.findCategoriesFromArticle(acceptLanguage,articleId);
+    }
+
+    @GetMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE + UrlMapping.ARTICLE_ID + UrlMapping.TAGS)
+    public List<TagDTO> findTagsFromArticle(@RequestHeader("Accept-Language") final String acceptLanguage, @PathVariable final Long articleId) {
+        log.info("[ArticleController][findTagsFromArticle] articleId={}", articleId);
+        return articleService.findTagsFromArticle(acceptLanguage,articleId);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)

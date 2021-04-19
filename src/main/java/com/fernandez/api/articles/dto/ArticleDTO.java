@@ -51,7 +51,6 @@ public class ArticleDTO {
     @Valid
     UserDTO user;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     String createdDate;
 
     @Size(max=3)
