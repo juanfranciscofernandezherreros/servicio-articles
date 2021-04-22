@@ -37,6 +37,8 @@ public class ComentariosDTO {
     
     private boolean isanswer;
 
+    String createdDate;
+
     @NonNull
     private Long level;
 

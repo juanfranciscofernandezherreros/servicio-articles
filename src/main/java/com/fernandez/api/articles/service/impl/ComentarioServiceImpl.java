@@ -10,6 +10,7 @@ import com.fernandez.api.articles.exceptions.ArticlesLogicException;
 import com.fernandez.api.articles.model.Comentarios;
 import com.fernandez.api.articles.model.ComentariosUserNotRegistered;
 import com.fernandez.api.articles.model.User;
+import com.fernandez.api.articles.model.auditable.Audit;
 import com.fernandez.api.articles.repository.CommentsRepository;
 import com.fernandez.api.articles.repository.UserRepository;
 import com.fernandez.api.articles.service.ComentarioService;
@@ -22,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,13 +61,16 @@ public class ComentarioServiceImpl implements ComentarioService {
         User foundByEmail = null, foundByUsername = null;
         ComentariosUserNotRegistered comentariosUserNotRegistered = new ComentariosUserNotRegistered();
         Comentarios comentarios = modelMapper.map(comentariosDTO, Comentarios.class);
+        if(comentariosDTO.getCreatedDate()!=null) {
+            Audit audit = new Audit();
+            Date date1=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(comentariosDTO.getCreatedDate());
+            audit.setCreatedOn(date1);
+            comentarios.setAudit(audit);
+        }
         if (Objects.nonNull(comentariosDTO.getUsername()) && Objects.nonNull(comentariosDTO.getUsername())) {
-
             foundByEmail = userRepository.findByEmail(comentariosDTO.getEmail());
             foundByUsername = userRepository.findByUsername(comentariosDTO.getUsername());
-
         }
-        
         if(Objects.isNull(foundByEmail) && Objects.isNull(foundByUsername)) {
             comentariosUserNotRegistered.setEmail(comentariosDTO.getEmail());
             comentariosUserNotRegistered.setUsername(comentariosDTO.getUsername());
@@ -73,6 +79,7 @@ public class ComentarioServiceImpl implements ComentarioService {
             comentarios.setAuthorComment(foundByEmail);
         }
         comentarios.setLevel(comentariosDTO.getLevel());
+
         return modelMapper.map(commentsRepository.save(comentarios), ComentariosDTO.class);
     }
 
@@ -80,6 +87,11 @@ public class ComentarioServiceImpl implements ComentarioService {
     public ComentariosDTO findCommentById(Long commentId) {
         Comentarios foundComentario = commentsRepository.getOne(commentId);
         ComentariosDTO comentariosDTO = modelMapper.map(foundComentario,ComentariosDTO.class);
+        if(foundComentario.getAudit().getCreatedOn()!=null){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String formattedDate = formatter.format(foundComentario.getAudit().getCreatedOn());
+            comentariosDTO.setCreatedDate(formattedDate);
+        }
         if(Objects.nonNull(foundComentario.getComentarioUserNotRegistered ())){
             UserDTO userDTO = new UserDTO();
             userDTO.setUsername(foundComentario.getComentarioUserNotRegistered().getUsername());
