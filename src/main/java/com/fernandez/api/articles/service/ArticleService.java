@@ -26,4 +26,6 @@ public interface ArticleService {
     List<CategoryDTO> findCategoriesFromArticle(final String acceptLanguage, final Long articleId);
 
     List<TagDTO> findTagsFromArticle(String acceptLanguage, Long articleId);
+
+    void addPlayByPlay(String articleId, String numberofplay, String gamecode, String seasoncode);
 }

@@ -136,6 +136,11 @@ public class ArticleServiceImpl implements ArticleService {
         return checkTags(tagsList,tagsListFromArticle);
     }
 
+    @Override
+    public void addPlayByPlay(String articleId, String numberofplay, String gamecode, String seasoncode) {
+
+    }
+
     private List<TagDTO> checkTags(List<Tag> tagsList, List<Long> tagsListFromArticle) {
         List<TagDTO> tagDTOList = new ArrayList<TagDTO>();
         for(Tag one : tagsList) {

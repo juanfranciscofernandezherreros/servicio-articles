@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -72,6 +73,16 @@ public class ArticleController {
     public List<TagDTO> findTagsFromArticle(@RequestHeader("Accept-Language") final String acceptLanguage, @PathVariable final Long articleId) {
         log.info("[ArticleController][findTagsFromArticle] articleId={}", articleId);
         return articleService.findTagsFromArticle(acceptLanguage,articleId);
+    }
+
+    @GetMapping(value = UrlMapping.PUBLIC + UrlMapping.V1 + "/playbyplay/article")
+    public void addToArticle(
+            @RequestParam String articleId,
+            @RequestParam String numberofplay,
+            @RequestParam String gamecode ,
+            @RequestParam String seasoncode) throws IOException {
+        log.info("[PlayByPlayController][addToArticle]");
+        articleService.addPlayByPlay(articleId,numberofplay,gamecode,seasoncode);
     }
 
     @DeleteMapping(value = UrlMapping.PROTECTED + UrlMapping.V1 + UrlMapping.ARTICLE)
