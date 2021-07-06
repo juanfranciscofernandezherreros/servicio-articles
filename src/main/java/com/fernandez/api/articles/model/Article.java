@@ -33,7 +33,7 @@ public class Article {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content" ,length = 6000000, nullable = false)
     private String content;
 
     @Column(name = "main_image", length = 600000, nullable = false)
